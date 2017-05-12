@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reseda.Core", "Reseda.Core\Reseda.Core.csproj", "{80C44A88-6ECF-4E45-8D4D-137A5A75F672}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reseda.Tests", "Reseda.Tests\Reseda.Tests.csproj", "{9368B646-23B1-448D-9A31-B21466C3A698}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reseda.Parser", "Reseda.Parser\Reseda.Parser.csproj", "{9EB78260-DD28-41F6-BF6E-8AFB98F91F98}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80C44A88-6ECF-4E45-8D4D-137A5A75F672}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80C44A88-6ECF-4E45-8D4D-137A5A75F672}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80C44A88-6ECF-4E45-8D4D-137A5A75F672}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80C44A88-6ECF-4E45-8D4D-137A5A75F672}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9368B646-23B1-448D-9A31-B21466C3A698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9368B646-23B1-448D-9A31-B21466C3A698}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9368B646-23B1-448D-9A31-B21466C3A698}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9368B646-23B1-448D-9A31-B21466C3A698}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EB78260-DD28-41F6-BF6E-8AFB98F91F98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EB78260-DD28-41F6-BF6E-8AFB98F91F98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EB78260-DD28-41F6-BF6E-8AFB98F91F98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EB78260-DD28-41F6-BF6E-8AFB98F91F98}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
