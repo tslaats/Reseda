@@ -84,7 +84,8 @@ namespace Reseda.Parser
             var Term = new NonTerminal("Term");
             var ParExpr = new NonTerminal("ParExpr");
             var BinExpr = new NonTerminal("BinExpr");
-            var BinOp = new NonTerminal("BinOp");
+            var BinExpr2 = new NonTerminal("BinExpr2");
+            var BinOp = new NonTerminal("BinOp");            
             var Unit = new KeyTerm("!", "Unit");
             //var PlusOp = new KeyTerm("+","PlusOp");
             //var MinOp = new KeyTerm("-", "MinOp");
@@ -105,9 +106,11 @@ namespace Reseda.Parser
             ParExpr.Rule = "(" + Expression + ")";
             //BinExpr.Rule = Expression + BinOp + Expression;
             //BinOp.Rule = ToTerm("+") | "-" | "*" | "/" | "**";
-            BinExpr.Rule = PlusOp | MinOp | TimesOp | DivOp;
-            PlusOp.Rule = Expression + ToTerm("+") + Expression;
-            MinOp.Rule = Expression + ToTerm("-") + Expression;
+            BinExpr.Rule = PlusOp | MinOp | BinExpr2;
+            PlusOp.Rule = BinExpr2 + ToTerm("+") + BinExpr2;
+            MinOp.Rule = BinExpr2 + ToTerm("-") + BinExpr2;
+
+            BinExpr2.Rule = TimesOp | DivOp | Expression;
             TimesOp.Rule = Expression + ToTerm("*") + Expression;
             DivOp.Rule = Expression + ToTerm("/") + Expression;
 
@@ -149,7 +152,7 @@ namespace Reseda.Parser
 
             //MarkTransient(PathExpression);
             MarkTransient(Relation, Event, SubProcess, PathExpressionCont,
-                PathExpression, Path, BinExpr, Expression, Term, ParExpr);
+                PathExpression, Path, BinExpr, Expression, Term, ParExpr, BinExpr2);
             
 
 

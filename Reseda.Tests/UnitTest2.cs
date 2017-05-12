@@ -11,8 +11,8 @@ namespace Reseda.Tests
         [TestMethod]
         public void TestMethod1()
         {
-            string input = "A<!>," +
-                           "B<!>{C<a + (3 * 5) - c/d>;}" +
+            string input = "A< 2 * 2 + 4 >," +
+                           "B<3 + 4 + 5 * 6 + 7 + 8 + 9>{C<a + (3 * 5) - c/d>;}" +
                            "; A -->* /B," +
                            " A/*/C -->* /B/.././F," 
                            + "B -->% *";
