@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace Reseda.Core.Syntax.DataExpressions
 {
-    abstract public class DataExpression
+    public class IntType : DataType
     {
-        public abstract DataType Eval();
+        public int value;
+        public IntType(int v)
+        {
+            value = v;
+        }        
     }
 }

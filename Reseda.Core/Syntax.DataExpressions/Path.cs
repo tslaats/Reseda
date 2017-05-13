@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace Reseda.Core.Syntax.DataExpressions
 {
-    abstract public class DataExpression
+    public class Path : DataExpression
     {
-        public abstract DataType Eval();
+        public PathExpression value;        
+
+        public Path(PathExpression v)
+        {
+            this.value = v;
+        }
     }
 }

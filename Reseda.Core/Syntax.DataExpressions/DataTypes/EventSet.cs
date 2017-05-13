@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace Reseda.Core.Syntax.DataExpressions
 {
-    abstract public class DataExpression
+    public class EventSet : DataType
     {
-        public abstract DataType Eval();
+        public HashSet<Event> value;
+        public EventSet(HashSet<Event> v)
+        {
+            value = v;
+        }
     }
 }

@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Reseda.Core
+namespace Reseda.Core.Syntax.DataExpressions
 {
-    public class Unit : DataExpression
-    {
-    }
+    public class Unit : DataType
+    {    }
 }

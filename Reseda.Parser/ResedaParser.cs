@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Irony.Parsing;
 using Reseda.Core;
+using Reseda.Core.Syntax.DataExpressions;
 
 namespace Reseda.Parser
 {
@@ -27,7 +28,11 @@ namespace Reseda.Parser
         {
             for (int i = 0; i < level; i++)
                 System.Diagnostics.Debug.Write("  ");
-            System.Diagnostics.Debug.WriteLine(node);
+            //System.Diagnostics.Debug.WriteLine(node);
+            if (node != null && node.Token != null)
+                System.Diagnostics.Debug.WriteLine(node.Token.Value);
+            else
+                System.Diagnostics.Debug.WriteLine(node.Term.Name);
 
             foreach (ParseTreeNode child in node.ChildNodes)
                 dispTree(child, level + 1);
@@ -96,8 +101,40 @@ namespace Reseda.Parser
         }
 
         private DataExpression GenerateExpression(ParseTreeNode node)
-        {
+        {            
+            switch (node.Term.Name)
+            {
+                case "PlusOp":
+                    return new PlusOp(GenerateExpression(node.ChildNodes[0]), GenerateExpression(node.ChildNodes[1]));                    
+                case "MinOp":
+                    return new MinOp(GenerateExpression(node.ChildNodes[0]), GenerateExpression(node.ChildNodes[1]));
+                case "TimesOp":
+                    return new TimesOp(GenerateExpression(node.ChildNodes[0]), GenerateExpression(node.ChildNodes[1]));
+                case "DivOp":
+                    return new DivOp(GenerateExpression(node.ChildNodes[0]), GenerateExpression(node.ChildNodes[1]));
+                case "number":
+                    return new IntType((int)node.Token.Value);
+                case "identifier":
+                    return new Unit();
+                case "Unit":
+                    return new Unit();
+                case "DPath":
+                    return new Path(GeneratePath(node.ChildNodes[0]));
+
+                /*case "PathAll":
+                    result = new All();
+                    break;*/
+                default:
+                    throw new NotImplementedException(node.ToString());
+            }
+
             return null;
+            /*
+            PlusOp
+  TimesOp
+          2(number)
+          2(number)
+        4(number*/
         }
 
         public HashSet<Relation> GenerateRelations(ParseTreeNode node)

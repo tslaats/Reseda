@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Reseda.Core.Syntax.DataExpressions
 {
-    abstract public class DataExpression
+    public abstract class DataType : DataExpression
     {
-        public abstract DataType Eval();
+        public override DataType Eval()
+        {
+            return this;
+        }
     }
 }

@@ -41,8 +41,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auxiliary\SideEffects.cs" />
+    <Compile Include="Syntax.DataExpressions\BinOp.cs" />
     <Compile Include="Syntax.DataExpressions\DataExpression.cs" />
-    <Compile Include="Syntax.DataExpressions\Unit.cs" />
+    <Compile Include="Syntax.DataExpressions\DataTypes\EventSet.cs" />
+    <Compile Include="Syntax.DataExpressions\DataTypes\IntType.cs" />
+    <Compile Include="Syntax.DataExpressions\DataTypes\DataType.cs" />
+    <Compile Include="Syntax.DataExpressions\DivOp.cs" />
+    <Compile Include="Syntax.DataExpressions\MinOp.cs" />
+    <Compile Include="Syntax.DataExpressions\Path.cs" />
+    <Compile Include="Syntax.DataExpressions\PlusOp.cs" />
+    <Compile Include="Syntax.DataExpressions\TimesOp.cs" />
+    <Compile Include="Syntax.DataExpressions\DataTypes\Unit.cs" />
     <Compile Include="Syntax.PathExpressions\All.cs" />
     <Compile Include="Syntax.PathExpressions\Current.cs" />
     <Compile Include="Syntax.PathExpressions\Name.cs" />

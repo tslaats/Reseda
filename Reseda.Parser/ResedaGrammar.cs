@@ -97,12 +97,14 @@ namespace Reseda.Parser
             var MinOp = new NonTerminal("MinOp");
             var TimesOp = new NonTerminal("TimesOp");
             var DivOp = new NonTerminal("DivOp");
+            var DPath = new NonTerminal("DPath");
 
 
             //.Rule = ;
             //Unit.Rule = ToTerm("!");
+            DPath.Rule = ToTerm("@") + Path;
             Expression.Rule = Term | BinExpr;
-            Term.Rule = number | ParExpr | identifier | Unit | (ToTerm("@") + Path);
+            Term.Rule = number | ParExpr | identifier | Unit | DPath;
             ParExpr.Rule = "(" + Expression + ")";
             //BinExpr.Rule = Expression + BinOp + Expression;
             //BinOp.Rule = ToTerm("+") | "-" | "*" | "/" | "**";
@@ -144,7 +146,7 @@ namespace Reseda.Parser
 
             
             MarkPunctuation("-->+", ",", ";", "-->%", "-->*", "*-->",
-                "-->>", "<", ">", "?", "!", "{", "}", "/", ".", "..", "*", "+", "-", "(", ")");
+                "-->>", "<", ">", "?", "!", "{", "}", "/", ".", "..", "*", "+", "-", "(", ")", "@");
 
             //MarkPunctuation(Empty);
 
