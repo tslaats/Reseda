@@ -19,6 +19,23 @@ namespace Reseda.Core
             this.parent = parent;
         }
 
+        internal Process CloneByParser()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal Process Clone()
+        {
+            var p = new Process(null);
+            foreach (var r in relations)
+                p.relations.Add(r);
+
+            foreach (var e in structuredData)
+                p.structuredData.Add(e.Clone());
+
+            return p;
+        }
+
         public ISet<Event> allEvents()
         {
             return new HashSet<Event>(structuredData);
@@ -77,7 +94,7 @@ namespace Reseda.Core
                     //var trg = s.target.Eval(this.parent);
                     if (src.Contains(e))
                     {                        
-                        result.spawn.Add(new SpawnEffect(s.target, this));
+                        result.spawn.Add(new SpawnEffect(s.target, this.parent));
                     }
                 }
             }

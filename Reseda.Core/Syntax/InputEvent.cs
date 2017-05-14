@@ -42,5 +42,11 @@ namespace Reseda.Core
             this.marking.value = d;
             base.Execute();
         }
+
+        internal override Event Clone()
+        {
+            return new InputEvent(this.name);
+        }
+
     }
 }

@@ -40,6 +40,8 @@ namespace Reseda.Core
             return this;
         }
 
+        internal abstract Event Clone();
+
         public ISet<Event> Descendants()
         {
             HashSet<Event> result = new HashSet<Event>(this.subProcess.structuredData);
@@ -143,6 +145,19 @@ namespace Reseda.Core
 
             foreach (var e in se.respond)
                 e.marking.included = false;
+            
+            foreach (var s in se.spawn)
+            {
+                foreach (var e in s.process.structuredData)
+                {
+                    s.context.AddChildEvent(e);
+                }
+                foreach (var r in s.process.relations)
+                {
+                    s.context.AddRelation(r);
+                }
+            }
+                
         }
 
 

@@ -25,5 +25,10 @@ namespace Reseda.Core
             if (s.value.Count > 1) throw new Exception("Value of multiple events.");
             return s.value.ElementAt(0).marking.value;
         }
+
+        public override string ToSource()
+        {
+            return child.ToSource() + ":v";
+        }
     }
 }

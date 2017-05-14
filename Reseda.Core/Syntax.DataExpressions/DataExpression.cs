@@ -9,5 +9,7 @@ namespace Reseda.Core
     abstract public class DataExpression
     {
         public abstract DataType Eval(Event context);
+
+        public abstract String ToSource();
     }
 }

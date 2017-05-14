@@ -9,12 +9,12 @@ namespace Reseda.Core
     public class SpawnEffect
     {
         public Process process;
-        public Process context;
+        public Event context;
 
-        public SpawnEffect(Process p, Process c)
+        public SpawnEffect(Process p, Event c)
         {
-            //this.process = p.Copy();
-            this.process = p;
+            this.process = p.Clone();
+            //this.process = p;
             this.context = c;
         }
     }

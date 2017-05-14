@@ -18,5 +18,10 @@ namespace Reseda.Core
         {
             return this.value.ToString();
         }
+
+        public override string ToSource()
+        {
+            return value.ToString();
+        }
     }
 }

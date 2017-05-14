@@ -46,7 +46,12 @@ namespace Reseda.Core
 
         public override string TypeToSource()
         {
-            return "<" + "" + ">";
+            return "<" + expression.ToSource() + ">";
+        }
+
+        internal override Event Clone()
+        {
+            return new OutputEvent(this.name, this.expression);
         }
     }
 }

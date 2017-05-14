@@ -22,5 +22,10 @@ namespace Reseda.Core
         {
             return "<>";
         }
+
+        internal override Event Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

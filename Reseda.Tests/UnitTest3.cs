@@ -29,6 +29,7 @@ namespace Reseda.Tests
             System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
 
             //var term2 = term.CloneJson();
+            var term2 = p.Generate(term.subProcess.ToSource());
 
             InputEvent a = (InputEvent)term.subProcess.structuredData[0];
             InputEvent b = (InputEvent)term.subProcess.structuredData[1];
@@ -51,7 +52,8 @@ namespace Reseda.Tests
             d.Execute();
             System.Diagnostics.Debug.WriteLine(term.PrintTree(true));
 
-            /*
+            System.Diagnostics.Debug.WriteLine("TERM 2");
+
             a = (InputEvent)term2.subProcess.structuredData[0];
             b = (InputEvent)term2.subProcess.structuredData[1];
             c = (OutputEvent)term2.subProcess.structuredData[2];
@@ -73,7 +75,7 @@ namespace Reseda.Tests
 
             d.Execute();
             System.Diagnostics.Debug.WriteLine(term2.PrintTree(true));
-            */
+            
         }
     }
 }

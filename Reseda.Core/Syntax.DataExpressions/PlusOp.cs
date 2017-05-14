@@ -12,6 +12,8 @@ namespace Reseda.Core
         {
         }
 
+        public override string Symbol => "+";
+
         public override DataType Eval(Event context)
         {
             var l = left.Eval(context);

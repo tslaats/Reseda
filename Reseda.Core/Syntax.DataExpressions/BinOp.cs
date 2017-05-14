@@ -16,5 +16,12 @@ namespace Reseda.Core
             left = l;
             right = r;
         }
+
+        public abstract String Symbol { get; }
+
+        public override String ToSource()
+        {
+            return left.ToSource() + " " + Symbol + " " + right.ToSource();
+        }
     }
 }

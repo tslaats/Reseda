@@ -21,5 +21,10 @@ namespace Reseda.Core
 
             return new EventSet(result);
         }
+
+        public override string ToSource()
+        {
+            return "@" + value.ToSource();
+        }
     }
 }

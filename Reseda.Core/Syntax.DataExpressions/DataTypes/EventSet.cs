@@ -21,6 +21,11 @@ namespace Reseda.Core
             this.value = new HashSet<Event>(s);
         }
 
+        public override string ToSource()
+        {
+            throw new NotImplementedException();
+        }
+
         public override string ToString()
         {
             if (value.Count == 0)
