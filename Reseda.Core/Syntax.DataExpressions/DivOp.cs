@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Reseda.Core.Syntax.DataExpressions
+namespace Reseda.Core
 {
     public class DivOp : BinOp
     {
@@ -12,10 +12,10 @@ namespace Reseda.Core.Syntax.DataExpressions
         {
         }
 
-        public override DataType Eval()
+        public override DataType Eval(Event context)
         {
-            var l = left.Eval();
-            var r = right.Eval();
+            var l = left.Eval(context);
+            var r = right.Eval(context);
 
             var lt = l.GetType();
             var rt = r.GetType();

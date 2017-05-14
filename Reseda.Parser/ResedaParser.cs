@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Irony.Parsing;
 using Reseda.Core;
-using Reseda.Core.Syntax.DataExpressions;
 
 namespace Reseda.Parser
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Reseda.Core.Syntax.DataExpressions
+namespace Reseda.Core
 {
     public class IntType : DataType
     {

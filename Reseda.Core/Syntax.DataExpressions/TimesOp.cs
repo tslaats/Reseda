@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Reseda.Core.Syntax.DataExpressions
+namespace Reseda.Core
 {
     public class TimesOp : BinOp
     {
@@ -12,10 +12,10 @@ namespace Reseda.Core.Syntax.DataExpressions
         {
         }
 
-        public override DataType Eval()
+        public override DataType Eval(Event context)
         {
-            var l = left.Eval();
-            var r = right.Eval();
+            var l = left.Eval(context);
+            var r = right.Eval(context);
 
             var lt = l.GetType();
             var rt = r.GetType();
@@ -27,9 +27,9 @@ namespace Reseda.Core.Syntax.DataExpressions
                 return new IntType(lc.value * rc.value);
             }
             if (rt != lt)
-                throw new Exception("DivOp Types mismatch");
+                throw new Exception("TimesOp Types mismatch");
             else
-                throw new NotImplementedException("DivOp incomplete");
+                throw new NotImplementedException("TimesOp incomplete");
         }
     }
 }

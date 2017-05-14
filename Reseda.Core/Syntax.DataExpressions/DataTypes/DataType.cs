@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Reseda.Core.Syntax.DataExpressions
+namespace Reseda.Core
 {
     public abstract class DataType : DataExpression
     {
-        public override DataType Eval()
+        public override DataType Eval(Event context)
         {
             return this;
         }

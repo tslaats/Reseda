@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Reseda.Core.Syntax.DataExpressions
+namespace Reseda.Core
 {
     public class PlusOp : BinOp
     {
@@ -12,10 +12,10 @@ namespace Reseda.Core.Syntax.DataExpressions
         {
         }
 
-        public override DataType Eval()
+        public override DataType Eval(Event context)
         {
-            var l = left.Eval();
-            var r = right.Eval();
+            var l = left.Eval(context);
+            var r = right.Eval(context);
 
             var lt = l.GetType();
             var rt = r.GetType();
@@ -26,10 +26,16 @@ namespace Reseda.Core.Syntax.DataExpressions
                 var rc = (IntType)r;
                 return new IntType(lc.value + rc.value);
             }
+            if (rt == typeof(EventSet) && lt == typeof(EventSet))
+            {
+                var lc = (EventSet)l;
+                var rc = (EventSet)r;
+                return new EventSet(lc.value.Union(rc.value));
+            }
             if (rt != lt)
-                throw new Exception("DivOp Types mismatch");
+                throw new Exception("PlusOp Types mismatch");
             else
-                throw new NotImplementedException("DivOp incomplete");
+                throw new NotImplementedException("PlusOp incomplete");
         }
     }
 }
