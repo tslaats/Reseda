@@ -70,6 +70,16 @@ namespace Reseda.Core
                             result.respond.Add(f);
                     }
                 }
+                else if (r.GetType() == typeof(Spawn))
+                {
+                    Spawn s = (Spawn)r;
+                    var src = s.source.Eval(this.parent);
+                    //var trg = s.target.Eval(this.parent);
+                    if (src.Contains(e))
+                    {                        
+                        result.spawn.Add(new SpawnEffect(s.target, this));
+                    }
+                }
             }
 
             foreach (var f in this.structuredData)
@@ -122,6 +132,24 @@ namespace Reseda.Core
                 //System.Diagnostics.Debug.WriteLine("<--" + result);
             }
 
+            return result;
+        }
+
+
+        public String ToSource()
+        {
+            var result = "";
+            foreach(var e in structuredData)
+            {
+                result += e.ToSource() + ",";
+            }
+            result = result.TrimEnd(',');
+            result += ";";
+            foreach (var r in relations)
+            {
+                result += r.ToSource() + ",";
+            }
+            result = result.TrimEnd(',');
             return result;
         }
 

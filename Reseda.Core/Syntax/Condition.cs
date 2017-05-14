@@ -11,5 +11,14 @@ namespace Reseda.Core
         public Condition(PathExpression s, PathExpression t) : base(s, t)
         {
         }
+
+        public override String Symbol
+        {
+            get
+            {
+                return "-->*";
+            }
+        }
+
     }
 }

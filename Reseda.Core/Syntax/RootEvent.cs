@@ -17,5 +17,10 @@ namespace Reseda.Core
         {
             throw new Exception("Don't execute a root event!");
         }
+
+        public override string TypeToSource()
+        {
+            return "<>";
+        }
     }
 }

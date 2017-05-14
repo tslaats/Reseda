@@ -11,7 +11,7 @@ namespace Reseda.Core
         public HashSet<Event> include = new HashSet<Event>();
         public HashSet<Event> exclude = new HashSet<Event>();
         public HashSet<Event> respond = new HashSet<Event>();
-        public HashSet<Process> spawn = new HashSet<Process>();
+        public HashSet<SpawnEffect> spawn = new HashSet<SpawnEffect>();
 
     }
 }

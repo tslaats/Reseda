@@ -44,5 +44,9 @@ namespace Reseda.Core
             return this.expression.Eval(e);                
         }
 
+        public override string TypeToSource()
+        {
+            return "<" + "" + ">";
+        }
     }
 }

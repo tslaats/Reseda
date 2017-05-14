@@ -26,7 +26,12 @@ namespace Reseda.Core
         public void Execute(int i)
         {
             this.Execute(new IntType(i));
-        }        
+        }
+
+        public override string TypeToSource()
+        {
+            return "<?>";
+        }
 
         private void Execute(DataType d)
         {

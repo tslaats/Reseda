@@ -11,5 +11,14 @@ namespace Reseda.Core
         public Inclusion(PathExpression s, PathExpression t) : base(s, t)
         {
         }
+
+
+        public override String Symbol
+        {
+            get
+            {
+                return "-->+";
+            }
+        }
     }
 }

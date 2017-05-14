@@ -16,6 +16,12 @@ namespace Reseda.Core
                 return Symbol+ "/" + child.ToString();
         }
 
+
+        public String ToSource()
+        {
+            return this.ToString();
+        }
+
         PathExpression child;
         DataExpression filter;
 

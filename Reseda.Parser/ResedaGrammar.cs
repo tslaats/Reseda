@@ -135,7 +135,7 @@ namespace Reseda.Parser
 
             Include.Rule = Path + ToTerm("-->+") + Path;
             Exclude.Rule = Path + ToTerm("-->%") + Path;
-            Spawn.Rule = Path + ToTerm("-->>") + Process;
+            Spawn.Rule = Path + ToTerm("-->>") + ToTerm("{") + Process + ToTerm("}");
             Condition.Rule = Path + ToTerm("-->*") + Path;
             Response.Rule = Path + ToTerm("*-->") + Path;
             Relation.Rule = Include | Exclude | Response | Condition | Spawn;

@@ -12,5 +12,13 @@ namespace Reseda.Core
         public Exclusion(PathExpression s, PathExpression t) : base(s, t)
         {
         }
+
+        public override String Symbol
+        {
+            get
+            {
+                return "-->%";
+            }
+        }
     }
 }

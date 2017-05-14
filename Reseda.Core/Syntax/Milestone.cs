@@ -11,5 +11,13 @@ namespace Reseda.Core
         public Milestone(PathExpression s, PathExpression t) : base(s, t)
         {
         }
+
+        public override String Symbol
+        {
+            get
+            {
+                return "--><>";
+            }
+        }
     }
 }

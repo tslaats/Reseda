@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Reseda.Core
 {
-    public class Event
+    public abstract class Event
     {
         public String name;
         public Marking marking;
@@ -82,8 +82,20 @@ namespace Reseda.Core
             return result;
         }
 
+        public abstract String TypeToSource();
 
-        public override String ToString()
+        public String ToSource()
+        {
+            var result = this.name;
+            result += TypeToSource();
+            if (this.subProcess.structuredData.Count > 0 || this.subProcess.relations.Count > 0)
+                result += "{}";
+            return result;
+        }
+
+
+
+    public override String ToString()
         {
             return "Event: " + Location();
         }

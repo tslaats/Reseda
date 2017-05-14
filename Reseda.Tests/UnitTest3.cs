@@ -17,7 +17,7 @@ namespace Reseda.Tests
                            "D<!>," +
                            "E<!>" +
                            "; A -->* B," +
-                           " D -->> N<?>;," +
+                           " D -->> {N<?>;}," +
                            "E -->% *";
             var p = new ResedaParser();
             p.dispTree(input);
@@ -25,6 +25,10 @@ namespace Reseda.Tests
             //System.Diagnostics.Debug.WriteLine(p.Generate(input).PrintTree());
 
             var term = p.Generate(input);
+
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+
+            //var term2 = term.CloneJson();
 
             InputEvent a = (InputEvent)term.subProcess.structuredData[0];
             InputEvent b = (InputEvent)term.subProcess.structuredData[1];
@@ -46,6 +50,30 @@ namespace Reseda.Tests
 
             d.Execute();
             System.Diagnostics.Debug.WriteLine(term.PrintTree(true));
+
+            /*
+            a = (InputEvent)term2.subProcess.structuredData[0];
+            b = (InputEvent)term2.subProcess.structuredData[1];
+            c = (OutputEvent)term2.subProcess.structuredData[2];
+            d = (OutputEvent)term2.subProcess.structuredData[3];
+            e = (OutputEvent)term2.subProcess.structuredData[4];
+
+            System.Diagnostics.Debug.WriteLine(term2.PrintTree(true));
+            a.Execute(1);
+            System.Diagnostics.Debug.WriteLine(term2.PrintTree(true));
+
+            b.Execute(5);
+            System.Diagnostics.Debug.WriteLine(term2.PrintTree(true));
+
+            c.Execute();
+            System.Diagnostics.Debug.WriteLine(term2.PrintTree(true));
+
+            d.Execute();
+            System.Diagnostics.Debug.WriteLine(term2.PrintTree(true));
+
+            d.Execute();
+            System.Diagnostics.Debug.WriteLine(term2.PrintTree(true));
+            */
         }
     }
 }

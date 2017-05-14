@@ -69,6 +69,17 @@ namespace Reseda.Parser
                 ev.AddRelation(r);
         }
 
+        public Process GenerateProcess(ParseTreeNode node)
+        {
+            Process result = new Process(null);            
+            foreach (var e in GenerateEvents(node.ChildNodes[0]))
+                result.structuredData.Add(e);
+            foreach (var r in GenerateRelations(node.ChildNodes[1]))
+                result.relations.Add(r);
+
+            return result;
+        }
+
 
         public HashSet<Event> GenerateEvents(ParseTreeNode node)
         {
@@ -153,8 +164,8 @@ namespace Reseda.Parser
                     result.Add(new Exclusion(GeneratePath(child.ChildNodes[0]), GeneratePath(child.ChildNodes[1])));
                 else if (child.Term.Name == "Milestone")
                     result.Add(new Milestone(GeneratePath(child.ChildNodes[0]), GeneratePath(child.ChildNodes[1])));
-                //else if (child.Term.Name == "Spawn")
-                //    result.Add(new Response(GeneratePath(child.ChildNodes[0]), GeneratePath(child.ChildNodes[1])));
+                else if (child.Term.Name == "Spawn")
+                    result.Add(new Spawn(GeneratePath(child.ChildNodes[0]), GenerateProcess(child.ChildNodes[1])));
             }
             return result;
         }

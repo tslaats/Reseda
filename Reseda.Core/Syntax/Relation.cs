@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Reseda.Core
 {
-    public class Relation
+    public abstract class Relation
     {
+        public abstract String ToSource();
+
     }
 }
