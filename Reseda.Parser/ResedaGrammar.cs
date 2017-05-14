@@ -79,8 +79,17 @@ namespace Reseda.Parser
             PathExpressionCont.Rule = (ToTerm("/") + PathExpression) | Empty;
             PathExpression.Rule = PathName | PathLocal | PathParent | PathAll;
             PathRoot.Rule = ToTerm("/") + PathExpression;
+
             Path.Rule = PathExpression | PathRoot;
 
+            /*
+            var PathNoAttr = new NonTerminal("PathNoAttr");
+            var PathValue = new NonTerminal("PathValue");
+
+            PathValue.Rule = PathNoAttr + ToTerm(":v");
+            Path.Rule = PathValue | PathNoAttr;
+            PathNoAttr.Rule = PathExpression | PathRoot;
+            */
             var Term = new NonTerminal("Term");
             var ParExpr = new NonTerminal("ParExpr");
             var BinExpr = new NonTerminal("BinExpr");
@@ -100,11 +109,19 @@ namespace Reseda.Parser
             var DPath = new NonTerminal("DPath");
 
 
+            
+            var DPathValue = new NonTerminal("DPathValue");
+            var DDPath = new NonTerminal("DDPath");
+
+
+            DDPath.Rule = DPathValue | DPath;
+            DPathValue.Rule = DPath + ToTerm(":v");
+
             //.Rule = ;
             //Unit.Rule = ToTerm("!");
             DPath.Rule = ToTerm("@") + Path;
             Expression.Rule = Term | BinExpr;
-            Term.Rule = number | ParExpr | identifier | Unit | DPath;
+            Term.Rule = number | ParExpr | identifier | Unit | DDPath;
             ParExpr.Rule = "(" + Expression + ")";
             //BinExpr.Rule = Expression + BinOp + Expression;
             //BinOp.Rule = ToTerm("+") | "-" | "*" | "/" | "**";
@@ -154,7 +171,8 @@ namespace Reseda.Parser
 
             //MarkTransient(PathExpression);
             MarkTransient(Relation, Event, SubProcess, PathExpressionCont,
-                PathExpression, Path, BinExpr, Expression, Term, ParExpr, BinExpr2);
+                PathExpression, Path, BinExpr, Expression, Term, ParExpr, BinExpr2,
+                DDPath);
             
 
 

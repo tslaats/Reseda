@@ -13,5 +13,9 @@ namespace Reseda.Core
             this.name = "/";
         }
 
+        public override void Execute()
+        {
+            throw new Exception("Don't execute a root event!");
+        }
     }
 }

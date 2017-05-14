@@ -12,6 +12,11 @@ namespace Reseda.Core
         public IntType(int v)
         {
             value = v;
-        }        
+        }
+
+        public override string ToString()
+        {
+            return this.value.ToString();
+        }
     }
 }

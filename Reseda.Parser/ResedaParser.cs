@@ -117,6 +117,8 @@ namespace Reseda.Parser
                     return new Unit();
                 case "Unit":
                     return new Unit();
+                case "DPathValue":
+                    return new ValueOf(GenerateExpression(node.ChildNodes[0]));                    
                 case "DPath":
                     return new Path(GeneratePath(node.ChildNodes[0]));
 

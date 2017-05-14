@@ -110,12 +110,13 @@ namespace Reseda.Core
             return result;
         }
 
-        public void Execute()
+        public virtual void Execute()
         {
+            /*
             if (!this.IsEnabled())
             {
                 throw new Exception("Trying to execute disabled event!");                
-            }
+            }*/
 
             this.marking.happened = true;
             this.marking.pending = false;
@@ -131,6 +132,7 @@ namespace Reseda.Core
             foreach (var e in se.respond)
                 e.marking.included = false;
         }
+
 
         /*
         public Boolean IsEnabled(Event e)

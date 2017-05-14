@@ -20,5 +20,17 @@ namespace Reseda.Core
         {
             this.value = new HashSet<Event>(s);
         }
+
+        public override string ToString()
+        {
+            if (value.Count == 0)
+                return "{}";
+
+            String result = "{";
+            ;
+            foreach (var e in value)
+                result += e.ToString() + ",";
+            return result.Substring(0,result.Length - 1) + "}";
+        }
     }
 }

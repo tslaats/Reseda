@@ -35,7 +35,7 @@ namespace Reseda.Core
             if (rt != lt)
                 throw new Exception("PlusOp Types mismatch");
             else
-                throw new NotImplementedException("PlusOp incomplete");
+                throw new NotImplementedException("PlusOp incomplete: " + lt.ToString() + " - " + rt.ToString());
         }
     }
 }

@@ -17,5 +17,25 @@ namespace Reseda.Core
         {
             this.name = name;
         }
+
+        public override void Execute()
+        {
+            this.Execute(new Unit());
+        }
+
+        public void Execute(int i)
+        {
+            this.Execute(new IntType(i));
+        }        
+
+        private void Execute(DataType d)
+        {
+            if (!this.IsEnabled())
+            {
+                throw new Exception("Trying to execute disabled event!");
+            }
+            this.marking.value = d;
+            base.Execute();
+        }
     }
 }

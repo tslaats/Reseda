@@ -11,7 +11,7 @@ namespace Reseda.Core
         public Boolean happened;
         public Boolean included;
         public Boolean pending;
-        public Object value;
+        public DataType value;
 
         public Marking()
         {

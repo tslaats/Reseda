@@ -28,5 +28,21 @@ namespace Reseda.Core
             this.expression = new Unit();
         }
 
+        public override void Execute()
+        {
+            if (!this.IsEnabled())
+            {
+                throw new Exception("Trying to execute disabled event!");
+            }
+            this.marking.value = this.Compute(this.parentProcess.parent);
+            base.Execute();
+        }
+
+
+        private DataType Compute(Event e)
+        {
+            return this.expression.Eval(e);                
+        }
+
     }
 }
