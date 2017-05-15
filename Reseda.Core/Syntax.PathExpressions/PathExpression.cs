@@ -11,11 +11,18 @@ namespace Reseda.Core
         public override String ToString()
         {
             if (child == null)
-                return Symbol;
+                return Symbol + FilterToString();
             else
-                return Symbol+ "/" + child.ToString();
+                return Symbol + FilterToString() + "/" + child.ToString();
         }
 
+        private string FilterToString()
+        {
+            if (this.filter == null)
+                return "";
+            else
+                return "[" + filter.ToSource() + "]";
+        }
 
         public String ToSource()
         {
@@ -47,20 +54,38 @@ namespace Reseda.Core
             return Eval(context, context.Root());
         }
 
+        ISet<Event> ApplyFilter(ISet<Event> s, Event context)
+        {
+            if (this.filter == null)
+                return s;
+
+            var result = new HashSet<Event>();
+            var val = this.filter.Eval(context);
+            if (val.GetType() == typeof(IntType))
+            {
+                IntType v = (IntType)val;
+                if (s.Count > v.value)
+                    result.Add(s.ElementAt(v.value));
+                return result;
+            }
+
+            throw new Exception("Bad filter type: " + val.GetType());
+        }
+
         public ISet<Event> Eval(Event context, Event root)
         {
             //System.out.println("Checking '" + this.ToString() + "' in context: " + context.location());
             if (Next== null)
             {
                 //System.out.println("1");
-                return Current(context, root);
+                return ApplyFilter(Current(context, root),context);
             }
             else
             {
                 //System.out.println("2");
                 //System.out.println(current(context,root));
                 HashSet<Event> result = new HashSet<Event>();
-                foreach (Event e in Current(context, root))
+                foreach (Event e in ApplyFilter(Current(context, root), context))
                 {
                     result.UnionWith(Next.Eval(e, root));
                 }
@@ -91,5 +116,10 @@ namespace Reseda.Core
         public abstract ISet<Event> Current(Event context, Event root);
 
         public abstract String Symbol { get; }
+
+        public void AddFilter(DataExpression dataExpression)
+        {
+            this.filter = dataExpression;
+        }
     }
 }

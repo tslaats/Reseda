@@ -45,10 +45,12 @@ namespace Reseda.Parser
             var PathParent = new NonTerminal("PathParent");
             var PathAll = new NonTerminal("PathAll");
 
-            PathName.Rule = identifier + PathExpressionCont;
-            PathLocal.Rule = ToTerm(".") + PathExpressionCont;
-            PathParent.Rule = ToTerm("..") + PathExpressionCont;
-            PathAll.Rule = ToTerm("*") + PathExpressionCont;
+            var Filter = new NonTerminal("Filter");
+            Filter.Rule = (ToTerm("[") + Expression + ToTerm("]")) | Empty;
+            PathName.Rule = identifier + Filter + PathExpressionCont;
+            PathLocal.Rule = ToTerm(".") + Filter + PathExpressionCont;
+            PathParent.Rule = ToTerm("..") + Filter + PathExpressionCont;
+            PathAll.Rule = ToTerm("*") + Filter + PathExpressionCont;
             PathExpressionCont.Rule = (ToTerm("/") + PathExpression) | Empty;
             PathExpression.Rule = PathName | PathLocal | PathParent | PathAll;
             PathRoot.Rule = ToTerm("/") + PathExpression;
@@ -103,7 +105,7 @@ namespace Reseda.Parser
 
             
             MarkPunctuation("-->+", ",", ";", "-->%", "-->*", "*-->",
-                "-->>", "<", ">", "?", "!", "{", "}", "/", ".", "..", "*", "+", "-", "(", ")", "@");
+                "-->>", "<", ">", "?", "!", "{", "}", "/", ".", "..", "*", "+", "-", "(", ")", "@", "[","]");
 
             MarkTransient(Relation, Event, SubProcess, PathExpressionCont,
                 PathExpression, Path, BinExpr, Expression, Term, ParExpr, BinExpr2,

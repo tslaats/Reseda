@@ -208,9 +208,17 @@ namespace Reseda.Parser
                     throw new NotImplementedException(node.ToString());
             }
 
-            var i = 0;
+            var j = 0;
             if (node.Term.Name == "PathName")
-                i = 1;
+                j = 1;
+            if (node.Term.Name != "PathRoot" && node.ChildNodes[j].ChildNodes.Count > 0) //.Term.Name == "Filter" 
+                result.AddFilter(GenerateExpression(node.ChildNodes[j].ChildNodes[0]));
+
+            var i = 1;
+            if (node.Term.Name == "PathName")
+                i = 2;
+            else if (node.Term.Name == "PathRoot")
+                i = 0;
             if (node.ChildNodes.Count > i)
                 result.Extend(GeneratePath(node.ChildNodes[i]));
             return result;
