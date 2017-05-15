@@ -40,7 +40,7 @@ namespace Reseda.Core
             return this;
         }
 
-        internal abstract Event Clone();
+        internal abstract Event ShallowClone();
 
         public ISet<Event> Descendants()
         {
@@ -86,7 +86,7 @@ namespace Reseda.Core
 
         public abstract String TypeToSource();
 
-        public String ToSource()
+        public virtual String ToSource()
         {
             var result = this.name;
             result += TypeToSource();

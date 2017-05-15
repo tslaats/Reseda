@@ -19,19 +19,14 @@ namespace Reseda.Core
             this.parent = parent;
         }
 
-        internal Process CloneByParser()
-        {
-            throw new NotImplementedException();
-        }
-
-        internal Process Clone()
+        internal Process ShallowClone()
         {
             var p = new Process(null);
             foreach (var r in relations)
                 p.relations.Add(r);
 
             foreach (var e in structuredData)
-                p.structuredData.Add(e.Clone());
+                p.structuredData.Add(e.ShallowClone());
 
             return p;
         }

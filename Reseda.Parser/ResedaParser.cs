@@ -23,6 +23,32 @@ namespace Reseda.Parser
             return root;
         }
 
+
+        public String stringTree(ParseTreeNode node, int level)
+        {
+            var result = "";
+            for (int i = 0; i < level; i++)
+                result += "  ";
+            //System.Diagnostics.Debug.WriteLine(node);
+            if (node != null && node.Token != null)
+                result += node.Token.Value + Environment.NewLine;
+            else
+                result += node.Term.Name + Environment.NewLine;
+
+            foreach (ParseTreeNode child in node.ChildNodes)
+                result += stringTree(child, level + 1);
+
+            return result;
+        }
+
+        public String stringTree(string sourceCode)
+        {
+            var root = getRoot(sourceCode);
+            if (root == null)
+                throw new Exception("No Root!");
+            return stringTree(root, 0);
+        }
+
         public void dispTree(ParseTreeNode node, int level)
         {
             for (int i = 0; i < level; i++)

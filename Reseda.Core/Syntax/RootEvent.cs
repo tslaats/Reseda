@@ -20,10 +20,15 @@ namespace Reseda.Core
 
         public override string TypeToSource()
         {
-            return "<>";
+            return subProcess.ToSource();
         }
 
-        internal override Event Clone()
+        public override string ToSource()
+        {
+            return subProcess.ToSource();
+        }
+
+        internal override Event ShallowClone()
         {
             throw new NotImplementedException();
         }

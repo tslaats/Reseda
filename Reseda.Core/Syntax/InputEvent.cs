@@ -43,7 +43,7 @@ namespace Reseda.Core
             base.Execute();
         }
 
-        internal override Event Clone()
+        internal override Event ShallowClone()
         {
             return new InputEvent(this.name);
         }

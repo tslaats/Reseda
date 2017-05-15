@@ -49,7 +49,7 @@ namespace Reseda.Core
             return "<" + expression.ToSource() + ">";
         }
 
-        internal override Event Clone()
+        internal override Event ShallowClone()
         {
             return new OutputEvent(this.name, this.expression);
         }
