@@ -91,7 +91,7 @@ namespace Reseda.Core
             var result = this.name;
             result += TypeToSource();
             if (this.subProcess.structuredData.Count > 0 || this.subProcess.relations.Count > 0)
-                result += "{}";
+                result += "{" + subProcess.ToSource() + "}";
             return result;
         }
 

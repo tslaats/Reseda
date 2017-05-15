@@ -6,10 +6,51 @@ using Reseda.Core;
 namespace Reseda.Tests
 {
     [TestClass]
-    public class UnitTest3
+    public class ParserTests
     {
         [TestMethod]
-        public void ComputeTest()
+        public void BasicParserTest()
+        {
+            string input = "A< 2 * 2 + 4 >," +
+                           "B<3 + 4 + 5 * 6 + 7 + 8 + 9>{C<1 + (3 * 5) - @c/d>;}" +
+                           "; A -->* /B," +
+                           " A/*/C -->* /B/.././F," 
+                           + "B -->% *";
+            var p = new ResedaParser();
+
+            var term = p.Generate(input);
+            var term2 = p.Generate(term.ToSource());
+
+            Assert.AreEqual(term.ToSource(), "A<2 * 2 + 4>,B<3 + 4 + 5 * 6 + 7 + 8 + 9>{C<1 + 3 * 5 - @c/d>;};A -->* /B,A/*/C -->* /B/.././F,B -->% *");
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+
+            //p.dispTree(input);
+
+            //System.Diagnostics.Debug.WriteLine(p.Generate(input).PrintTree());
+
+            /*
+            var term = p.Generate(input);
+            System.Diagnostics.Debug.WriteLine(term.PrintTree());
+            System.Diagnostics.Debug.WriteLine(term.PrintTree(true));
+
+            var c = (Condition)term.subProcess.relations[0];
+            System.Diagnostics.Debug.WriteLine(c.source.ToString());
+            System.Diagnostics.Debug.WriteLine(c.target.ToString());
+
+            c = (Condition)term.subProcess.relations[1];
+            System.Diagnostics.Debug.WriteLine(c.source.ToString());
+            System.Diagnostics.Debug.WriteLine(c.target.ToString());
+
+            term.subProcess.structuredData[0].Execute();
+            System.Diagnostics.Debug.WriteLine(term.PrintTree(true));
+
+            term.subProcess.structuredData[1].Execute();
+            System.Diagnostics.Debug.WriteLine(term.PrintTree(true));
+            */
+        }
+
+        [TestMethod]
+        public void CurrentHackingTest()
         {
             string input = "A<?>," +
                            "B<?>," +
@@ -75,7 +116,8 @@ namespace Reseda.Tests
 
             d.Execute();
             System.Diagnostics.Debug.WriteLine(term2.PrintTree(true));
-            
+
         }
+
     }
 }

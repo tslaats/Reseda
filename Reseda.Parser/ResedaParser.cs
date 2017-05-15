@@ -158,21 +158,9 @@ namespace Reseda.Parser
                     return new ValueOf(GenerateExpression(node.ChildNodes[0]));                    
                 case "DPath":
                     return new Path(GeneratePath(node.ChildNodes[0]));
-
-                /*case "PathAll":
-                    result = new All();
-                    break;*/
                 default:
                     throw new NotImplementedException(node.ToString());
-            }
-
-            return null;
-            /*
-            PlusOp
-  TimesOp
-          2(number)
-          2(number)
-        4(number*/
+            }            
         }
 
         public HashSet<Relation> GenerateRelations(ParseTreeNode node)
@@ -227,32 +215,7 @@ namespace Reseda.Parser
                 result.Extend(GeneratePath(node.ChildNodes[i]));
             return result;
         }
-
-
-
-
-        /*
-        public Process generateProcess(ParseTreeNode node)
-        {
-
-        }
-
-        public Event generate(ParseTreeNode node)
-        {
-            
-
-            switch (node.Term.Name)
-            {
-                case "TopLevel":
-                case "Expr":
-                case "ValueExpr":
-                case "ParenExpr":
-                    return generate(node.ChildNodes[0]);
-                case "NumberExpr":
-                    return ConstantFP.get(builder.getDoubleTy(), double.Parse(node.Token.Text));
-                case "VariableExpr":
-
-            }
-        }*/
+        
+        
     }
 }
