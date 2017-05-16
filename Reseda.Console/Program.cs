@@ -38,9 +38,13 @@ namespace Reseda.ConsoleApp
                     case "load":
                         Load(commandArgs[0]);
                         break;
-                    case "print": Console.WriteLine(term.ToSource()); break;
+                    case "term": Console.WriteLine(term.ToSource()); break;
+                    case "tree": Console.WriteLine(term.PrintTree(true)); break;
                     case "execute":
-                        Execute(commandArgs[0]);
+                        if (commandArgs.Count > 1)
+                            Execute(commandArgs[0], commandArgs[1]);
+                        else
+                            Execute(commandArgs[0]);                        
                         break;
                 }
             }
@@ -48,7 +52,35 @@ namespace Reseda.ConsoleApp
 
         private static void Execute(string v)
         {
-            throw new NotImplementedException();
+            var path = parser.GeneratePath(v);
+            var es = path.Eval(term);
+            if (es.Count == 0)
+                Console.WriteLine("Not a valid event.");
+            else if (es.Count > 1)
+                Console.WriteLine("Path selects more than one event, consider adding [0].");
+            else
+            {
+                es.ElementAt(0).Execute();
+                Console.WriteLine(term.ToSource());
+                Console.WriteLine(term.PrintTree(true));                
+            }
+        }
+
+        private static void Execute(string v, string value)
+        {
+            var path = parser.GeneratePath(v);
+            var es = path.Eval(term);
+            if (es.Count == 0)
+                Console.WriteLine("Not a valid event.");
+            else if (es.Count > 1)
+                Console.WriteLine("Path selects more than one event, consider adding [0].");
+            else
+            {
+                InputEvent e = (InputEvent)es.ElementAt(0);
+                e.Execute(int.Parse(value));
+                Console.WriteLine(term.ToSource());
+                Console.WriteLine(term.PrintTree(true));
+            }
         }
 
         private static void Load(string v)

@@ -100,7 +100,8 @@ namespace Reseda.Core
                 var se2 = f.subProcess.GetSideEffects(e);
                 result.include.UnionWith(se2.include);
                 result.exclude.UnionWith(se2.exclude);
-                result.respond.UnionWith(se2.respond);                
+                result.respond.UnionWith(se2.respond);
+                result.spawn.UnionWith(se2.spawn);
                 //System.Diagnostics.Debug.WriteLine("<--" + result);
             }
             return result;
