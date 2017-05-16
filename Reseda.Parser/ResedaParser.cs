@@ -11,8 +11,9 @@ namespace Reseda.Parser
     public class ResedaParser
     {
         public Grammar grammar = new ResedaGrammar();
+        public Grammar pathgrammar = new ResedaPathGrammar();
 
-        public ParseTreeNode getRoot(string sourceCode)
+        public ParseTreeNode getRoot(string sourceCode, Grammar grammar)
         {
             LanguageData language = new LanguageData(grammar);
             Irony.Parsing.Parser parser = new Irony.Parsing.Parser(language);
@@ -43,7 +44,7 @@ namespace Reseda.Parser
 
         public String stringTree(string sourceCode)
         {
-            var root = getRoot(sourceCode);
+            var root = getRoot(sourceCode, grammar);
             if (root == null)
                 throw new Exception("No Root!");
             return stringTree(root, 0);
@@ -65,7 +66,7 @@ namespace Reseda.Parser
 
         public void dispTree(string sourceCode)
         {
-            var root = getRoot(sourceCode);
+            var root = getRoot(sourceCode, grammar);
             if (root == null)
                 throw new Exception("No Root!");
             dispTree(root, 0);
@@ -73,7 +74,7 @@ namespace Reseda.Parser
 
         public Event Generate(string sourceCode)
         {
-            var root = getRoot(sourceCode);
+            var root = getRoot(sourceCode, grammar);
             if (root == null)
                 throw new Exception("No Root!");
             return GenerateRoot(root);
@@ -183,6 +184,15 @@ namespace Reseda.Parser
             }
             return result;
         }
+
+        public PathExpression GeneratePath(string sourceCode)
+        {
+            var root = getRoot(sourceCode, pathgrammar);
+            if (root == null)
+                throw new Exception("No Root!");
+            return GeneratePath(root);
+        }
+
 
         private PathExpression GeneratePath(ParseTreeNode node)
         {

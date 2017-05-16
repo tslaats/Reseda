@@ -10,6 +10,7 @@ namespace Reseda.Parser
 {
     public class ResedaGrammar : Grammar
     {
+        internal NonTerminal path;
         public ResedaGrammar()
         {
             var number = new NumberLiteral("number");
@@ -102,7 +103,7 @@ namespace Reseda.Parser
             StructuredData.Rule = MakeListRule(StructuredData, ToTerm(","), Event) | Empty;            
             Process.Rule = StructuredData + ToTerm(";") + Relations;
             this.Root = Process;
-
+            this.path = Path;
             
             MarkPunctuation("-->+", ",", ";", "-->%", "-->*", "*-->",
                 "-->>", "<", ">", "?", "!", "{", "}", "/", ".", "..", "*", "+", "-", "(", ")", "@", "[","]");
