@@ -9,7 +9,7 @@ namespace Reseda.Core
     public class Here : PathExpression
     {
 
-        public override ISet<Event> Current(Event context, Event root) {
+        public override ISet<Event> EvalCurrentNode(Event context, Event root) {
             HashSet<Event> result = new HashSet<Event>();
             result.Add(context);
             return result;

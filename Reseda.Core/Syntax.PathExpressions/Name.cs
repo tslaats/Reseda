@@ -35,7 +35,7 @@ namespace Reseda.Core
 
         public String name;
         
-        public override ISet<Event> Current(Event context, Event root) {
+        public override ISet<Event> EvalCurrentNode(Event context, Event root) {
             HashSet<Event> result = new HashSet<Event>(context.subProcess.structuredData);
             result.RemoveWhere(p => p.name != name);
             return result;

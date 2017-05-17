@@ -16,7 +16,7 @@ namespace Reseda.Core
             }
         }
         
-        public override ISet<Event> Current(Event context, Event root) {
+        public override ISet<Event> EvalCurrentNode(Event context, Event root) {
             return new HashSet<Event>(context.subProcess.structuredData);
         }
 

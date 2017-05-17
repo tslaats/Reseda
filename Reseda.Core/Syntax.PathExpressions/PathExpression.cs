@@ -41,7 +41,7 @@ namespace Reseda.Core
         }
 
 
-        PathExpression Next
+        PathExpression Child
         {
             get
             {
@@ -75,19 +75,19 @@ namespace Reseda.Core
         public ISet<Event> Eval(Event context, Event root)
         {
             //System.out.println("Checking '" + this.ToString() + "' in context: " + context.location());
-            if (Next== null)
+            if (Child== null)
             {
                 //System.out.println("1");
-                return ApplyFilter(Current(context, root),context);
+                return ApplyFilter(EvalCurrentNode(context, root),context);
             }
             else
             {
                 //System.out.println("2");
                 //System.out.println(current(context,root));
                 HashSet<Event> result = new HashSet<Event>();
-                foreach (Event e in ApplyFilter(Current(context, root), context))
+                foreach (Event e in ApplyFilter(EvalCurrentNode(context, root), context))
                 {
-                    result.UnionWith(Next.Eval(e, root));
+                    result.UnionWith(Child.Eval(e, root));
                 }
                 return result;
             }
@@ -113,7 +113,7 @@ namespace Reseda.Core
         }
 
 
-        public abstract ISet<Event> Current(Event context, Event root);
+        public abstract ISet<Event> EvalCurrentNode(Event context, Event root);
 
         public abstract String Symbol { get; }
 

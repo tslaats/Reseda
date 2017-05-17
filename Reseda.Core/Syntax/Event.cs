@@ -144,7 +144,7 @@ namespace Reseda.Core
                 e.marking.included = true;
 
             foreach (var e in se.respond)
-                e.marking.included = false;
+                e.marking.pending = true;
             
             foreach (var s in se.spawn)
             {

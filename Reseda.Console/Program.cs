@@ -60,9 +60,16 @@ namespace Reseda.ConsoleApp
                 Console.WriteLine("Path selects more than one event, consider adding [0].");
             else
             {
-                es.ElementAt(0).Execute();
-                Console.WriteLine(term.ToSource());
-                Console.WriteLine(term.PrintTree(true));                
+                try
+                {
+                    es.ElementAt(0).Execute();
+                    Console.WriteLine(term.ToSource());
+                    Console.WriteLine(term.PrintTree(true));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Execution of " + v + " failed because: " + e.Message);
+                }
             }
         }
 
@@ -76,10 +83,17 @@ namespace Reseda.ConsoleApp
                 Console.WriteLine("Path selects more than one event, consider adding [0].");
             else
             {
-                InputEvent e = (InputEvent)es.ElementAt(0);
-                e.Execute(int.Parse(value));
-                Console.WriteLine(term.ToSource());
-                Console.WriteLine(term.PrintTree(true));
+                try
+                { 
+                    InputEvent e = (InputEvent)es.ElementAt(0);
+                    e.Execute(int.Parse(value));
+                    Console.WriteLine(term.ToSource());
+                    Console.WriteLine(term.PrintTree(true));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Execution of " + v + " failed because: " + e.Message);
+                }
             }
         }
 
