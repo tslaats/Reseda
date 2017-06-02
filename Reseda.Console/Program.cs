@@ -25,27 +25,35 @@ namespace Reseda.ConsoleApp
                 var commandParts = Console.ReadLine().Split(' ').ToList();
                 var commandName = commandParts[0];
                 var commandArgs = commandParts.Skip(1).ToList(); // the arguments is after the command                
-                switch (commandName)
+                try
                 {
-                    // Create command based on CommandName (and maybe arguments)
-                    case "exit": exit = true; break;
-                    case "parse":
-                        String s = "";
-                        foreach (var i in commandArgs)
-                            s += i + " ";
-                        Parse(s);
-                        break;
-                    case "load":
-                        Load(commandArgs[0]);
-                        break;
-                    case "term": Console.WriteLine(term.ToSource()); break;
-                    case "tree": Console.WriteLine(term.PrintTree(true)); break;
-                    case "execute":
-                        if (commandArgs.Count > 1)
-                            Execute(commandArgs[0], commandArgs[1]);
-                        else
-                            Execute(commandArgs[0]);                        
-                        break;
+                    switch (commandName)
+                    {
+                        // Create command based on CommandName (and maybe arguments)
+                        case "exit": exit = true; break;
+                        case "parse":
+                            String s = "";
+                            foreach (var i in commandArgs)
+                                s += i + " ";
+                            Parse(s);
+                            break;
+                        case "load":
+                            Load(commandArgs[0]);
+                            break;
+                        case "term": Console.WriteLine(term.ToSource()); break;
+                        case "tree": Console.WriteLine(term.PrintTree(true)); break;
+                        case "execute":
+                            if (commandArgs.Count > 1)
+                                Execute(commandArgs[0], commandArgs[1]);
+                            else
+                                Execute(commandArgs[0]);
+                            break;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Command " + commandName + "failed, because:");
+                    Console.WriteLine(e.Message);
                 }
             }
         }
