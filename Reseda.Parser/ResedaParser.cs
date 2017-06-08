@@ -141,6 +141,14 @@ namespace Reseda.Parser
         {            
             switch (node.Term.Name)
             {
+                case "AndOp":
+                    return new AndOp(GenerateExpression(node.ChildNodes[0]), GenerateExpression(node.ChildNodes[1]));
+                case "OrOp":
+                    return new OrOp(GenerateExpression(node.ChildNodes[0]), GenerateExpression(node.ChildNodes[1]));
+                case "EqOp":
+                    return new EqOp(GenerateExpression(node.ChildNodes[0]), GenerateExpression(node.ChildNodes[1]));
+                case "GtOp":
+                    return new GtOp(GenerateExpression(node.ChildNodes[0]), GenerateExpression(node.ChildNodes[1]));
                 case "PlusOp":
                     return new PlusOp(GenerateExpression(node.ChildNodes[0]), GenerateExpression(node.ChildNodes[1]));                    
                 case "MinOp":
@@ -159,6 +167,8 @@ namespace Reseda.Parser
                     return new ValueOf(GenerateExpression(node.ChildNodes[0]));                    
                 case "DPath":
                     return new Path(GeneratePath(node.ChildNodes[0]));
+                case "NegOp":
+                    return new NegOp(GenerateExpression(node.ChildNodes[0]));
                 default:
                     throw new NotImplementedException(node.ToString());
             }            
