@@ -94,7 +94,13 @@ namespace Reseda.ConsoleApp
                 try
                 { 
                     InputEvent e = (InputEvent)es.ElementAt(0);
-                    e.Execute(int.Parse(value));
+                    bool b;
+                    if (Boolean.TryParse(value, out b))
+                    {
+                        e.Execute(b);
+                    }
+                    else
+                        e.Execute(int.Parse(value));
                     Console.WriteLine(term.ToSource());
                     Console.WriteLine(term.PrintTree(true));
                 }

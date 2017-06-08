@@ -45,6 +45,7 @@
     <Compile Include="Syntax.DataExpressions\BinOp.cs" />
     <Compile Include="Syntax.DataExpressions\DataExpression.cs" />
     <Compile Include="Syntax.DataExpressions\DataTypes\EventSet.cs" />
+    <Compile Include="Syntax.DataExpressions\DataTypes\BoolType.cs" />
     <Compile Include="Syntax.DataExpressions\DataTypes\IntType.cs" />
     <Compile Include="Syntax.DataExpressions\DataTypes\DataType.cs" />
     <Compile Include="Syntax.DataExpressions\DivOp.cs" />

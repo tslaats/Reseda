@@ -11,8 +11,8 @@ namespace Reseda.Tests
         [TestMethod]
         public void BasicParserTest()
         {
-            string input = "A< 2 * 2 + 4 >," +
-                           "B<3 + 4 + 5 * 6 + 7 + 8 + 9>{C<1 + (3 * 5) - @c/d>;}" +
+            string input = "A[ 2 * 2 + 4 ]," +
+                           "B[3 + 4 + 5 * 6 + 7 + 8 + 9]{C[1 + (3 * 5) - @c/d];}" +
                            "; A -->* /B," +
                            " A/*/C -->* /B/.././F," 
                            + "B -->% *";
@@ -22,7 +22,7 @@ namespace Reseda.Tests
             var term = p.Generate(input);
             var term2 = p.Generate(term.ToSource());
 
-            Assert.AreEqual(term.ToSource(), "A<2 * 2 + 4>,B<3 + 4 + 5 * 6 + 7 + 8 + 9>{C<1 + 3 * 5 - @c/d>;};A -->* /B,A/*/C -->* /B/.././F,B -->% *");
+            Assert.AreEqual(term.ToSource(), "A[2 * 2 + 4],B[3 + 4 + 5 * 6 + 7 + 8 + 9]{C[1 + 3 * 5 - @c/d];};A -->* /B,A/*/C -->* /B/.././F,B -->% *");
             Assert.AreEqual(term.ToSource(), term2.ToSource());
 
             
@@ -53,13 +53,13 @@ namespace Reseda.Tests
         [TestMethod]
         public void CurrentHackingTest()
         {
-            string input = "A<?>," +
-                           "B<?>," +
-                           "C<@A:v + @B:v * 10>," +
-                           "D<!>," +
-                           "E<!>" +
+            string input = "A[?]," +
+                           "B[?]," +
+                           "C[@A:v + @B:v * 10]," +
+                           "D[!]," +
+                           "E[!]" +
                            "; A -->* B," +
-                           " D -->> {N<?>;}," +
+                           " D -->> {N[?];}," +
                            "E -->% *";
             var p = new ResedaParser();
             p.dispTree(input);
@@ -124,10 +124,10 @@ namespace Reseda.Tests
         [TestMethod]
         public void FilterTest()
         {
-            string input = "A<!>," +
-                           "B<!>," +
-                           "B<!>," +
-                           "C<!>" +
+            string input = "A[!]," +
+                           "B[!]," +
+                           "B[!]," +
+                           "C[!]" +
                            "; A -->* B[1]";
 
             var p = new ResedaParser();

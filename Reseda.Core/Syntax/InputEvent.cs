@@ -28,6 +28,12 @@ namespace Reseda.Core
             this.Execute(new IntType(i));
         }
 
+
+        public void Execute(bool i)
+        {
+            this.Execute(new BoolType(i));
+        }
+
         public override string TypeToSource()
         {
             return "[?]";
