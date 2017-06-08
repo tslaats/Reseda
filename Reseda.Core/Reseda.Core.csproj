@@ -42,6 +42,9 @@
   <ItemGroup>
     <Compile Include="Auxiliary\SideEffects.cs" />
     <Compile Include="Auxiliary\SpawnEffect.cs" />
+    <Compile Include="Syntax.DataExpressions\GtOp.cs" />
+    <Compile Include="Syntax.DataExpressions\EqOp.cs" />
+    <Compile Include="Syntax.DataExpressions\OrOp.cs" />
     <Compile Include="Syntax.DataExpressions\BinOp.cs" />
     <Compile Include="Syntax.DataExpressions\DataExpression.cs" />
     <Compile Include="Syntax.DataExpressions\DataTypes\EventSet.cs" />
@@ -52,6 +55,7 @@
     <Compile Include="Syntax.DataExpressions\MinOp.cs" />
     <Compile Include="Syntax.DataExpressions\Path.cs" />
     <Compile Include="Syntax.DataExpressions\PlusOp.cs" />
+    <Compile Include="Syntax.DataExpressions\AndOp.cs" />
     <Compile Include="Syntax.DataExpressions\TimesOp.cs" />
     <Compile Include="Syntax.DataExpressions\DataTypes\Unit.cs" />
     <Compile Include="Syntax.DataExpressions\ValueOf.cs" />
