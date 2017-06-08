@@ -167,6 +167,40 @@ namespace Reseda.Core
         }
 
 
+        public ISet<String> Names()
+        {
+            var result = new HashSet<String>();
+            foreach (Event e in structuredData)
+            {
+                result.Add(e.name);
+                result.UnionWith(e.subProcess.Names());
+            }
+            return result;
+        }
+
+        // Should also check for valueof? - actually not since its a dataexpression
+        public Boolean Bounded()
+        {
+            var result = true;
+
+            foreach (var r in relations)
+            {
+                if (r.GetType() == typeof(Spawn))
+                {
+                    Spawn c = (Spawn)r;
+                    if (c.source.ContainsNamesOrStar(c.target.Names())) result = false;
+                }
+            }
+
+            foreach (Event e in structuredData)
+            {
+                result = result && e.subProcess.Bounded();
+            }
+            return result;
+            //throw new NotImplementedException("Bounded()");
+        }
+
+
 
     }
 }

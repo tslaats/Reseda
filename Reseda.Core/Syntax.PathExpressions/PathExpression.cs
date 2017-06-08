@@ -140,5 +140,13 @@ namespace Reseda.Core
         {
             this.filter = dataExpression;
         }
+
+        internal virtual bool ContainsNamesOrStar(ISet<string> set)
+        {
+            if (child == null)
+                return true;
+            else
+                return child.ContainsNamesOrStar(set);
+        }
     }
 }

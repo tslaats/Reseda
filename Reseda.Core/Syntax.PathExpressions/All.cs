@@ -20,5 +20,10 @@ namespace Reseda.Core
             return new HashSet<Event>(context.subProcess.structuredData);
         }
 
+        override internal bool ContainsNamesOrStar(ISet<string> set)
+        {
+            return false;
+        }
+
     }
 }
