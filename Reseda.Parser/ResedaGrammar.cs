@@ -61,8 +61,9 @@ namespace Reseda.Parser
             var ParExpr = new NonTerminal("ParExpr");
             var BinExpr = new NonTerminal("BinExpr");
             var BinExpr2 = new NonTerminal("BinExpr2");
-            var BinOp = new NonTerminal("BinOp");            
-            var Unit = new KeyTerm("!", "Unit");
+            var BinOp = new NonTerminal("BinOp");
+            //var Unit = new KeyTerm("", "Unit");
+            var Unit = new NonTerminal("Unit");
 
             var PlusOp = new NonTerminal("PlusOp");
             var MinOp = new NonTerminal("MinOp");
@@ -80,6 +81,7 @@ namespace Reseda.Parser
             DPath.Rule = ToTerm("@") + Path;
             Expression.Rule = Term | BinExpr;
             Term.Rule = number | ParExpr | identifier | Unit | DDPath;
+            Unit.Rule = Empty;
             ParExpr.Rule = "(" + Expression + ")";
             BinExpr.Rule = PlusOp | MinOp | BinExpr2;
             PlusOp.Rule = BinExpr2 + ToTerm("+") + BinExpr2;

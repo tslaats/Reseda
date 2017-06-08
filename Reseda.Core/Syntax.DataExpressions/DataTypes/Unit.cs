@@ -10,7 +10,7 @@ namespace Reseda.Core
     {
         public override string ToSource()
         {
-            return "!";
+            return "";
         }
     }
 }

@@ -56,8 +56,8 @@ namespace Reseda.Tests
             string input = "A[?]," +
                            "B[?]," +
                            "C[@A:v + @B:v * 10]," +
-                           "D[!]," +
-                           "E[!]" +
+                           "D[]," +
+                           "E[]" +
                            "; A -->* B," +
                            " D -->> {N[?];}," +
                            "E -->% *";
@@ -124,10 +124,10 @@ namespace Reseda.Tests
         [TestMethod]
         public void FilterTest()
         {
-            string input = "A[!]," +
-                           "B[!]," +
-                           "B[!]," +
-                           "C[!]" +
+            string input = "A[]," +
+                           "B[]," +
+                           "B[]," +
+                           "C[]" +
                            "; A -->* B[1]";
 
             var p = new ResedaParser();
