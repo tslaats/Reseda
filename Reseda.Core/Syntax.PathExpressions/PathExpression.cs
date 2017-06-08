@@ -142,9 +142,9 @@ namespace Reseda.Core
         }
 
         internal virtual bool ContainsNamesOrStar(ISet<string> set)
-        {
+        {            
             if (child == null)
-                return true;
+                return false;
             else
                 return child.ContainsNamesOrStar(set);
         }

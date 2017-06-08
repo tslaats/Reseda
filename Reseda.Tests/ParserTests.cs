@@ -242,5 +242,47 @@ namespace Reseda.Tests
 
         }
 
+
+        [TestMethod]
+        public void BoundedTest()
+        {
+            var p = new ResedaParser();
+
+
+            string input = "A[?]," +
+                           "A[?]," +
+                           "A[?]," +
+                           "B[]" +
+                           "; A[@.:v == 5] *--> B";
+            var term = p.Generate(input);            
+            Assert.IsTrue(term.Bounded());
+
+
+            input = "B[]" +
+                    "; B -->> {B[];}";
+            term = p.Generate(input);
+            Assert.IsFalse(term.Bounded());
+
+
+            input = "B[]" +
+                    "; * -->> {C[];}";
+            term = p.Generate(input);
+            Assert.IsFalse(term.Bounded());
+
+            input = "B[]" +
+                    "; B -->> {C[];C -->> {C[];}}";
+            term = p.Generate(input);
+            Assert.IsFalse(term.Bounded());
+
+
+            input = "B[]{A[]; A-->> {A[];}}" +
+                    ";";
+            term = p.Generate(input);
+            Assert.IsFalse(term.Bounded());
+
+        }
+
+        
+
     }
 }

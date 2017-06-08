@@ -22,7 +22,7 @@ namespace Reseda.Core
 
         override internal bool ContainsNamesOrStar(ISet<string> set)
         {
-            return false;
+            return true;
         }
 
     }

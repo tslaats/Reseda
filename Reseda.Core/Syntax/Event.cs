@@ -160,6 +160,11 @@ namespace Reseda.Core
                 
         }
 
+        public Boolean Bounded()
+        {
+            return subProcess.Bounded();
+        }
+
 
         /*
         public Boolean IsEnabled(Event e)

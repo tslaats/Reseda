@@ -188,7 +188,11 @@ namespace Reseda.Core
                 if (r.GetType() == typeof(Spawn))
                 {
                     Spawn c = (Spawn)r;
-                    if (c.source.ContainsNamesOrStar(c.target.Names())) result = false;
+
+                    result = result && !c.source.ContainsNamesOrStar(c.target.Names());
+
+                    // not so clear from paper that this is also needed:
+                    result = result && c.target.Bounded();
                 }
             }
 
@@ -196,8 +200,7 @@ namespace Reseda.Core
             {
                 result = result && e.subProcess.Bounded();
             }
-            return result;
-            //throw new NotImplementedException("Bounded()");
+            return result;            
         }
 
 
