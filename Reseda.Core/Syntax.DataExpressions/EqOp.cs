@@ -36,9 +36,10 @@ namespace Reseda.Core
                 return new BoolType(lc.value == rc.value);
             }
             if (rt != lt)
-                throw new Exception("OrOp Types mismatch");
+                return new BoolType(false);
+            //throw new Exception("EqOp Types mismatch");
             else
-                throw new NotImplementedException("OrOp incomplete");
+                throw new NotImplementedException("EqOp incomplete");
         }
     }
 }

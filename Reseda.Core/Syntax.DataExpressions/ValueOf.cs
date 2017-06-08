@@ -23,7 +23,11 @@ namespace Reseda.Core
             EventSet s = (EventSet)c;
 
             if (s.value.Count > 1) throw new Exception("Value of multiple events.");
-            return s.value.ElementAt(0).marking.value;
+
+            if (s.value.ElementAt(0).marking.value == null)
+                return new Unit();
+            else
+                return s.value.ElementAt(0).marking.value;
         }
 
         public override string ToSource()

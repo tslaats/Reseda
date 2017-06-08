@@ -60,16 +60,35 @@ namespace Reseda.Core
                 return s;
 
             var result = new HashSet<Event>();
-            var val = this.filter.Eval(context);
-            if (val.GetType() == typeof(IntType))
-            {
-                IntType v = (IntType)val;
-                if (s.Count > v.value)
-                    result.Add(s.ElementAt(v.value));
-                return result;
-            }
 
-            throw new Exception("Bad filter type: " + val.GetType());
+            try
+            {
+                var val = this.filter.Eval(context);
+                if (val.GetType() == typeof(IntType))
+                {
+                    IntType v = (IntType)val;
+                    if (s.Count > v.value)
+                        result.Add(s.ElementAt(v.value));
+                    return result;
+                }
+            }
+            catch
+            { }
+
+            foreach(var e in s)
+            {
+                var val = this.filter.Eval(e);
+                if (val.GetType() == typeof(BoolType))
+                {
+                    BoolType v = (BoolType)val;
+                    if (v.value)
+                        result.Add(e);                    
+                }
+            }
+            return result;
+
+
+            //throw new Exception("Bad filter type: " + val.GetType());
         }
 
         public ISet<Event> Eval(Event context, Event root)

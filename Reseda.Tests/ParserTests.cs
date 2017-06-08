@@ -204,5 +204,43 @@ namespace Reseda.Tests
 
         }
 
+
+
+        [TestMethod]
+        public void BooleanFilterTest()
+        {
+            string input = "A[?]," +
+                           "A[?]," +
+                           "A[?]," +
+                           "B[]" +
+                           "; A[@.:v == 5] *--> B";
+
+            var p = new ResedaParser();
+            p.dispTree(input);
+
+            var term = p.Generate(input);
+            var term2 = p.Generate(term.subProcess.ToSource());
+
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+
+
+
+            InputEvent a0 = (InputEvent)term.subProcess.structuredData[0];
+            InputEvent a1 = (InputEvent)term.subProcess.structuredData[1];
+            InputEvent a2 = (InputEvent)term.subProcess.structuredData[2];
+            OutputEvent b = (OutputEvent)term.subProcess.structuredData[3];
+
+
+            a0.Execute(1);
+            System.Diagnostics.Debug.WriteLine(term.PrintTree(true));
+
+            a1.Execute(5);
+            System.Diagnostics.Debug.WriteLine(term.PrintTree(true));
+
+            a2.Execute(3);
+            System.Diagnostics.Debug.WriteLine(term.PrintTree(true));
+
+        }
+
     }
 }
