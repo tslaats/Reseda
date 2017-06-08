@@ -12,7 +12,7 @@ namespace Reseda.Core
         {
         }
 
-        public override string Symbol => "&&";
+        public override string Symbol => Symbols.And;
 
         public override DataType Eval(Event context)
         {

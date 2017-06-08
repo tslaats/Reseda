@@ -80,6 +80,7 @@
     <Compile Include="Syntax\Response.cs" />
     <Compile Include="Syntax\RootEvent.cs" />
     <Compile Include="Syntax\Spawn.cs" />
+    <Compile Include="Symbols.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

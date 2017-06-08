@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Irony.Parsing;
 using Irony.Ast;
+using Reseda.Core;
 
 namespace Reseda.Parser
 {
@@ -59,6 +60,7 @@ namespace Reseda.Parser
 
             var Term = new NonTerminal("Term");
             var ParExpr = new NonTerminal("ParExpr");
+            var NegOp = new NonTerminal("NegOp");
             var BinExpr = new NonTerminal("BinExpr");
             var BinExpr2 = new NonTerminal("BinExpr2");
             var BinOp = new NonTerminal("BinOp");
@@ -70,18 +72,35 @@ namespace Reseda.Parser
             var TimesOp = new NonTerminal("TimesOp");
             var DivOp = new NonTerminal("DivOp");
             var DPath = new NonTerminal("DPath");
-            
+
             var DPathValue = new NonTerminal("DPathValue");
             var DDPath = new NonTerminal("DDPath");
 
+
+            var RelExpr = new NonTerminal("RelExpr");
+            var BoolExpr = new NonTerminal("BoolExpr");
+            var AndOp = new NonTerminal("AndOp");
+            var OrOp = new NonTerminal("OrOp");
+            var EqOp = new NonTerminal("EqOp");
+            var GtOp = new NonTerminal("GtOp");
 
             DDPath.Rule = DPathValue | DPath;
             DPathValue.Rule = DPath + ToTerm(":v");
 
             DPath.Rule = ToTerm("@") + Path;
-            Expression.Rule = Term | BinExpr;
-            Term.Rule = number | ParExpr | identifier | Unit | DDPath;
+            Expression.Rule = Term | BoolExpr;
+
+            BoolExpr.Rule = AndOp | OrOp | RelExpr;
+            AndOp.Rule = RelExpr + ToTerm(Symbols.And) + RelExpr;
+            OrOp.Rule = RelExpr + ToTerm(Symbols.Or) + RelExpr;
+
+            RelExpr.Rule = EqOp | GtOp | BinExpr;
+            EqOp.Rule = BinExpr + ToTerm(Symbols.Eq) + BinExpr;
+            GtOp.Rule = BinExpr + ToTerm(Symbols.Gt) + BinExpr;
+
+            Term.Rule = number | ParExpr | NegOp | identifier | Unit | DDPath;
             Unit.Rule = Empty;
+            NegOp.Rule = ToTerm("!") + Expression;
             ParExpr.Rule = "(" + Expression + ")";
             BinExpr.Rule = PlusOp | MinOp | BinExpr2;
             PlusOp.Rule = BinExpr2 + ToTerm("+") + BinExpr2;
@@ -112,7 +131,7 @@ namespace Reseda.Parser
 
             MarkTransient(Relation, Event, SubProcess, PathExpressionCont,
                 PathExpression, Path, BinExpr, Expression, Term, ParExpr, BinExpr2,
-                DDPath);
+                DDPath, BoolExpr, RelExpr);
 
         }
     }

@@ -117,7 +117,6 @@ namespace Reseda.Tests
 
             d.Execute();
             System.Diagnostics.Debug.WriteLine(term2.PrintTree(true));
-
         }
 
 
