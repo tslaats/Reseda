@@ -30,7 +30,7 @@ namespace Reseda.Core
 
         public override string TypeToSource()
         {
-            return "<?>";
+            return "[?]";
         }
 
         private void Execute(DataType d)

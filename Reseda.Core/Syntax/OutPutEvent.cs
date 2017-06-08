@@ -46,7 +46,7 @@ namespace Reseda.Core
 
         public override string TypeToSource()
         {
-            return "<" + expression.ToSource() + ">";
+            return "[" + expression.ToSource() + "]";
         }
 
         internal override Event ShallowClone()

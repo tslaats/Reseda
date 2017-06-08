@@ -96,8 +96,8 @@ namespace Reseda.Parser
             Response.Rule = Path + ToTerm("*-->") + Path;
             Relation.Rule = Include | Exclude | Response | Condition | Spawn;
             Relations.Rule = MakeListRule(Relations, ToTerm(","), Relation) | Empty;            
-            InputEvent.Rule = identifier + ToTerm("<?>") +SubProcess;
-            OutputEvent.Rule = identifier + ToTerm("<") + Expression + ToTerm(">") +SubProcess;
+            InputEvent.Rule = identifier + ToTerm("[?]") +SubProcess;
+            OutputEvent.Rule = identifier + ToTerm("[") + Expression + ToTerm("]") +SubProcess;
             SubProcess.Rule = (ToTerm("{") + Process + ToTerm("}")) | Empty;
             Event.Rule = InputEvent | OutputEvent;
             StructuredData.Rule = MakeListRule(StructuredData, ToTerm(","), Event) | Empty;            
