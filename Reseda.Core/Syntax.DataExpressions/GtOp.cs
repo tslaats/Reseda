@@ -34,9 +34,9 @@ namespace Reseda.Core
                 return new BoolType(lc.value > rc.value);
             }
             if (rt != lt)
-                throw new Exception("OrOp Types mismatch");
+                throw new Exception("GtOp Types mismatch: " + lt.ToString() + " - " + rt.ToString());
             else
-                throw new NotImplementedException("OrOp incomplete");
+                throw new NotImplementedException("GtOp incomplete: " + lt.ToString() + " - " + rt.ToString());
         }
     }
 }

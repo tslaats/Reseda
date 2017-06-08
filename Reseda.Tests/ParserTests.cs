@@ -121,13 +121,12 @@ namespace Reseda.Tests
 
 
         [TestMethod]
-        public void FilterTest()
+        public void BooleanExpresionTest()
         {
-            string input = "A[]," +
-                           "B[]," +
-                           "B[]," +
-                           "C[]" +
-                           "; A -->* B[1]";
+            string input = "A[?]," +
+                           "B[?]," +
+                           "C[@A:v + @B:v > 5 && !(@A:v - @B:v > 10)]" +                           
+                           "; ";
 
             var p = new ResedaParser();
             p.dispTree(input);          
@@ -139,11 +138,56 @@ namespace Reseda.Tests
 
 
 
+            InputEvent a = (InputEvent)term.subProcess.structuredData[0];
+            InputEvent b = (InputEvent)term.subProcess.structuredData[1];
+            OutputEvent c = (OutputEvent)term.subProcess.structuredData[2];
+
+            
+
+            a.Execute(3);
+            b.Execute(5);
+            System.Diagnostics.Debug.WriteLine(term.PrintTree(true));
+
+            c.Execute();            
+            var val = (BoolType)c.marking.value;
+            Assert.AreEqual(val.value, true);
+            System.Diagnostics.Debug.WriteLine(term.PrintTree(true));
+
+
+            a.Execute(20);
+            c.Execute();
+            val = (BoolType)c.marking.value;
+            Assert.AreEqual(val.value, false);
+            System.Diagnostics.Debug.WriteLine(term.PrintTree(true));
+
+        }
+
+
+
+        [TestMethod]
+        public void FilterTest()
+        {
+            string input = "A[]," +
+                           "B[]," +
+                           "B[]," +
+                           "C[]" +
+                           "; A -->* B[1]";
+
+            var p = new ResedaParser();
+            p.dispTree(input);
+
+            var term = p.Generate(input);
+            var term2 = p.Generate(term.subProcess.ToSource());
+
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+
+
+
             OutputEvent a = (OutputEvent)term.subProcess.structuredData[0];
             OutputEvent b0 = (OutputEvent)term.subProcess.structuredData[1];
             OutputEvent b1 = (OutputEvent)term.subProcess.structuredData[2];
             OutputEvent c = (OutputEvent)term.subProcess.structuredData[3];
-            
+
 
             b0.Execute();
             System.Diagnostics.Debug.WriteLine(term.PrintTree(true));
@@ -156,7 +200,7 @@ namespace Reseda.Tests
             catch
             { }
 
-            System.Diagnostics.Debug.WriteLine(term.PrintTree(true));           
+            System.Diagnostics.Debug.WriteLine(term.PrintTree(true));
 
         }
 
