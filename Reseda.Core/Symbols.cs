@@ -13,5 +13,6 @@ namespace Reseda.Core
         public static String Or = "||";
         public static String Eq = "==";
         public static String Gt = ">";
+        public static String Neg = "!";
     }
 }

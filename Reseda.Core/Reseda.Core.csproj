@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Auxiliary\SideEffects.cs" />
     <Compile Include="Auxiliary\SpawnEffect.cs" />
+    <Compile Include="Syntax.DataExpressions\NegOp.cs" />
     <Compile Include="Syntax.DataExpressions\GtOp.cs" />
     <Compile Include="Syntax.DataExpressions\EqOp.cs" />
     <Compile Include="Syntax.DataExpressions\OrOp.cs" />
