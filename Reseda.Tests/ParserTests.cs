@@ -280,6 +280,12 @@ namespace Reseda.Tests
             term = p.Generate(input);
             Assert.IsFalse(term.Bounded());
 
+            // Cycles
+            input = "B[]" +
+                    "; B -->> {C[];}, C -->> {B[];}";
+            term = p.Generate(input);
+            Assert.IsFalse(term.Bounded());
+
         }
 
         
