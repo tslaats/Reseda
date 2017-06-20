@@ -13,7 +13,7 @@ namespace Reseda.Core
         public Event parent;
 
         public Process(Event parent)
-        {            
+        {
             this.structuredData = new List<Event>();
             this.relations = new List<Relation>();
             this.parent = parent;
@@ -46,7 +46,7 @@ namespace Reseda.Core
 
         public SideEffects GetSideEffects(Event e)
         {
-            var result = new SideEffects();            
+            var result = new SideEffects();
             foreach (var r in this.relations)
             {
                 if (r.GetType() == typeof(Inclusion))
@@ -88,7 +88,7 @@ namespace Reseda.Core
                     var src = s.source.Eval(this.parent);
                     //var trg = s.target.Eval(this.parent);
                     if (src.Contains(e))
-                    {                        
+                    {
                         result.spawn.Add(new SpawnEffect(s.target, this.parent));
                     }
                 }
@@ -123,7 +123,7 @@ namespace Reseda.Core
                     {
                         foreach (var f in src)
                             result = result && (!f.marking.included || f.marking.happened);
-                    }                        
+                    }
                 }
                 else if (r.GetType() == typeof(Milestone))
                 {
@@ -152,7 +152,7 @@ namespace Reseda.Core
         public String ToSource()
         {
             var result = "";
-            foreach(var e in structuredData)
+            foreach (var e in structuredData)
             {
                 result += e.ToSource() + ",";
             }
@@ -200,10 +200,39 @@ namespace Reseda.Core
             {
                 result = result && e.subProcess.Bounded();
             }
-            return result;            
+            return result;
         }
 
 
 
+        public void UnFold()
+        {
+            UnFold(this.relations);
+        }
+
+        private void UnFold(List<Relation> relations)
+        {
+            foreach (var r in relations)
+            {
+                if (r.GetType() == typeof(Spawn))
+                {
+                    Spawn sr = (Spawn)r;
+                    var s = sr.target;
+                    foreach (var e in s.structuredData)
+                    {
+                        this.parent.AddChildEvent(e);
+                    }
+                    foreach (var nr in s.relations)
+                    {
+                        this.parent.AddRelation(nr);
+                    }
+                    UnFold(s.relations);
+                }
+            }
+            foreach (var e in this.structuredData)
+            {
+                e.subProcess.UnFold();
+            }
+        }
     }
 }
