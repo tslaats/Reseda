@@ -13,6 +13,17 @@ namespace Reseda.Core
         public Process subProcess;
         public Process parentProcess;
 
+        public PathExpression Path {
+            get
+            {                
+                if (parentProcess != null)
+                    return parentProcess.parent.Path.Extend(new Name(this.name));
+                else
+                    return new Root();
+            }
+
+        }
+
         public Event()
         {
             this.marking = new Marking();
@@ -63,7 +74,7 @@ namespace Reseda.Core
                     result.UnionWith(e.DescendantLeaves());
 
             return result;
-        }
+        }        
 
         public String Location()
         {
@@ -164,6 +175,11 @@ namespace Reseda.Core
         public Boolean Bounded()
         {
             return subProcess.Bounded();
+        }
+
+        public EventSet StaticInhibitors()
+        {
+
         }
 
 

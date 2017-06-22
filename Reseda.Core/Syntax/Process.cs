@@ -221,6 +221,8 @@ namespace Reseda.Core
                     foreach (var e in s.structuredData)
                     {
                         this.parent.AddChildEvent(e);
+                        // Adding a condition to each spawned event.
+                        this.parent.AddRelation(new Condition(this.parent.Path, e.Path));
                     }
                     foreach (var nr in s.relations)
                     {

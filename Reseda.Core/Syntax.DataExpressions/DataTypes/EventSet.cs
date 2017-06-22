@@ -9,7 +9,7 @@ namespace Reseda.Core
     public class EventSet : DataType
     {
         public HashSet<Event> value;
-        private IEnumerable<Event> enumerable;
+        //private IEnumerable<Event> enumerable;
 
         public EventSet(HashSet<Event> v)
         {
