@@ -236,5 +236,35 @@ namespace Reseda.Core
                 e.subProcess.UnFold();
             }
         }
+
+        public ISet<Event> GetStaticInhibitors(Event e)
+        {            
+            var result = new HashSet<Event>();
+            foreach (var r in this.relations)
+            {
+                if (r.GetType() == typeof(Condition))
+                {
+                    Condition c = (Condition)r;
+                    var src = c.source.Eval(this.parent);
+                    var trg = c.target.Eval(this.parent);
+                    if (trg.Contains(e))
+                        result.UnionWith(src);
+                }
+                else if (r.GetType() == typeof(Milestone))
+                {
+                    Milestone c = (Milestone)r;
+                    var src = c.source.Eval(this.parent);
+                    var trg = c.target.Eval(this.parent);
+                    if (trg.Contains(e))
+                        result.UnionWith(src);
+                }
+            }
+            foreach (var f in this.structuredData)
+            {
+                result.UnionWith(f.subProcess.GetStaticInhibitors(e));
+            }
+            return result;
+        }
+
     }
-}
+    }
