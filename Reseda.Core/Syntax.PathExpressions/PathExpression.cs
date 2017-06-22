@@ -112,6 +112,28 @@ namespace Reseda.Core
             }
         }
 
+        public ISet<Event> EvalNoFilter(Event context, Event root)
+        {
+            //System.out.println("Checking '" + this.ToString() + "' in context: " + context.location());
+            if (Child == null)
+            {
+                //System.out.println("1");
+                return EvalCurrentNode(context, root);
+            }
+            else
+            {
+                //System.out.println("2");
+                //System.out.println(current(context,root));
+                HashSet<Event> result = new HashSet<Event>();
+                foreach (Event e in EvalCurrentNode(context, root))
+                {
+                    result.UnionWith(Child.EvalNoFilter(e, root));
+                }
+                return result;
+            }
+        }
+
+
 
         public PathExpression()
         {            
