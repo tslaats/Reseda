@@ -177,9 +177,9 @@ namespace Reseda.Core
             return subProcess.Bounded();
         }
 
-        public EventSet StaticInhibitors()
+        public ISet<Event> StaticInhibitors()
         {
-
+            return Root().subProcess.GetStaticInhibitors(this);
         }
 
 
