@@ -177,10 +177,40 @@ namespace Reseda.Core
             return subProcess.Bounded();
         }
 
-        public ISet<Event> StaticInhibitors()
+        public HashSet<Event> StaticInhibitors()
         {
             return Root().subProcess.GetStaticInhibitors(this);
         }
+        
+        public Dictionary<Event, HashSet<Event>> StaticInhibitorGraph()
+        {
+            var result = new Dictionary<Event, HashSet<Event>>();
+            result.Add(this, this.StaticInhibitors());
+            foreach (var e in this.StaticInhibitors())
+            {
+                if (!result.ContainsKey(e))
+                    StaticInhibitorGraph(ref result);
+            }
+            return result;
+        }
+
+        private void StaticInhibitorGraph(ref Dictionary<Event, HashSet<Event>> current)
+        {
+            current.Add(this, this.StaticInhibitors());
+            foreach (var e in this.StaticInhibitors())
+            {
+                if (!current.ContainsKey(e))
+                    StaticInhibitorGraph(ref current);
+            }
+        }
+        
+        public void CloseForResponses(ref Dictionary<Event, HashSet<Event>> g)
+        {
+            Root().subProcess.CloseForResponses(this, ref g);
+        }
+
+
+
 
 
         /*

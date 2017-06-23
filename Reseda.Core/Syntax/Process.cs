@@ -237,7 +237,7 @@ namespace Reseda.Core
             }
         }
 
-        public ISet<Event> GetStaticInhibitors(Event e)
+        public HashSet<Event> GetStaticInhibitors(Event e)
         {            
             var result = new HashSet<Event>();
             foreach (var r in this.relations)
@@ -264,6 +264,38 @@ namespace Reseda.Core
                 result.UnionWith(f.subProcess.GetStaticInhibitors(e));
             }
             return result;
+        }
+
+
+        // skipping inclusions for now.
+        public void CloseForResponses(Event e, ref Dictionary<Event, HashSet<Event>> g)
+        {            
+            foreach (var r in this.relations)
+            {
+                if (r.GetType() == typeof(Response))
+                {
+                    Response c = (Response)r;
+                    var src = c.source.Eval(this.parent);
+                    var trg = c.target.Eval(this.parent);
+                    foreach (var a in src)
+                    {
+                        foreach (var b in trg)
+                        {
+                            if (g.ContainsKey(a) && g.ContainsKey(b))
+                                g[b].Add(a);
+                        }
+                    }
+                    /*
+                    if (trg.Contains(e))
+                        result.UnionWith(src);
+                        */
+                }
+            }
+            foreach (var f in this.structuredData)
+            {
+                f.subProcess.CloseForResponses(e, ref g);
+            }
+            
         }
 
     }
