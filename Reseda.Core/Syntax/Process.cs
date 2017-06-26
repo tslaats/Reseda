@@ -249,6 +249,16 @@ namespace Reseda.Core
                     var trg = c.target.Eval(this.parent);
                     if (trg.Contains(e))
                         result.UnionWith(src);
+                    //System.Diagnostics.Debug.WriteLine("Checking ancestors of : " + e.ToString());
+                    //System.Diagnostics.Debug.WriteLine(">");
+                    foreach (var e2 in e.Ancestors())
+                    {
+
+                        //System.Diagnostics.Debug.WriteLine("     " + e2.ToString());
+                        if (trg.Contains(e2))
+                            result.UnionWith(src);
+                    }
+                    //System.Diagnostics.Debug.WriteLine("<");
                 }
                 else if (r.GetType() == typeof(Milestone))
                 {
@@ -257,6 +267,11 @@ namespace Reseda.Core
                     var trg = c.target.Eval(this.parent);
                     if (trg.Contains(e))
                         result.UnionWith(src);
+                    foreach (var e2 in e.Ancestors())
+                    {
+                        if (trg.Contains(e2))
+                            result.UnionWith(src);
+                    }
                 }
             }
             foreach (var f in this.structuredData)

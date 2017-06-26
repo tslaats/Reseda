@@ -124,7 +124,7 @@ namespace Reseda.Parser
         private Event GenerateInputEvent(ParseTreeNode child)
         {
             var result = new InputEvent(child.ChildNodes[0].Token.Text);
-            if (child.ChildNodes[1] != null && child.ChildNodes[1].Term.Name == "Process")
+            if (child.ChildNodes.Count > 1 && child.ChildNodes[1] != null && child.ChildNodes[1].Term.Name == "Process")
                 AddProcess(result, child.ChildNodes[1]);
             return result;
         }

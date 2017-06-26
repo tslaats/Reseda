@@ -14,7 +14,7 @@ namespace Reseda.Tests
             string input = "A[ 2 * 2 + 4 ]," +
                            "B[3 + 4 + 5 * 6 + 7 + 8 + 9]{C[1 + (3 * 5) - @c/d];}" +
                            "; A -->* /B," +
-                           " A/*/C -->* /B/.././F," 
+                           " A/*/C -->* /B/.././F,"
                            + "B -->% *";
             var p = new ResedaParser();
             p.dispTree(input);
@@ -25,7 +25,7 @@ namespace Reseda.Tests
             Assert.AreEqual(term.ToSource(), "A[2 * 2 + 4],B[3 + 4 + 5 * 6 + 7 + 8 + 9]{C[1 + 3 * 5 - @c/d];};A -->* /B,A/*/C -->* /B/.././F,B -->% *");
             Assert.AreEqual(term.ToSource(), term2.ToSource());
 
-            
+
 
             //System.Diagnostics.Debug.WriteLine(p.Generate(input).PrintTree());
 
@@ -125,13 +125,13 @@ namespace Reseda.Tests
         {
             string input = "A[?]," +
                            "B[?]," +
-                           "C[@A:v + @B:v > 5 && !(@A:v - @B:v > 10)]" +                           
+                           "C[@A:v + @B:v > 5 && !(@A:v - @B:v > 10)]" +
                            "; ";
 
             var p = new ResedaParser();
-            p.dispTree(input);          
+            p.dispTree(input);
 
-            var term = p.Generate(input);            
+            var term = p.Generate(input);
             var term2 = p.Generate(term.subProcess.ToSource());
 
             Assert.AreEqual(term.ToSource(), term2.ToSource());
@@ -142,13 +142,13 @@ namespace Reseda.Tests
             InputEvent b = (InputEvent)term.subProcess.structuredData[1];
             OutputEvent c = (OutputEvent)term.subProcess.structuredData[2];
 
-            
+
 
             a.Execute(3);
             b.Execute(5);
             System.Diagnostics.Debug.WriteLine(term.PrintTree(true));
 
-            c.Execute();            
+            c.Execute();
             var val = (BoolType)c.marking.value;
             Assert.AreEqual(val.value, true);
             System.Diagnostics.Debug.WriteLine(term.PrintTree(true));
@@ -244,51 +244,30 @@ namespace Reseda.Tests
 
 
         [TestMethod]
-        public void BoundedTest()
+        public void ShallowCloneTest()
         {
+            string input = "A[?]{D[?];}" +
+                           ";" +
+                           " A -->> {B[?]{C[?];};}";
             var p = new ResedaParser();
+            p.dispTree(input);
+
+            //System.Diagnostics.Debug.WriteLine(p.Generate(input).PrintTree());
+
+            var term = p.Generate(input);
+
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            InputEvent d = (InputEvent)term.subProcess.structuredData[0].subProcess.structuredData[0];
+
+            //var term2 = term.CloneJson();
+            var term2 = p.Generate(term.subProcess.ToSource());
+
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
 
 
-            string input = "A[?]," +
-                           "A[?]," +
-                           "A[?]," +
-                           "B[]" +
-                           "; A[@.:v == 5] *--> B";
-            var term = p.Generate(input);            
-            Assert.IsTrue(term.Bounded());
+            //Assert.AreEqual(term.ToSource(), term.shallow().ToSource());
 
-
-            input = "B[]" +
-                    "; B -->> {B[];}";
-            term = p.Generate(input);
-            Assert.IsFalse(term.Bounded());
-
-
-            input = "B[]" +
-                    "; * -->> {C[];}";
-            term = p.Generate(input);
-            Assert.IsFalse(term.Bounded());
-
-            input = "B[]" +
-                    "; B -->> {C[];C -->> {C[];}}";
-            term = p.Generate(input);
-            Assert.IsFalse(term.Bounded());
-
-
-            input = "B[]{A[]; A-->> {A[];}}" +
-                    ";";
-            term = p.Generate(input);
-            Assert.IsFalse(term.Bounded());
-
-            // Cycles
-            input = "B[]" +
-                    "; B -->> {C[];}, C -->> {B[];}";
-            term = p.Generate(input);
-            Assert.IsFalse(term.Bounded());
 
         }
-
-        
-
     }
 }

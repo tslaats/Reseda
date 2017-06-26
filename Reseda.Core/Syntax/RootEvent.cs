@@ -30,7 +30,9 @@ namespace Reseda.Core
 
         internal override Event ShallowClone()
         {
-            throw new NotImplementedException();
+            var result = new RootEvent();
+            result.subProcess = this.subProcess.ShallowClone();
+            return result;
         }
     }
 }

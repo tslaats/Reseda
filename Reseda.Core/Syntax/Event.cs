@@ -15,7 +15,7 @@ namespace Reseda.Core
 
         public PathExpression Path {
             get
-            {                
+            {
                 if (parentProcess != null)
                     return parentProcess.parent.Path.Extend(new Name(this.name));
                 else
@@ -51,7 +51,7 @@ namespace Reseda.Core
             return this;
         }
 
-        internal abstract Event ShallowClone();
+        internal abstract Event ShallowClone();        
 
         public ISet<Event> Descendants()
         {
@@ -60,6 +60,20 @@ namespace Reseda.Core
             foreach (Event e in this.subProcess.structuredData)
                 result.UnionWith(e.Descendants());
             return result;
+        }
+
+
+
+        public ISet<Event> Ancestors()
+        {
+            if (this.parentProcess != null)
+            {
+                HashSet<Event> result = new HashSet<Event>(this.parentProcess.parent.Ancestors());
+                result.Add(this.parentProcess.parent);
+                return result;
+            }
+            else
+                return new HashSet<Event>();
         }
 
 
@@ -74,7 +88,7 @@ namespace Reseda.Core
                     result.UnionWith(e.DescendantLeaves());
 
             return result;
-        }        
+        }
 
         public String Location()
         {
@@ -108,7 +122,7 @@ namespace Reseda.Core
 
 
 
-    public override String ToString()
+        public override String ToString()
         {
             return "Event: " + Location();
         }
@@ -157,7 +171,7 @@ namespace Reseda.Core
 
             foreach (var e in se.respond)
                 e.marking.pending = true;
-            
+
             foreach (var s in se.spawn)
             {
                 foreach (var e in s.process.structuredData)
@@ -169,7 +183,7 @@ namespace Reseda.Core
                     s.context.AddRelation(r);
                 }
             }
-                
+
         }
 
         public Boolean Bounded()
@@ -181,15 +195,19 @@ namespace Reseda.Core
         {
             return Root().subProcess.GetStaticInhibitors(this);
         }
-        
+
         public Dictionary<Event, HashSet<Event>> StaticInhibitorGraph()
         {
             var result = new Dictionary<Event, HashSet<Event>>();
+
+            if (this.StaticInhibitors().Count == 0)
+                return result;
+
             result.Add(this, this.StaticInhibitors());
             foreach (var e in this.StaticInhibitors())
             {
                 if (!result.ContainsKey(e))
-                    StaticInhibitorGraph(ref result);
+                    e.StaticInhibitorGraph(ref result);
             }
             return result;
         }
@@ -200,16 +218,73 @@ namespace Reseda.Core
             foreach (var e in this.StaticInhibitors())
             {
                 if (!current.ContainsKey(e))
-                    StaticInhibitorGraph(ref current);
+                    e.StaticInhibitorGraph(ref current);
             }
         }
-        
+
         public void CloseForResponses(ref Dictionary<Event, HashSet<Event>> g)
         {
             Root().subProcess.CloseForResponses(this, ref g);
         }
 
+        public Dictionary<Event, HashSet<Event>> DependencyGraph()
+        {
+            var g = StaticInhibitorGraph();
+            CloseForResponses(ref g);
+            return g;
+        }
 
+        public Boolean IsLive()
+        {            
+            var g = DependencyGraph();
+
+
+            System.Diagnostics.Debug.WriteLine("Dependence Graph for: " + this.ToString());
+            foreach (var kvp in g)
+            {
+                var e = kvp.Key;
+                System.Diagnostics.Debug.WriteLine(e.ToString());
+                foreach (var e2 in kvp.Value)
+                {
+                    System.Diagnostics.Debug.WriteLine("---> " + e2.ToString());                    
+                }
+            }
+
+            return ((g.Count == 0) || (!Cycle(g, new HashSet<Event>())));
+        }
+
+        private bool Cycle(Dictionary<Event, HashSet<Event>> g, HashSet<Event> s)
+        {
+            if (s.Contains(this))
+                return true;
+            var t = new HashSet<Event>();
+            t.UnionWith(s);
+            t.Add(this);
+            foreach (Event e in g[this])
+            {
+                if (e.Cycle(g, t))
+                    return true;
+            }
+            return false;
+        }
+
+        public Boolean ProcessIsLive()
+        {
+            System.Diagnostics.Debug.WriteLine("Checking process : " + this.Root().ToSource());
+            var result = true;
+            var term = this.Root().ShallowClone();
+            if (!term.Bounded())
+                return false;
+            term.Root().subProcess.UnFold();
+            // for all events in the term...
+            foreach (Event e in this.Root().Descendants())
+            {
+                //check if they are live
+                result = result && e.IsLive();
+            }
+            return result;
+
+        }
 
 
 
