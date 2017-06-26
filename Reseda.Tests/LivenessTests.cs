@@ -149,6 +149,15 @@ namespace Reseda.Tests
             term = p.Generate(input);
             Assert.IsTrue(term.ProcessIsLive());
 
+
+            input = "A[?]," +
+                    "B[?]," +
+                    "C[@A:v + @B:v]," +
+                    "N[]{A[];A-->>{D[],E[@../C:v];}};" +
+                    "A-->*C," +
+                    "B-->*C";
+            term = p.Generate(input);
+            Assert.IsTrue(term.ProcessIsLive());
         }
 
 

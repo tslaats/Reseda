@@ -26,7 +26,11 @@ namespace Reseda.Core
                 p.relations.Add(r);
 
             foreach (var e in structuredData)
-                p.structuredData.Add(e.ShallowClone());
+            {
+                var x = e.ShallowClone();
+                x.parentProcess = p;
+                p.structuredData.Add(x);
+            }
 
             return p;
         }
@@ -212,6 +216,7 @@ namespace Reseda.Core
 
         private void UnFold(List<Relation> relations)
         {
+            var newRels = new List<Relation>();
             foreach (var r in relations)
             {
                 if (r.GetType() == typeof(Spawn))
@@ -222,17 +227,24 @@ namespace Reseda.Core
                     {
                         this.parent.AddChildEvent(e);
                         // Adding a condition to each spawned event.
-                        this.parent.AddRelation(new Condition(this.parent.Path, e.Path));
+                        //this.parent.AddRelation(new Condition(this.parent.Path, e.Path));
+                        newRels.Add(new Condition(this.parent.Path, e.Path));
                     }
                     foreach (var nr in s.relations)
                     {
-                        this.parent.AddRelation(nr);
+                        //this.parent.AddRelation(nr);
+                        newRels.Add(nr);
                     }
                     UnFold(s.relations);
                 }
             }
+            foreach (var r in newRels)
+            {
+                this.parent.AddRelation(r);
+            }
             foreach (var e in this.structuredData)
             {
+                System.Diagnostics.Debug.WriteLine(e.Root().ToSource());
                 e.subProcess.UnFold();
             }
         }

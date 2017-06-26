@@ -53,6 +53,7 @@ namespace Reseda.Core
         {
             var result = new OutputEvent(this.name, this.expression);
             result.subProcess = this.subProcess.ShallowClone();
+            result.subProcess.parent = result;
             return result;
         }
     }

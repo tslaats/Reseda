@@ -42,6 +42,7 @@ namespace Reseda.ConsoleApp
                             break;
                         case "term": Console.WriteLine(term.ToSource()); break;
                         case "tree": Console.WriteLine(term.PrintTree(true)); break;
+                        case "live": Console.WriteLine(term.ProcessIsLive()); break;
                         case "execute":
                             if (commandArgs.Count > 1)
                                 Execute(commandArgs[0], commandArgs[1]);
