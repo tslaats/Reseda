@@ -141,7 +141,7 @@ namespace Reseda.Tests
             Assert.IsFalse(term.ProcessIsLive());
 
 
-            // type: would be nice to type check this somehow as well, since it doesn't make sense to have this path expression.
+            // typo: would be nice to syntax check this somehow as well, since it doesn't make sense to have this path expression.
             input = "A[?]{D[];}," +
                     "B[]," +
                     "C[]" +
@@ -156,6 +156,15 @@ namespace Reseda.Tests
                     "N[]{A[];A-->>{D[],E[@../C:v];}};" +
                     "A-->*C," +
                     "B-->*C";
+            term = p.Generate(input);
+            Assert.IsTrue(term.ProcessIsLive());
+
+
+            // Note: Responses do not need to be flattened!
+            input = "A[?]{D[];}," +
+                    "B[]," +
+                    "C[]" +
+                    "; A/D --><> C, C -->* B, B *--> A";
             term = p.Generate(input);
             Assert.IsTrue(term.ProcessIsLive());
         }

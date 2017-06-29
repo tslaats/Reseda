@@ -170,5 +170,22 @@ namespace Reseda.Core
             else
                 return child.ContainsNamesOrStar(set);
         }
+
+
+        internal virtual bool ContainsNames(ISet<string> set)
+        {
+            if (child == null)
+                return false;
+            else
+                return child.ContainsNames(set);
+        }
+
+        internal virtual bool ContainsStar()
+        {
+            if (child == null)
+                return false;
+            else
+                return child.ContainsStar();
+        }
     }
 }

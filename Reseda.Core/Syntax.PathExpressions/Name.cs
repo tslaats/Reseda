@@ -53,5 +53,16 @@ namespace Reseda.Core
         }
 
 
+        override internal bool ContainsNames(ISet<string> set)
+        {
+            if (set.Contains(name))
+            {
+                return true;
+            }
+            else
+                return base.ContainsNames(set);
+        }
+
+
     }
 }

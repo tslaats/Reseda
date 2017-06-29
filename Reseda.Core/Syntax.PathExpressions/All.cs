@@ -25,5 +25,11 @@ namespace Reseda.Core
             return true;
         }
 
+
+        override internal bool ContainsStar()
+        {
+            return true;
+        }
+
     }
 }

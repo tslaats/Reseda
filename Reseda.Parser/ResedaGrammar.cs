@@ -30,6 +30,7 @@ namespace Reseda.Parser
             var Exclude = new NonTerminal("Exclude");
             var Response = new NonTerminal("Response");
             var Condition = new NonTerminal("Condition");
+            var Milestone = new NonTerminal("Milestone");
             var Spawn = new NonTerminal("Spawn");
             var Event = new NonTerminal("Event");
             var InputEvent = new NonTerminal("InputEvent");
@@ -114,8 +115,9 @@ namespace Reseda.Parser
             Exclude.Rule = Path + ToTerm("-->%") + Path;
             Spawn.Rule = Path + ToTerm("-->>") + ToTerm("{") + Process + ToTerm("}");
             Condition.Rule = Path + ToTerm("-->*") + Path;
+            Milestone.Rule = Path + ToTerm("--><>") + Path;
             Response.Rule = Path + ToTerm("*-->") + Path;
-            Relation.Rule = Include | Exclude | Response | Condition | Spawn;
+            Relation.Rule = Include | Exclude | Response | Condition | Milestone | Spawn;
             Relations.Rule = MakeListRule(Relations, ToTerm(","), Relation) | Empty;            
             InputEvent.Rule = identifier + ToTerm("[?]") +SubProcess;
             OutputEvent.Rule = identifier + ToTerm("[") + Expression + ToTerm("]") +SubProcess;
@@ -126,7 +128,7 @@ namespace Reseda.Parser
             this.Root = Process;
             this.path = Path;
             
-            MarkPunctuation("-->+", ",", ";", "-->%", "-->*", "*-->",
+            MarkPunctuation("-->+", ",", ";", "-->%", "-->*", "--><>", "*-->",
                 "-->>", "<", ">", "?", "!", "{", "}", "/", ".", "..", "*", "+", "-", "(", ")", "@", "[","]", Symbols.And, Symbols.Eq, Symbols.Gt, Symbols.Neg, Symbols.Or, "[?]");
 
             MarkTransient(Relation, Event, SubProcess, PathExpressionCont,

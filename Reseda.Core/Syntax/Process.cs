@@ -183,7 +183,7 @@ namespace Reseda.Core
         }
 
         // Should also check for valueof? - actually not since its a dataexpression
-        public Boolean Bounded()
+        public Boolean OldBounded()
         {
             var result = true;
 
@@ -196,16 +196,96 @@ namespace Reseda.Core
                     result = result && !c.source.ContainsNamesOrStar(c.target.Names());
 
                     // not so clear from paper that this is also needed:
-                    result = result && c.target.Bounded();
+                    result = result && c.target.OldBounded();
                 }
             }
 
             foreach (Event e in structuredData)
             {
-                result = result && e.subProcess.Bounded();
+                result = result && e.subProcess.OldBounded();
             }
             return result;
         }
+
+
+
+        List<Spawn> DescendantSpawns()
+        {
+            var result = new List<Spawn>();
+            foreach (var r in relations)
+            {
+                if (r.GetType() == typeof(Spawn))
+                {
+                    var s = (Spawn)r;
+                    result.Add(s);
+                    result.AddRange(s.target.DescendantSpawns());
+                }
+            }
+
+            foreach (Event e in structuredData)
+            {
+                result.AddRange(e.subProcess.DescendantSpawns());
+            }
+
+            return result;
+        }
+
+
+        public Boolean SpawnCycle(Spawn current, List<Spawn> trace, Process root)
+        {
+            List<Spawn> newTrace = new List<Spawn>(trace);            
+            newTrace.Add(current);
+            foreach (var rel in root.DescendantSpawns())
+            {
+                if (current.source.ContainsNames(rel.target.Names()))
+                {
+                    if (newTrace.Contains(rel))
+                        return true;
+
+                    if (SpawnCycle(rel, newTrace, root))
+                        return true;
+                }
+            }
+            return false;
+        }
+
+
+        public Boolean Bounded()
+        {
+            return Bounded(this.parent.Root().subProcess);
+        }
+
+        public Boolean Bounded(Process root)
+        {            
+            foreach (var r in relations)
+            {
+                if (r.GetType() == typeof(Spawn))
+                {
+                    Spawn c = (Spawn)r;
+
+                    if (c.source.ContainsStar())
+                        return false;
+
+                    if (SpawnCycle(c, new List<Spawn>(), root))
+                        return false;
+                    // check for spawn cycle here...
+
+                    // build dpeendency graph
+                    // just do it here, not most efficient way to do it, but meh...
+
+                    // not so clear from paper that this is also needed:
+                    if (!c.target.Bounded(root)) return false;
+                }
+            }
+
+            foreach (Event e in structuredData)
+            {
+                if (!e.subProcess.Bounded(root)) return false;
+            }
+            return true;
+        }
+
+
 
 
 
