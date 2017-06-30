@@ -53,5 +53,52 @@ ship -->% checkout
             var term2 = p.Generate(term.subProcess.ToSource());
             Assert.AreEqual(term.ToSource(), term2.ToSource());
         }
+
+        [TestMethod]
+        public void Example3()
+        {
+            string input = @"itemInCart[!]{
+  data[!]{
+        !name[?],
+        !price[?], 
+        !quantity[?],
+        amount[@price:value * @quantity:value],
+        invoiceRow[@name:value + ';' + @price:value + ';' + @quantity:value + ';' + @amount:value]
+        ~
+        * --><> ../../checkout
+      }
+},
+checkout[?],
+ship[?],
+%printInvoice[@itemInCart/data/invoiceRow]
+~
+checkout -->%  itemInCart/data,
+checkout -->* ship,
+checkout *--> ship,
+ship -->% checkout,
+ship -->+ printInvoice,
+ship *--> printInvoice";
+            var p = new ResedaParser();
+            p.dispTree(input);
+            var term = p.Generate(input);
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            var term2 = p.Generate(term.subProcess.ToSource());
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+        }
+
+
+        [TestMethod]
+        public void Example4()
+        {
+            string input = @"A[?]
+";
+            var p = new ResedaParser();
+            p.dispTree(input);
+            var term = p.Generate(input);
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            var term2 = p.Generate(term.subProcess.ToSource());
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+        }
+
     }
 }
