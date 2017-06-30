@@ -21,7 +21,7 @@ namespace Reseda.Core
 
         public override string ToSource()
         {
-            return value.ToString();
+            return "'" + value.ToString() + "'";
         }
     }
 }

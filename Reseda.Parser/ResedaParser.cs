@@ -92,8 +92,9 @@ namespace Reseda.Parser
         {
             foreach (var e in GenerateEvents(node.ChildNodes[0]))
                 ev.AddChildEvent(e);
-            foreach (var r in GenerateRelations(node.ChildNodes[1]))
-                ev.AddRelation(r);
+            if (node.ChildNodes.Count > 1)
+                foreach (var r in GenerateRelations(node.ChildNodes[1]))
+                    ev.AddRelation(r);
         }
 
         public Process GenerateProcess(ParseTreeNode node)
@@ -177,7 +178,7 @@ namespace Reseda.Parser
                     return new DivOp(GenerateExpression(node.ChildNodes[0]), GenerateExpression(node.ChildNodes[1]));
                 case "number":
                     return new IntType((int)node.Token.Value);
-                case "str":
+                case "string":
                     return new StrType((string)node.Token.Value);
                 case "identifier":
                     return new Unit();

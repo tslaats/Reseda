@@ -15,7 +15,7 @@ namespace Reseda.Parser
         public ResedaGrammar()
         {
 
-            var str = new StringLiteral("string", "\"");
+            var str = new StringLiteral("string", "\'");
             var number = new NumberLiteral("number");
             number.DefaultIntTypes = new TypeCode[] { TypeCode.Int32, TypeCode.Int64, NumberLiteral.TypeCodeBigInt };
             var identifier = new IdentifierTerminal("identifier");
@@ -27,6 +27,7 @@ namespace Reseda.Parser
             var SubProcess_opt = new NonTerminal("SubProcess_opt");
             var StructuredData = new NonTerminal("StructuredData");
             var Relations = new NonTerminal("Relations");
+            var RelationsOpt = new NonTerminal("RelationsOpt");
             var Relation = new NonTerminal("Relation");
             var Include = new NonTerminal("Include");
             var Exclude = new NonTerminal("Exclude");
@@ -131,7 +132,8 @@ namespace Reseda.Parser
             SubProcess.Rule = (ToTerm("{") + Process + ToTerm("}")) | Empty;
             Event.Rule = InputEvent | OutputEvent;
             StructuredData.Rule = MakeListRule(StructuredData, ToTerm(","), Event) | Empty;
-            Process.Rule = StructuredData + ToTerm(";") + Relations;
+            Process.Rule = StructuredData + RelationsOpt;
+            RelationsOpt.Rule = ((ToTerm(";") | ToTerm("~")) + Relations) | Empty;
             Marking.Rule = Pending | Excluded | PendingExcluded | Empty;
             Pending.Rule = ToTerm("!");
             Excluded.Rule = ToTerm("%");
@@ -144,7 +146,7 @@ namespace Reseda.Parser
 
             MarkTransient(Relation, Event, SubProcess, PathExpressionCont,
                 PathExpression, Path, BinExpr, Expression, Term, ParExpr, BinExpr2,
-                DDPath, BoolExpr, RelExpr, Marking);
+                DDPath, BoolExpr, RelExpr, Marking, RelationsOpt);
 
         }
     }
