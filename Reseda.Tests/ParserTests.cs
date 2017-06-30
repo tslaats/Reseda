@@ -269,5 +269,35 @@ namespace Reseda.Tests
 
 
         }
+
+
+        [TestMethod]
+        public void MarkingTest()
+        {
+            string input = "%!A[?]," +
+                           "!B[?]," +
+                           "%C[?]," +
+                           "!%D[?]" +
+                           ";" +
+                           "";
+            var p = new ResedaParser();
+            p.dispTree(input);
+
+            //System.Diagnostics.Debug.WriteLine(p.Generate(input).PrintTree());
+
+            var term = p.Generate(input);
+
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());            
+
+            //var term2 = term.CloneJson();
+            var term2 = p.Generate(term.subProcess.ToSource());
+
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+
+
+            //Assert.AreEqual(term.ToSource(), term.shallow().ToSource());
+
+
+        }
     }
 }
