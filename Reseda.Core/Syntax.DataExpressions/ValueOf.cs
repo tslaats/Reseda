@@ -34,5 +34,11 @@ namespace Reseda.Core
         {
             return child.ToSource() + ":v";
         }
+
+
+        internal override bool ContainsNames(ISet<string> set)
+        {
+            return child.ContainsNames(set);
+        }
     }
 }

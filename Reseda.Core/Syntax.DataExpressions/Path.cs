@@ -26,5 +26,11 @@ namespace Reseda.Core
         {
             return "@" + value.ToSource();
         }
+
+
+        internal override bool ContainsNames(ISet<string> set)
+        {
+            return value.ContainsNames(set);
+        }
     }
 }

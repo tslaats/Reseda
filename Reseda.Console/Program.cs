@@ -11,7 +11,7 @@ namespace Reseda.ConsoleApp
 {
     class Program
     {
-        static Event term;
+        static RootEvent term;
         static ResedaParser parser;
 
         static void Main(string[] args)
@@ -43,6 +43,8 @@ namespace Reseda.ConsoleApp
                         case "term": Console.WriteLine(term.ToSource()); break;
                         case "tree": Console.WriteLine(term.PrintTree(true)); break;
                         case "live": Console.WriteLine(term.ProcessIsLive()); break;
+                        case "inseq": term = term.MakeInSeq(); break;
+                        case "glitchfree": term = term.MakeGlitchFree(); break;
                         case "execute":
                             if (commandArgs.Count > 1)
                                 Execute(commandArgs[0], commandArgs[1]);
@@ -134,7 +136,7 @@ namespace Reseda.ConsoleApp
             {
                 Console.WriteLine("Parsing: " + s);
                 Console.WriteLine("AST: " + parser.stringTree(s));
-                term = parser.Generate(s);
+                term = (RootEvent)parser.Generate(s);
             }
             catch (Exception ex)
             {

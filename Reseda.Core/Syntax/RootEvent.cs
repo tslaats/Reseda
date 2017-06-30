@@ -35,5 +35,77 @@ namespace Reseda.Core
             result.subProcess.parent = result;
             return result;
         }
+
+
+        public RootEvent MakeInSeq()
+        {
+            var result = this.ShallowClone();
+            var temp = this.ShallowClone();
+            temp.subProcess.UnFold();
+
+
+            HashSet<InputEvent> input = new HashSet<InputEvent>();
+            HashSet<OutputEvent> output = new HashSet<OutputEvent>();
+
+            foreach (Event e in temp.Descendants())
+            {
+                if (e.GetType() == typeof(InputEvent))
+                    input.Add((InputEvent)e);
+                else if(e.GetType() == typeof(OutputEvent))
+                    output.Add((OutputEvent)e);
+            }
+
+            foreach(var i in input)
+            {
+                foreach (var o in output)
+                {
+                    result.AddRelation(new Milestone(o.Path, i.Path));
+                }
+            }
+
+            return (RootEvent)result;
+        }
+
+        public RootEvent MakeGlitchFree()
+        {
+            var result = this.ShallowClone();
+            var temp = this.ShallowClone();
+            temp.subProcess.UnFold();
+
+
+            HashSet<InputEvent> input = new HashSet<InputEvent>();
+            HashSet<OutputEvent> output = new HashSet<OutputEvent>();
+
+            foreach (Event e in temp.Descendants())
+            {
+                if (e.GetType() == typeof(InputEvent))
+                    input.Add((InputEvent)e);
+                else if (e.GetType() == typeof(OutputEvent))
+                    output.Add((OutputEvent)e);
+            }
+            foreach (var o in output)
+            {
+                foreach (var i in input)
+                {
+                    var x = new HashSet<string>();
+                    x.Add(i.name);
+                    if (o.expression.ContainsNames(x))
+                        result.AddRelation(new Response(i.Path, o.Path));
+                }
+                foreach (var o2 in output)
+                {
+                    var x = new HashSet<string>();
+                    x.Add(o2.name);
+                    if (o.expression.ContainsNames(x))
+                    {
+                        result.AddRelation(new Response(o2.Path, o.Path));
+                        result.AddRelation(new Milestone(o2.Path, o.Path));
+                    }
+                }
+            }
+
+            return (RootEvent)result;
+        }
+
     }
 }

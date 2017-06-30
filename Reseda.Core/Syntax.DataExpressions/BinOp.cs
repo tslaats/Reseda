@@ -23,5 +23,11 @@ namespace Reseda.Core
         {
             return left.ToSource() + " " + Symbol + " " + right.ToSource();
         }
+
+
+        internal override bool ContainsNames(ISet<string> set)
+        {
+            return left.ContainsNames(set) || right.ContainsNames(set);
+        }
     }
 }

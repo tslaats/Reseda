@@ -12,5 +12,10 @@ namespace Reseda.Core
         {
             return this;
         }
+
+        internal override bool ContainsNames(ISet<string> set)
+        {
+            return false;
+        }
     }
 }

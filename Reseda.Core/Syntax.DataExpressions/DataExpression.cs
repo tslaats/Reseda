@@ -11,5 +11,7 @@ namespace Reseda.Core
         public abstract DataType Eval(Event context);
 
         public abstract String ToSource();
+
+        internal abstract bool ContainsNames(ISet<string> set);
     }
 }

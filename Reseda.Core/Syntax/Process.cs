@@ -403,7 +403,6 @@ namespace Reseda.Core
                 f.subProcess.CloseForResponses(e, ref g);
             }
             
-        }
-
+        }        
     }
-    }
+}
