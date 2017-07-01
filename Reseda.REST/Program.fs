@@ -166,14 +166,14 @@ let exec id (Q : Reseda.Core.RootEvent) (req : HttpRequest) =
 
 let app =
   choose [ 
-    POST >=> path "/api/parse"
+    POST >=> path "/reseda/api/parse"
          >=> request (fun req -> parse (ASCII.toString req.rawForm))
-    GET >=> pathScan "/api/%u/path" (with_term eval_path)
-    GET >=> pathScan "/api/%u/term" (with_term show)
-    GET >=> pathScan "/api/%u/exec" (with_term exec)
-    GET >=> pathScan "/api/%u/antiglitch" (with_term antiGlitch)
-    GET >=> pathScan "/api/%u/antipar" (with_term antiPar)
-    GET >=> pathScan "/api/%u/analysis" (with_term analyse)
+    GET >=> pathScan "/reseda/api/%u/path" (with_term eval_path)
+    GET >=> pathScan "/reseda/api/%u/term" (with_term show)
+    GET >=> pathScan "/reseda/api/%u/exec" (with_term exec)
+    GET >=> pathScan "/reseda/api/%u/antiglitch" (with_term antiGlitch)
+    GET >=> pathScan "/reseda/api/%u/antipar" (with_term antiPar)
+    GET >=> pathScan "/reseda/api/%u/analysis" (with_term analyse)
     RequestErrors.NOT_FOUND "Page not found." 
   ] 
 

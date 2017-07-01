@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import registerServiceWorker from './registerServiceWorker';
+//import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 import axios from 'axios';
 import { examples } from './examples';
@@ -53,7 +53,7 @@ class Path extends React.Component {
   }
 
   remote () { 
-    axios.get(`/api/${this.props.term}/path`, {
+    axios.get(`/reseda/api/${this.props.term}/path`, {
       params: {
         expr: this.state.src
       }})
@@ -93,7 +93,7 @@ class Path extends React.Component {
   }
 
   submit() { 
-    axios.get(`/api/${this.props.term}/exec`, { 
+    axios.get(`/reseda/api/${this.props.term}/exec`, { 
       params: { 
         event: this.state.matches[0].slice(0,-1),
         value: this.input.value
@@ -179,7 +179,7 @@ class Parser extends React.Component {
   }
 
   remote () { 
-    axios.post('/api/parse', this.state.src)
+    axios.post('/reseda/api/parse', this.state.src)
       .then((response) => { 
         this.setState({ 
           id: response.data,
@@ -271,7 +271,7 @@ class Term extends React.Component {
   }
 
   remote () { 
-    axios.get(`/api/${this.props.term}/term`)
+    axios.get(`/reseda/api/${this.props.term}/term`)
       .then((response) => { 
         this.setState({ 
           term: response.data['src@'],
@@ -330,7 +330,7 @@ class Analysis extends React.Component {
   }
 
   remote (url, f) { 
-    axios.get(`/api/${this.props.term}/` + url)
+    axios.get(`/reseda/api/${this.props.term}/` + url)
       .then((response) => f(response.data))
       .catch( (err) => { 
         console.log(err.response ? err.response.data : JSON.stringify(err));
@@ -425,7 +425,7 @@ const App = (props) => {
     const cxt = {
       term: props.match.params.term,
       setTerm: (id) => { 
-        props.history.push(`/process/${id}`);
+        props.history.push(`/reseda/api/${id}`);
       }
     }
     return (
@@ -438,20 +438,18 @@ const App = (props) => {
     );
   };
 
-
 ReactDOM.render(
   <Router>
     <div>
-      <Route path="/process/:term" component={App} />
-      <Route exact path="/" render={() => (
-        <Redirect to="/process/2714325035"/>
-      )}/>
+      <Route path="/reseda/api/:term" component={App} />
+      <Route exact path="/" render={() => ( <Redirect to="/reseda/api/2714325035"/>)}/>
+      <Route exact path="/reseda/index.html" render={() => ( <Redirect to="/reseda/api/2714325035"/>)}/>
     </div>
   </Router>,
   document.getElementById('root')
 );
 
-registerServiceWorker();
+//registerServiceWorker();
 
 
 
