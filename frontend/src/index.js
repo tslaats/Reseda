@@ -59,7 +59,7 @@ class Path extends React.Component {
       }})
       .then((response) => { 
         this.setState({ 
-          matches: response.data,
+          matches: response.data.map((p) => p.slice(0,-1)),
           msg: null
         });
       })
@@ -95,7 +95,7 @@ class Path extends React.Component {
   submit() { 
     axios.get(`/reseda/api/${this.props.term}/exec`, { 
       params: { 
-        event: this.state.matches[0].slice(0,-1),
+        event: this.state.src,
         value: this.input.value
       }})
     .then((response) => { this.props.setTerm( response.data ); })
@@ -108,7 +108,7 @@ class Path extends React.Component {
 
   render() { 
     const disabled = this.state.matches.length !== 1;
-    const matches = this.state.matches.map ((match) => <div key={match}>{match}</div>);
+    const matches = this.state.matches.map ((match) => <div>{match}</div>);
     return (
       <div className="tile is-ancestor">
         <div className="tile is-parent">
@@ -127,7 +127,7 @@ class Path extends React.Component {
                 { !this.state.msg && disabled &&
                   <span className="help">
                     To execute an event, enter a path expression that
-                    matches exactly that event.
+                    matches exactly that event.,
                   </span>
                 }
                 { !this.state.msg && !disabled && 
@@ -296,7 +296,7 @@ class Term extends React.Component {
   }
 
   render() { 
-    const evts = this.state.tree.map ((evt) => <div key={evt}>{evt}</div>);
+    const evts = this.state.tree.map ((evt) => <div>{evt}</div>);
     return (
       <div className="tile is-ancestor">
         <div className="tile is-parent">
