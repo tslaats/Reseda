@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AE847783-BA82-4DCD-AE45-62AEE8D20B25}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Reseda.REST</RootNamespace>
+    <AssemblyName>Reseda.REST</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <ExternalConsole>true</ExternalConsole>
+    <PlatformTarget></PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <DefineConstants></DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <ExternalConsole>true</ExternalConsole>
+    <GenerateTailCalls>true</GenerateTailCalls>
+    <PlatformTarget></PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <FSharpTargetsPath>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\FSharp\Microsoft.FSharp.Targets</FSharpTargetsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(VisualStudioVersion)' == '10.0' OR '$(VisualStudioVersion)' == '11.0'">
+    <FSharpTargetsPath>$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets</FSharpTargetsPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.ValueTuple">
+      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="FSharp.Core">
+      <HintPath>..\packages\FSharp.Core.4.1.0.2\lib\net45\FSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Suave">
+      <HintPath>..\packages\Suave.2.1.1\lib\net40\Suave.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Serialization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Irony">
+      <HintPath>..\packages\Irony.0.9.1\lib\net40\Irony.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Program.fs" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Reseda.Core\Reseda.Core.csproj">
+      <Project>{80C44A88-6ECF-4E45-8D4D-137A5A75F672}</Project>
+      <Name>Reseda.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Reseda.Parser\Reseda.Parser.csproj">
+      <Project>{9EB78260-DD28-41F6-BF6E-8AFB98F91F98}</Project>
+      <Name>Reseda.Parser</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(FSharpTargetsPath)" />
+</Project>

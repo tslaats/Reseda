@@ -1,0 +1,35 @@
+// 1. Import the initial variables
+@import "../node_modules/bulma/sass/utilities/initial-variables"
+
+// 2. Set your own initial variables
+$family-sans-serif: "Open Sans", sans-serif
+
+// 3. Set the derived variables
+$body-background: lightgrey
+
+// 4. Import the rest of Bulma
+@import "../node_modules/bulma/bulma.sass"
+
+title, subtitle
+  .is-1, .is-2, .is-3, .is-4, .is-5, .is-6
+      font-family: "Montserrat"
+
+textarea
+    font-family: "Roboto Mono"
+    
+
+.term 
+    .terms
+        display: flex
+        flex-direction: column
+
+.match-table
+    font-family: "Roboto Mono"
+
+body > div 
+    padding: 32px
+
+.liveness, .input-serialisation, .glitch-freedom
+    display: flex
+    flex-direction: column
+    justify-content: space-between
