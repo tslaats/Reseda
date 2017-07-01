@@ -121,7 +121,14 @@ namespace Reseda.Core
 
         public virtual String ToSource()
         {
-            var result = this.name;
+            var result = "";
+            if (this.marking.happened)
+                result += "✓";
+            if (this.marking.pending)
+                result += "!";
+            if (!this.marking.included)
+                result += "%";
+            result += this.name;
             result += TypeToSource();
             if (this.subProcess.structuredData.Count > 0 || this.subProcess.relations.Count > 0)
                 result += "{" + subProcess.ToSource() + "}";

@@ -114,7 +114,13 @@ namespace Reseda.Parser
             HashSet<Event> result = new HashSet<Event>();
             foreach (ParseTreeNode child in node.ChildNodes)
             {
-                if ((child.ChildNodes[0].Term.Name == "Pending") || (child.ChildNodes[0].Term.Name == "Excluded") || (child.ChildNodes[0].Term.Name == "PendingExcluded"))
+                if ((child.ChildNodes[0].Term.Name == "Pending") 
+                    || (child.ChildNodes[0].Term.Name == "Excluded") 
+                    || (child.ChildNodes[0].Term.Name == "PendingExcluded")
+                    || (child.ChildNodes[0].Term.Name == "Executed")
+                    || (child.ChildNodes[0].Term.Name == "ExecutedPending")
+                    || (child.ChildNodes[0].Term.Name == "ExecutedExcluded")
+                    || (child.ChildNodes[0].Term.Name == "ExecutedPendingExcluded"))
                 {
                     Event e = null;
                     if (child.Term.Name == "OutputEvent")
@@ -122,10 +128,15 @@ namespace Reseda.Parser
                     else if (child.Term.Name == "InputEvent")
                         e = GenerateInputEvent(child, 1);
 
-                    if ((child.ChildNodes[0].Term.Name == "Pending") || (child.ChildNodes[0].Term.Name == "PendingExcluded"))
+                    if ((child.ChildNodes[0].Term.Name == "Pending") || (child.ChildNodes[0].Term.Name == "PendingExcluded") || 
+                        (child.ChildNodes[0].Term.Name == "ExecutedPending") || (child.ChildNodes[0].Term.Name == "ExecutedPendingExcluded"))
                         e.marking.pending = true;
-                    if ((child.ChildNodes[0].Term.Name == "Excluded") || (child.ChildNodes[0].Term.Name == "PendingExcluded"))
+                    if ((child.ChildNodes[0].Term.Name == "Excluded") || (child.ChildNodes[0].Term.Name == "PendingExcluded") || 
+                        (child.ChildNodes[0].Term.Name == "ExecutedExcluded") || (child.ChildNodes[0].Term.Name == "ExecutedPendingExcluded"))
                         e.marking.included = false;
+                    if ((child.ChildNodes[0].Term.Name == "Executed") || (child.ChildNodes[0].Term.Name == "ExecutedPending") ||
+                        (child.ChildNodes[0].Term.Name == "ExecutedExcluded") || (child.ChildNodes[0].Term.Name == "ExecutedPendingExcluded"))
+                        e.marking.happened = true;
 
                     result.Add(e);
                 }
