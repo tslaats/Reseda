@@ -14,5 +14,7 @@ namespace Reseda.Core
         public static String Eq = "==";
         public static String Gt = ">";
         public static String Neg = "!";
+        public static String Value = ":value";
+        public static String ValueShort = ":v";
     }
 }

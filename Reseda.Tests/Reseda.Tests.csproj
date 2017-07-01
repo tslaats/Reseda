@@ -56,6 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ParserTests.cs" />
     <Compile Include="LivenessTests.cs" />
+    <Compile Include="PaperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -14,6 +14,8 @@ namespace Reseda.Parser
         internal NonTerminal path;
         public ResedaGrammar()
         {
+
+            var str = new StringLiteral("string", "\'");
             var number = new NumberLiteral("number");
             number.DefaultIntTypes = new TypeCode[] { TypeCode.Int32, TypeCode.Int64, NumberLiteral.TypeCodeBigInt };
             var identifier = new IdentifierTerminal("identifier");
@@ -25,6 +27,7 @@ namespace Reseda.Parser
             var SubProcess_opt = new NonTerminal("SubProcess_opt");
             var StructuredData = new NonTerminal("StructuredData");
             var Relations = new NonTerminal("Relations");
+            var RelationsOpt = new NonTerminal("RelationsOpt");
             var Relation = new NonTerminal("Relation");
             var Include = new NonTerminal("Include");
             var Exclude = new NonTerminal("Exclude");
@@ -85,8 +88,13 @@ namespace Reseda.Parser
             var EqOp = new NonTerminal("EqOp");
             var GtOp = new NonTerminal("GtOp");
 
+            var Marking = new NonTerminal("Marking");
+            var Pending = new NonTerminal("Pending");
+            var Excluded = new NonTerminal("Excluded");
+            var PendingExcluded = new NonTerminal("PendingExcluded");
+
             DDPath.Rule = DPathValue | DPath;
-            DPathValue.Rule = DPath + ToTerm(":v");
+            DPathValue.Rule = DPath + (ToTerm(Symbols.ValueShort) | ToTerm(Symbols.Value));
 
             DPath.Rule = ToTerm("@") + Path;
             Expression.Rule = Term | BoolExpr;
@@ -99,7 +107,7 @@ namespace Reseda.Parser
             EqOp.Rule = BinExpr + ToTerm(Symbols.Eq) + BinExpr;
             GtOp.Rule = BinExpr + ToTerm(Symbols.Gt) + BinExpr;
 
-            Term.Rule = number | ParExpr | NegOp | identifier | Unit | DDPath;
+            Term.Rule = str | number | ParExpr | NegOp | identifier | Unit | DDPath;
             Unit.Rule = Empty;
             NegOp.Rule = ToTerm("!") + Expression;
             ParExpr.Rule = "(" + Expression + ")";
@@ -118,13 +126,18 @@ namespace Reseda.Parser
             Milestone.Rule = Path + ToTerm("--><>") + Path;
             Response.Rule = Path + ToTerm("*-->") + Path;
             Relation.Rule = Include | Exclude | Response | Condition | Milestone | Spawn;
-            Relations.Rule = MakeListRule(Relations, ToTerm(","), Relation) | Empty;            
-            InputEvent.Rule = identifier + ToTerm("[?]") +SubProcess;
-            OutputEvent.Rule = identifier + ToTerm("[") + Expression + ToTerm("]") +SubProcess;
+            Relations.Rule = MakeListRule(Relations, ToTerm(","), Relation) | Empty;
+            InputEvent.Rule = Marking + identifier + ToTerm("[?]") + SubProcess;
+            OutputEvent.Rule = Marking + identifier + ToTerm("[") + Expression + ToTerm("]") + SubProcess;
             SubProcess.Rule = (ToTerm("{") + Process + ToTerm("}")) | Empty;
             Event.Rule = InputEvent | OutputEvent;
-            StructuredData.Rule = MakeListRule(StructuredData, ToTerm(","), Event) | Empty;            
-            Process.Rule = StructuredData + ToTerm(";") + Relations;
+            StructuredData.Rule = MakeListRule(StructuredData, ToTerm(","), Event) | Empty;
+            Process.Rule = StructuredData + RelationsOpt;
+            RelationsOpt.Rule = ((ToTerm(";") | ToTerm("~")) + Relations) | Empty;
+            Marking.Rule = Pending | Excluded | PendingExcluded | Empty;
+            Pending.Rule = ToTerm("!");
+            Excluded.Rule = ToTerm("%");
+            PendingExcluded.Rule = ToTerm("!%") | ToTerm("%!");
             this.Root = Process;
             this.path = Path;
             
@@ -133,7 +146,7 @@ namespace Reseda.Parser
 
             MarkTransient(Relation, Event, SubProcess, PathExpressionCont,
                 PathExpression, Path, BinExpr, Expression, Term, ParExpr, BinExpr2,
-                DDPath, BoolExpr, RelExpr);
+                DDPath, BoolExpr, RelExpr, Marking, RelationsOpt);
 
         }
     }

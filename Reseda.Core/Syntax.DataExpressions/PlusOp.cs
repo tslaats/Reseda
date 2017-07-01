@@ -28,13 +28,31 @@ namespace Reseda.Core
                 var rc = (IntType)r;
                 return new IntType(lc.value + rc.value);
             }
-            if (rt == typeof(EventSet) && lt == typeof(EventSet))
+            else if (rt == typeof(EventSet) && lt == typeof(EventSet))
             {
                 var lc = (EventSet)l;
                 var rc = (EventSet)r;
                 return new EventSet(lc.value.Union(rc.value));
             }
-            if (rt != lt)
+            else if (rt == typeof(StrType) && lt == typeof(StrType))
+            {
+                var lc = (StrType)l;
+                var rc = (StrType)r;
+                return new StrType(lc.value + rc.value);
+            }
+            else if (lt == typeof(StrType) && rt == typeof(IntType))
+            {
+                var lc = (StrType)l;
+                var rc = (IntType)r;
+                return new StrType(lc.value + rc.value.ToString());
+            }
+            else if (lt == typeof(IntType) && rt == typeof(StrType))
+            {
+                var lc = (IntType)l;
+                var rc = (StrType)r;
+                return new StrType(lc.value.ToString() + rc.value);
+            }
+            else if (rt != lt)
                 throw new Exception("PlusOp Types mismatch");
             else
                 throw new NotImplementedException("PlusOp incomplete: " + lt.ToString() + " - " + rt.ToString());

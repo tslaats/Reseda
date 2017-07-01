@@ -92,8 +92,9 @@ namespace Reseda.Parser
         {
             foreach (var e in GenerateEvents(node.ChildNodes[0]))
                 ev.AddChildEvent(e);
-            foreach (var r in GenerateRelations(node.ChildNodes[1]))
-                ev.AddRelation(r);
+            if (node.ChildNodes.Count > 1)
+                foreach (var r in GenerateRelations(node.ChildNodes[1]))
+                    ev.AddRelation(r);
         }
 
         public Process GenerateProcess(ParseTreeNode node)
@@ -113,27 +114,45 @@ namespace Reseda.Parser
             HashSet<Event> result = new HashSet<Event>();
             foreach (ParseTreeNode child in node.ChildNodes)
             {
-                if (child.Term.Name == "OutputEvent")
-                    result.Add(GenerateOutputEvent(child));
-                else if (child.Term.Name == "InputEvent")
-                    result.Add(GenerateInputEvent(child));
+                if ((child.ChildNodes[0].Term.Name == "Pending") || (child.ChildNodes[0].Term.Name == "Excluded") || (child.ChildNodes[0].Term.Name == "PendingExcluded"))
+                {
+                    Event e = null;
+                    if (child.Term.Name == "OutputEvent")
+                        e = GenerateOutputEvent(child, 1);
+                    else if (child.Term.Name == "InputEvent")
+                        e = GenerateInputEvent(child, 1);
+
+                    if ((child.ChildNodes[0].Term.Name == "Pending") || (child.ChildNodes[0].Term.Name == "PendingExcluded"))
+                        e.marking.pending = true;
+                    if ((child.ChildNodes[0].Term.Name == "Excluded") || (child.ChildNodes[0].Term.Name == "PendingExcluded"))
+                        e.marking.included = false;
+
+                    result.Add(e);
+                }
+                else
+                {
+                    if (child.Term.Name == "OutputEvent")
+                        result.Add(GenerateOutputEvent(child, 0));
+                    else if (child.Term.Name == "InputEvent")
+                        result.Add(GenerateInputEvent(child, 0));
+                }
             }  
             return result;
         }
 
-        private Event GenerateInputEvent(ParseTreeNode child)
-        {
-            var result = new InputEvent(child.ChildNodes[0].Token.Text);
-            if (child.ChildNodes.Count > 1 && child.ChildNodes[1] != null && child.ChildNodes[1].Term.Name == "Process")
-                AddProcess(result, child.ChildNodes[1]);
+        private Event GenerateInputEvent(ParseTreeNode child, int i)
+        {            
+            var result = new InputEvent(child.ChildNodes[i].Token.Text);
+            if (child.ChildNodes.Count > i + 1 && child.ChildNodes[i + 1] != null && child.ChildNodes[i + 1].Term.Name == "Process")
+                AddProcess(result, child.ChildNodes[i+ 1]);
             return result;
         }
 
-        private Event GenerateOutputEvent(ParseTreeNode child)
+        private Event GenerateOutputEvent(ParseTreeNode child, int i)
         {
-            var result = new OutputEvent(child.ChildNodes[0].Token.Text, GenerateExpression(child.ChildNodes[1]));
-            if (child.ChildNodes.Count > 2 && child.ChildNodes[2].Term.Name == "Process")
-                AddProcess(result, child.ChildNodes[2]);
+            var result = new OutputEvent(child.ChildNodes[i + 0].Token.Text, GenerateExpression(child.ChildNodes[i + 1]));
+            if (child.ChildNodes.Count > i + 2 && child.ChildNodes[i + 2].Term.Name == "Process")
+                AddProcess(result, child.ChildNodes[i + 2]);
             return result;
         }
 
@@ -159,6 +178,8 @@ namespace Reseda.Parser
                     return new DivOp(GenerateExpression(node.ChildNodes[0]), GenerateExpression(node.ChildNodes[1]));
                 case "number":
                     return new IntType((int)node.Token.Value);
+                case "string":
+                    return new StrType((string)node.Token.Value);
                 case "identifier":
                     return new Unit();
                 case "Unit":
