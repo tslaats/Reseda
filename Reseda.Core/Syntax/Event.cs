@@ -21,7 +21,6 @@ namespace Reseda.Core
                 else
                     return new Root();
             }
-
         }
 
         public Event()
@@ -37,6 +36,17 @@ namespace Reseda.Core
             this.subProcess = new Process(this);
         }
 
+        public abstract Event Clone(Process parent);
+
+        internal Event CloneInto(Event other, Process parent)
+        {
+            other.name = this.name;
+            other.marking = this.marking.Clone();
+            other.subProcess = this.subProcess.Clone(other);
+            other.parentProcess = parent;
+            return other;
+        }
+
         public Event AddChildEvent(Event e)
         {
             this.subProcess.structuredData.Add(e);
@@ -50,8 +60,6 @@ namespace Reseda.Core
             this.subProcess.relations.Add(r);
             return this;
         }
-
-        internal abstract Event ShallowClone();        
 
         public ISet<Event> Descendants()
         {
@@ -124,7 +132,7 @@ namespace Reseda.Core
 
         public override String ToString()
         {
-            return "Event: " + Location();
+            return Location();
         }
 
         public Event Root()
@@ -272,7 +280,7 @@ namespace Reseda.Core
         {
             System.Diagnostics.Debug.WriteLine("Checking process : " + this.Root().ToSource());
             var result = true;
-            var term = this.Root().ShallowClone();
+            var term = this.Root().Clone(null);
             if (!term.Bounded())
                 return false;
             term.Root().subProcess.UnFold();

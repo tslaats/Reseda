@@ -19,19 +19,14 @@ namespace Reseda.Core
             this.parent = parent;
         }
 
-        internal Process ShallowClone()
+        internal Process Clone(Event parent) 
         {
             var p = new Process(null);
             foreach (var r in relations)
                 p.relations.Add(r);
-
             foreach (var e in structuredData)
-            {
-                var x = e.ShallowClone();
-                x.parentProcess = p;
-                p.structuredData.Add(x);
-            }
-
+                p.structuredData.Add(e.Clone(p));
+            p.parent = parent;
             return p;
         }
 

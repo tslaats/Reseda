@@ -49,13 +49,9 @@ namespace Reseda.Core
             base.Execute();
         }
 
-        internal override Event ShallowClone()
+        public override Event Clone(Process parent)
         {
-            var result = new InputEvent(this.name);
-            result.subProcess = this.subProcess.ShallowClone();
-            result.subProcess.parent = result;
-            return result;            
+            return (Event)this.CloneInto(new InputEvent(this.name), parent);
         }
-
     }
 }

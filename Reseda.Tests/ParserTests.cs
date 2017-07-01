@@ -244,7 +244,7 @@ namespace Reseda.Tests
 
 
         [TestMethod]
-        public void ShallowCloneTest()
+        public void CloneTest()
         {
             string input = "A[?]{D[?];}" +
                            ";" +

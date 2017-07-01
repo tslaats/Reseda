@@ -26,5 +26,15 @@ namespace Reseda.Core
             included = i;
             pending = p;
         }
+
+        public Marking Clone() 
+        {
+            var m = new Marking(happened, included, pending);
+            /* Values are treated like immutable values: Their internals never
+             * change after construction. 
+             */
+            m.value = this.value;
+            return m;
+        }
     }
 }

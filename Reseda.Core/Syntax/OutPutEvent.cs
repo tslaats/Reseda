@@ -28,6 +28,12 @@ namespace Reseda.Core
             this.expression = new Unit();
         }
 
+        public override Event Clone(Process parent) 
+        {
+            var other = new OutputEvent(this.name, this.expression);
+            return this.CloneInto(other, parent);
+        }
+
         public override void Execute()
         {
             if (!this.IsEnabled())
@@ -47,14 +53,6 @@ namespace Reseda.Core
         public override string TypeToSource()
         {
             return "[" + expression.ToSource() + "]";
-        }
-
-        internal override Event ShallowClone()
-        {
-            var result = new OutputEvent(this.name, this.expression);
-            result.subProcess = this.subProcess.ShallowClone();
-            result.subProcess.parent = result;
-            return result;
         }
     }
 }

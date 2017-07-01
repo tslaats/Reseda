@@ -28,19 +28,15 @@ namespace Reseda.Core
             return subProcess.ToSource();
         }
 
-        internal override Event ShallowClone()
+        public override Event Clone(Process parent) 
         {
-            var result = new RootEvent();
-            result.subProcess = this.subProcess.ShallowClone();
-            result.subProcess.parent = result;
-            return result;
+            return this.CloneInto(new RootEvent(), parent);
         }
-
 
         public RootEvent MakeInSeq()
         {
-            var result = this.ShallowClone();
-            var temp = this.ShallowClone();
+            var result = this.Clone(null);
+            var temp = this.Clone(null);
             temp.subProcess.UnFold();
 
 
@@ -68,8 +64,8 @@ namespace Reseda.Core
 
         public RootEvent MakeGlitchFree()
         {
-            var result = this.ShallowClone();
-            var temp = this.ShallowClone();
+            var result = this.Clone(null);
+            var temp = this.Clone(null);
             temp.subProcess.UnFold();
 
 

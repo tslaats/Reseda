@@ -13,8 +13,7 @@ namespace Reseda.Core
 
         public SpawnEffect(Process p, Event c)
         {
-            this.process = p.ShallowClone();
-            //this.process = p;
+            this.process = p.Clone(p.parent);
             this.context = c;
         }
     }
