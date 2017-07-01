@@ -89,6 +89,10 @@ namespace Reseda.Parser
             var GtOp = new NonTerminal("GtOp");
 
             var Marking = new NonTerminal("Marking");
+            var Executed = new NonTerminal("Executed");
+            var ExecutedPending = new NonTerminal("ExecutedPending");
+            var ExecutedExcluded = new NonTerminal("ExecutedExcluded");
+            var ExecutedPendingExcluded = new NonTerminal("ExecutedPendingExcluded");
             var Pending = new NonTerminal("Pending");
             var Excluded = new NonTerminal("Excluded");
             var PendingExcluded = new NonTerminal("PendingExcluded");
@@ -134,10 +138,14 @@ namespace Reseda.Parser
             StructuredData.Rule = MakeListRule(StructuredData, ToTerm(","), Event) | Empty;
             Process.Rule = StructuredData + RelationsOpt;
             RelationsOpt.Rule = ((ToTerm(";") | ToTerm("~")) + Relations) | Empty;
-            Marking.Rule = Pending | Excluded | PendingExcluded | Empty;
+            Marking.Rule = Pending | Excluded | PendingExcluded | Executed | ExecutedPending | ExecutedExcluded | ExecutedPendingExcluded | Empty;
             Pending.Rule = ToTerm("!");
             Excluded.Rule = ToTerm("%");
             PendingExcluded.Rule = ToTerm("!%") | ToTerm("%!");
+            Executed.Rule = ToTerm("✓");
+            ExecutedPending.Rule = ToTerm("!✓") | ToTerm("✓!");
+            ExecutedExcluded.Rule = ToTerm("✓%") | ToTerm("%✓");
+            ExecutedPendingExcluded.Rule = ToTerm("!✓%") | ToTerm("!%✓") | ToTerm("✓!%") | ToTerm("✓%!") | ToTerm("%!✓") | ToTerm("%✓!");            
             this.Root = Process;
             this.path = Path;
             
