@@ -35,6 +35,7 @@ namespace Reseda.Parser
             var Condition = new NonTerminal("Condition");
             var Milestone = new NonTerminal("Milestone");
             var Spawn = new NonTerminal("Spawn");
+            var SpawnIterator = new NonTerminal("SpawnIterator");
             var Event = new NonTerminal("Event");
             var InputEvent = new NonTerminal("InputEvent");
             var OutputEvent = new NonTerminal("OutputEvent");
@@ -126,10 +127,11 @@ namespace Reseda.Parser
             Include.Rule = Path + ToTerm("-->+") + Path;
             Exclude.Rule = Path + ToTerm("-->%") + Path;
             Spawn.Rule = Path + ToTerm("-->>") + ToTerm("{") + Process + ToTerm("}");
+            SpawnIterator.Rule = Path + ToTerm("-(") + identifier + ToTerm("in") + Path  + ToTerm(")->>") + ToTerm("{") + Process + ToTerm("}");
             Condition.Rule = Path + ToTerm("-->*") + Path;
             Milestone.Rule = Path + ToTerm("--><>") + Path;
             Response.Rule = Path + ToTerm("*-->") + Path;
-            Relation.Rule = Include | Exclude | Response | Condition | Milestone | Spawn;
+            Relation.Rule = Include | Exclude | Response | Condition | Milestone | Spawn | SpawnIterator;
             Relations.Rule = MakeListRule(Relations, ToTerm(","), Relation) | Empty;
             InputEvent.Rule = Marking + identifier + ToTerm("[?]") + SubProcess;
             OutputEvent.Rule = Marking + identifier + ToTerm("[") + Expression + ToTerm("]") + SubProcess;
@@ -150,7 +152,7 @@ namespace Reseda.Parser
             this.path = Path;
             
             MarkPunctuation("-->+", ",", ";", "-->%", "-->*", "--><>", "*-->",
-                "-->>", "<", ">", "?", "!", "{", "}", "/", ".", "..", "*", "+", "-", "(", ")", "@", "[","]", Symbols.And, Symbols.Eq, Symbols.Gt, Symbols.Neg, Symbols.Or, "[?]");
+                "-->>", "<", ">", "?", "!", "{", "}", "/", ".", "..", "*", "+", "-", "(", ")", "@", "[","]", Symbols.And, Symbols.Eq, Symbols.Gt, Symbols.Neg, Symbols.Or, "[?]", "-(", "in", ")->>");
 
             MarkTransient(Relation, Event, SubProcess, PathExpressionCont,
                 PathExpression, Path, BinExpr, Expression, Term, ParExpr, BinExpr2,

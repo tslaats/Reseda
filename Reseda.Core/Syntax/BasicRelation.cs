@@ -24,5 +24,10 @@ namespace Reseda.Core
             return source.ToSource() + " " + Symbol + " " + target.ToSource();            
         }
 
+        internal override void PathReplace(string iteratorName, Event e)
+        {
+            source = source.PathReplace(iteratorName, e);
+            target = target.PathReplace(iteratorName, e);
+        }
     }
 }

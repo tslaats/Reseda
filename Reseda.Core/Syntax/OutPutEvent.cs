@@ -54,5 +54,11 @@ namespace Reseda.Core
         {
             return "[" + expression.ToSource() + "]";
         }
+
+        internal override void PathReplace(string iteratorName, Event e)
+        {
+            this.expression.PathReplace(iteratorName, e);
+            base.PathReplace(iteratorName, e);            
+        }
     }
 }

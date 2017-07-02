@@ -32,5 +32,11 @@ namespace Reseda.Core
         {
             return value.ContainsNames(set);
         }
+
+
+        internal override void PathReplace(string iteratorName, Event e)
+        {
+            this.value = this.value.PathReplace(iteratorName, e);
+        }
     }
 }

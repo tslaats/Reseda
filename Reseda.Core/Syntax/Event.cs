@@ -17,7 +17,17 @@ namespace Reseda.Core
             get
             {
                 if (parentProcess != null)
-                    return parentProcess.parent.Path.Extend(new Name(this.name));
+                {
+                    var path = new Name(this.name);
+                    var results = parentProcess.parent.Path.Extend(path).Eval(this.Root(), this.Root());
+                    //if (results.Count > 1)
+                    //{
+                        for (int i = 0; i < results.Count; i++)
+                            if (results.ElementAt(i) == this)
+                                path.AddFilter(new IntType(i));
+                    //}
+                    return parentProcess.parent.Path.Extend(path);                    
+                }
                 else
                     return new Root();
             }
@@ -150,6 +160,11 @@ namespace Reseda.Core
                 return this;
         }
 
+        internal virtual void PathReplace(string iteratorName, Event e)
+        {
+            this.subProcess.PathReplace(iteratorName, e);
+        }
+
         public Boolean IsEnabled()
         {
             var result = true;
@@ -195,6 +210,7 @@ namespace Reseda.Core
                 }
                 foreach (var r in s.process.relations)
                 {
+                    System.Diagnostics.Debug.WriteLine(r.ToSource());
                     s.context.AddRelation(r);
                 }
             }

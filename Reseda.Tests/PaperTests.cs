@@ -90,7 +90,32 @@ ship *--> printInvoice";
         [TestMethod]
         public void Example4()
         {
-            string input = @"A[?]
+            string input = @"addItem[?],
+checkout[?],
+ship[?],
+%printInvoice[@itemInCart/data/invoiceRow]
+~
+addItem -->> {itemInCart[]{
+  data[]{
+        !name[?],
+        !price[?], 
+        !quantity[?],
+        amount[@price:value * @quantity:value]        
+        ~
+        * --><> ../../checkout
+      }
+}},
+checkout -->%  itemInCart/data,
+checkout -->* ship,
+checkout *--> ship,
+ship -->% checkout,
+ship -->+ printInvoice,
+ship *--> printInvoice,
+checkout -(p in itemInCart)->> 
+  {shipping[] { 
+    invoiceRow[@p/name:value + ';' + @p/price:value + ';' + @p/quantity:value + ';' + @p/amount:value]
+    ;    
+  }}
 ";
             var p = new ResedaParser();
             p.dispTree(input);

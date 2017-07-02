@@ -25,8 +25,8 @@ namespace Reseda.ConsoleApp
                 var commandParts = Console.ReadLine().Split(' ').ToList();
                 var commandName = commandParts[0];
                 var commandArgs = commandParts.Skip(1).ToList(); // the arguments is after the command                
-                try
-                {
+                //try
+                //{
                     switch (commandName)
                     {
                         // Create command based on CommandName (and maybe arguments)
@@ -52,12 +52,12 @@ namespace Reseda.ConsoleApp
                                 Execute(commandArgs[0]);
                             break;
                     }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Command " + commandName + "failed, because:");
-                    Console.WriteLine(e.Message);
-                }
+                //}
+                //catch (Exception e)
+                //{
+                //    Console.WriteLine("Command " + commandName + "failed, because:");
+                //    Console.WriteLine(e.Message);
+                //}
             }
         }
 
@@ -71,16 +71,16 @@ namespace Reseda.ConsoleApp
                 Console.WriteLine("Path selects more than one event, consider adding [0].");
             else
             {
-                try
-                {
+                //try
+                //{
                     es.ElementAt(0).Execute();
                     Console.WriteLine(term.ToSource());
                     Console.WriteLine(term.PrintTree(true));
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Execution of " + v + " failed because: " + e.Message);
-                }
+                //}
+                //catch (Exception e)
+                //{
+                //    Console.WriteLine("Execution of " + v + " failed because: " + e.Message);
+                //}
             }
         }
 

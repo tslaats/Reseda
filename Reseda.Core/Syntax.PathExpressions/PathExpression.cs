@@ -24,13 +24,25 @@ namespace Reseda.Core
                 return "[" + filter.ToSource() + "]";
         }
 
-        public String ToSource()
+        internal abstract PathExpression Clone();
+
+        public virtual String ToSource()
         {
             return this.ToString();
         }
 
-        PathExpression child;
+        internal PathExpression child;
         DataExpression filter;
+
+        internal virtual PathExpression PathReplace(string iteratorName, Event e)
+        {
+            if (child != null)
+                this.child = child.PathReplace(iteratorName, e);
+
+            System.Diagnostics.Debug.WriteLine(this.ToSource());
+            return this;
+        }
+        
 
         //Saet<Event> eval(Event context, Process Root);
 

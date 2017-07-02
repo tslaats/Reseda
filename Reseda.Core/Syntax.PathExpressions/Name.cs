@@ -64,5 +64,28 @@ namespace Reseda.Core
         }
 
 
+        internal override PathExpression PathReplace(string iteratorName, Event e)
+        {
+            if (this.name == iteratorName)
+            {
+                //System.Diagnostics.Debug.WriteLine(e.Path.ToSource());
+                return e.Path;//.Extend(this.child);
+            }
+            else
+            {
+                if (child != null)
+                    child.PathReplace(iteratorName, e);
+
+                System.Diagnostics.Debug.WriteLine(this);
+                return this;
+            }
+        }
+
+        internal override PathExpression Clone()
+        {
+            return new Name(name).Extend(this.child);
+        }
+
+
     }
 }

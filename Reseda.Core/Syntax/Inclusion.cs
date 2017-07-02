@@ -20,5 +20,11 @@ namespace Reseda.Core
                 return "-->+";
             }
         }
+
+        internal override Relation Clone()
+        {
+            return new Inclusion(source.Clone(), target.Clone());
+        }
+
     }
 }

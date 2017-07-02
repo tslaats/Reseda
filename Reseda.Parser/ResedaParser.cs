@@ -102,8 +102,9 @@ namespace Reseda.Parser
             Process result = new Process(null);            
             foreach (var e in GenerateEvents(node.ChildNodes[0]))
                 result.structuredData.Add(e);
-            foreach (var r in GenerateRelations(node.ChildNodes[1]))
-                result.relations.Add(r);
+            if (node.ChildNodes.Count > 1)
+                foreach (var r in GenerateRelations(node.ChildNodes[1]))
+                    result.relations.Add(r);
 
             return result;
         }
@@ -223,6 +224,8 @@ namespace Reseda.Parser
                     result.Add(new Milestone(GeneratePath(child.ChildNodes[0]), GeneratePath(child.ChildNodes[1])));
                 else if (child.Term.Name == "Spawn")
                     result.Add(new Spawn(GeneratePath(child.ChildNodes[0]), GenerateProcess(child.ChildNodes[1])));
+                else if (child.Term.Name == "SpawnIterator")
+                    result.Add(new Spawn(GeneratePath(child.ChildNodes[0]), child.ChildNodes[1].Token.Text, GeneratePath(child.ChildNodes[2]), GenerateProcess(child.ChildNodes[3])));
             }
             return result;
         }

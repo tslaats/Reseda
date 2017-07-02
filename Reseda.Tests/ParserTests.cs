@@ -299,5 +299,22 @@ namespace Reseda.Tests
 
 
         }
+
+        [TestMethod]
+        public void SpawnIterator()
+        {
+            string input = @"A[?],
+B[?]
+~
+A -->> {C[!]},
+B -(p in C)->> {D[!]}
+";
+            var p = new ResedaParser();
+            p.dispTree(input);
+            var term = p.Generate(input);
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            var term2 = p.Generate(term.subProcess.ToSource());
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+        }
     }
 }

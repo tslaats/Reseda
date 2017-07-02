@@ -22,5 +22,9 @@ namespace Reseda.Core
             return result;
         }
 
+        internal override PathExpression Clone()
+        {
+            return new Parent().Extend(this.child);
+        }
     }
 }

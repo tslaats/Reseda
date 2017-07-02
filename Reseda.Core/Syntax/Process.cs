@@ -23,7 +23,7 @@ namespace Reseda.Core
         {
             var p = new Process(null);
             foreach (var r in relations)
-                p.relations.Add(r);
+                p.relations.Add(r.Clone());
             foreach (var e in structuredData)
                 p.structuredData.Add(e.Clone(p));
             p.parent = parent;
@@ -88,7 +88,18 @@ namespace Reseda.Core
                     //var trg = s.target.Eval(this.parent);
                     if (src.Contains(e))
                     {
-                        result.spawn.Add(new SpawnEffect(s.target, this.parent));
+                        // handle iterator...
+                        if (s.iterateOver != null)
+                        {
+                            var over = s.iterateOver.Eval(this.parent);
+                            foreach (Event x in over)
+                            {                                
+                                result.spawn.Add(new SpawnEffect(s.target.Clone(null).PathReplace(s.iteratorName, x), this.parent));
+                                //result.spawn.Add(new SpawnEffect(s.target.Clone(null), this.parent));
+                            }
+                        }
+                        else
+                            result.spawn.Add(new SpawnEffect(s.target, this.parent));
                     }
                 }
             }
@@ -104,6 +115,19 @@ namespace Reseda.Core
                 //System.Diagnostics.Debug.WriteLine("<--" + result);
             }
             return result;
+        }
+
+        internal Process PathReplace(string iteratorName, Event e)
+        {   
+            foreach(var f in this.structuredData)
+            {
+                f.PathReplace(iteratorName, e);
+            }
+            foreach (Relation r in this.relations)
+            {
+                r.PathReplace(iteratorName, e);
+            }
+            return this;            
         }
 
         public Boolean CheckEnabled(Event e)

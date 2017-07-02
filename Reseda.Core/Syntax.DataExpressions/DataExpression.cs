@@ -13,5 +13,9 @@ namespace Reseda.Core
         public abstract String ToSource();
 
         internal abstract bool ContainsNames(ISet<string> set);
+
+        internal virtual void PathReplace(string iteratorName, Event e)
+        {            
+        }
     }
 }
