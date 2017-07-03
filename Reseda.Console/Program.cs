@@ -13,6 +13,7 @@ namespace Reseda.ConsoleApp
     {
         static RootEvent term;
         static ResedaParser parser;
+        static bool autoCompute = false;
 
         static void Main(string[] args)
         {
@@ -41,6 +42,7 @@ namespace Reseda.ConsoleApp
                             Load(commandArgs[0]);
                             break;
                         case "term": Console.WriteLine(term.ToSource()); break;
+                        case "auto": autoCompute = !autoCompute;  Console.WriteLine(autoCompute); break;
                         case "tree": Console.WriteLine(term.PrintTree(true)); break;
                         case "live": Console.WriteLine(term.ProcessIsLive()); break;
                         case "inseq": term = term.MakeInSeq(); break;
@@ -87,6 +89,11 @@ namespace Reseda.ConsoleApp
                     es.ElementAt(0).Execute();
                     Console.WriteLine(term.ToSource());
                     Console.WriteLine(term.PrintTree(true));
+                    if (autoCompute)
+                    {
+                        Console.WriteLine("Auto computing:");
+                        Console.WriteLine(term.AutoComputeToString());
+                    }
                 }
                 catch (Exception e)
                 {
@@ -117,6 +124,11 @@ namespace Reseda.ConsoleApp
                         e.Execute(int.Parse(value));
                     Console.WriteLine(term.ToSource());
                     Console.WriteLine(term.PrintTree(true));
+                    if (autoCompute)
+                    {
+                        Console.WriteLine("Auto computing:");
+                        Console.WriteLine(term.AutoComputeToString());
+                    }
                 }
                 catch (Exception e)
                 {

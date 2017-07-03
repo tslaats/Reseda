@@ -115,5 +115,37 @@ namespace Reseda.Core
             return result;
         }
 
+        public List<Event> GetAllEnabledAndPendingComputationEvents()
+        {
+            List<Event> result = new List<Event>();
+            foreach (var e in this.Descendants())
+            {
+                if (e.IsEnabled() && e.GetType() == typeof(OutputEvent) && e.marking.pending)
+                    result.Add(e);
+            }
+
+            return result;
+        }
+
+
+        public String AutoComputeToString()
+        {
+            var result = "";
+            foreach (var p in AutoCompute())
+                result += p.ToString() + System.Environment.NewLine;
+            return result;
+        }
+
+
+        public List<PathExpression> AutoCompute()
+        {
+            if (GetAllEnabledAndPendingComputationEvents().Count == 0)
+                return new List<PathExpression>();
+            var e = GetAllEnabledAndPendingComputationEvents()[0];
+            e.Execute();
+            var result = AutoCompute();
+            result.Add(e.Path);
+            return result; 
+        }
     }
 }
