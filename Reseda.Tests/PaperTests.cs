@@ -11,7 +11,9 @@ namespace Reseda.Tests
         [TestMethod]
         public void Example1()
         {
-            string input = @"!name[?],
+            string input = @"# First step:
+# ** Input and computational events
+!name[?],
 !price[?],
 !quantity[?],
 amount[@price:value * @quantity:value],
