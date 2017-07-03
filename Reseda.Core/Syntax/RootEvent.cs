@@ -103,5 +103,17 @@ namespace Reseda.Core
             return (RootEvent)result;
         }
 
+        public List<PathExpression> GetAllEnabledEvents()
+        {
+            List<PathExpression> result = new List<PathExpression>();
+            foreach (var e in this.Descendants())
+            {
+                if (e.IsEnabled())
+                    result.Add(e.Path);
+            }
+
+            return result;
+        }
+
     }
 }
