@@ -55,7 +55,7 @@ namespace Reseda.Core
             {
                 foreach (var o in output)
                 {
-                    result.AddRelation(new Milestone(o.Path, i.Path));
+                    result.AddRelation(new Milestone(o.GeneralPath, i.GeneralPath));
                 }
             }
 
@@ -86,7 +86,7 @@ namespace Reseda.Core
                     var x = new HashSet<string>();
                     x.Add(i.name);
                     if (o.expression.ContainsNames(x))
-                        result.AddRelation(new Response(i.Path, o.Path));
+                        result.AddRelation(new Response(i.GeneralPath, o.GeneralPath));
                 }
                 foreach (var o2 in output)
                 {
@@ -94,8 +94,8 @@ namespace Reseda.Core
                     x.Add(o2.name);
                     if (o.expression.ContainsNames(x))
                     {
-                        result.AddRelation(new Response(o2.Path, o.Path));
-                        result.AddRelation(new Milestone(o2.Path, o.Path));
+                        result.AddRelation(new Response(o2.GeneralPath, o.GeneralPath));
+                        result.AddRelation(new Milestone(o2.GeneralPath, o.GeneralPath));
                     }
                 }
             }
