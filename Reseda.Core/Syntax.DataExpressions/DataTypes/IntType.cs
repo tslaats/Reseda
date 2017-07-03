@@ -23,5 +23,10 @@ namespace Reseda.Core
         {
             return value.ToString();
         }
+
+        internal override DataExpression Clone()
+        {
+            return new IntType(this.value);
+        }
     }
 }

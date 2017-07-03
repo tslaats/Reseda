@@ -35,5 +35,13 @@ namespace Reseda.Core
             this.left.PathReplace(iteratorName, e);
             this.right.PathReplace(iteratorName, e);
         }
+
+
+        internal override DataExpression Clone()
+        {
+            Type t = this.GetType();            
+            Object[] args = { left.Clone(), right.Clone() };
+            return (DataExpression)Activator.CreateInstance(t, args);
+        }
     }
 }

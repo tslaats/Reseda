@@ -272,6 +272,31 @@ namespace Reseda.Tests
 
 
         [TestMethod]
+        public void CloneTestDataExpression()
+        {
+            string input = "A[5 * 6]" +
+                           ";";
+            var p = new ResedaParser();
+            p.dispTree(input);
+
+            //System.Diagnostics.Debug.WriteLine(p.Generate(input).PrintTree());
+
+            var term = p.Generate(input);
+            var term2 = term.Clone(null);
+
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            System.Diagnostics.Debug.WriteLine(term2.subProcess.ToSource());
+            
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+
+
+            //Assert.AreEqual(term.ToSource(), term.shallow().ToSource());
+
+
+        }
+
+
+        [TestMethod]
         public void MarkingTest()
         {
             string input = "%!A[?]," +

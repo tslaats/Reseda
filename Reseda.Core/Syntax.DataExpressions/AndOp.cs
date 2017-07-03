@@ -33,5 +33,10 @@ namespace Reseda.Core
             else
                 throw new NotImplementedException("AndOp incomplete");
         }
+
+        //internal override DataExpression Clone()
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

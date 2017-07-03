@@ -17,5 +17,7 @@ namespace Reseda.Core
         internal virtual void PathReplace(string iteratorName, Event e)
         {            
         }
+
+        internal abstract DataExpression Clone();
     }
 }

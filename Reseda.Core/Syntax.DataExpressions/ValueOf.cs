@@ -45,5 +45,10 @@ namespace Reseda.Core
         {
             this.child.PathReplace(iteratorName, e);
         }
+
+        internal override DataExpression Clone()
+        {
+            return new ValueOf(this.child.Clone());
+        }
     }
 }

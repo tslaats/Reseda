@@ -37,5 +37,10 @@ namespace Reseda.Core
                 result += e.ToString() + ",";
             return result.Substring(0,result.Length - 1) + "}";
         }
+
+        internal override DataExpression Clone()
+        {
+            return new EventSet(this.value);
+        }
     }
 }

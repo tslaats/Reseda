@@ -30,7 +30,7 @@ namespace Reseda.Core
 
         public override Event Clone(Process parent) 
         {
-            var other = new OutputEvent(this.name, this.expression);
+            var other = new OutputEvent(this.name, this.expression.Clone());
             return this.CloneInto(other, parent);
         }
 

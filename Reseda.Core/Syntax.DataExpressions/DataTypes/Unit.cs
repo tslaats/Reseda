@@ -12,5 +12,10 @@ namespace Reseda.Core
         {
             return "";
         }
+
+        internal override DataExpression Clone()
+        {
+            return new Unit();
+        }
     }
 }
