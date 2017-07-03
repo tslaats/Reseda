@@ -165,7 +165,7 @@ let exec id (Q : Reseda.Core.RootEvent) (req : HttpRequest) =
 (* SERVER *)
 
 let asset = 
-    sprintf "../../../frontend/build/%s" >> Files.file
+    sprintf "./build/%s" >> Files.file
 
 let app =
   choose [ 
@@ -177,13 +177,20 @@ let app =
     GET >=> pathScan "/reseda/api/%u/antiglitch" (with_term antiGlitch)
     GET >=> pathScan "/reseda/api/%u/antipar" (with_term antiPar)
     GET >=> pathScan "/reseda/api/%u/analysis" (with_term analyse)
+    GET >=> pathScan "/reseda/api/%u" (fun _ -> asset "index.html")
     // Static assets (for development without npm). Note that static 
     // assets must be available at the relative path specified in 
     // `asset` above. 
     GET >=> pathScan "/reseda/%s" asset
     GET >=> path "/index.html" >=> asset "index.html"
+    GET >=> path "/reseda" >=> asset "index.html"
+    GET >=> path "/reseda/" >=> asset "index.html"
     GET >=> path "/" >=> asset "index.html"
     RequestErrors.NOT_FOUND "Page not found." 
   ] 
 
-startWebServer defaultConfig app
+startWebServer
+  { defaultConfig with
+      bindings = [ HttpBinding.createSimple HTTP "0.0.0.0" 8080 ]
+  }
+  app

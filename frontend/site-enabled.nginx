@@ -13,16 +13,22 @@ server {
    proxy_pass  http://127.0.0.1:8003;
    add_header  Access-Control-Allow-Origin *;
  }
- 
+
  location /reseda/ {
-   index index.html; 
+   index /reseda/index.html; 
    root /var/www/html;
  }
 
+ location ~ /reseda/api/[0-9]+$ {
+   alias /var/www/html/reseda/index.html;
+   default_type text/html;
+ }
+
  location /reseda/api/ {
-   proxy_pass	http://127.0.0.1:8080;
+   proxy_pass   http://127.0.0.1:8080;
    add_header  Access-Control-Allow-Origin *;
  }
+
 
  location / {
 	 root /var/aspnet/workbench-v2;

@@ -444,6 +444,7 @@ ReactDOM.render(
       <Route path="/reseda/api/:term" component={App} />
       <Route exact path="/" render={() => ( <Redirect to="/reseda/api/2714325035"/>)}/>
       <Route exact path="/reseda/index.html" render={() => ( <Redirect to="/reseda/api/2714325035"/>)}/>
+      <Route exact path="/reseda/" render={() => ( <Redirect to="/reseda/api/2714325035"/>)}/>
     </div>
   </Router>,
   document.getElementById('root')
