@@ -38,7 +38,10 @@ namespace Reseda.Core
 
         public override string ToSource()
         {
-            return source.ToSource() + " " + Symbol + " {" + target.ToSource() + "}";
+            if (iterateOver != null)
+                return source.ToSource() + " -(" + iteratorName + " in " + iterateOver.ToSource() + ")->> {" + target.ToSource() + "}";
+            else
+                return source.ToSource() + " " + Symbol + " {" + target.ToSource() + "}";
         }
 
 
