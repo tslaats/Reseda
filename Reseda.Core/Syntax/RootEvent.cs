@@ -55,7 +55,7 @@ namespace Reseda.Core
             {
                 foreach (var o in output)
                 {
-                    result.AddRelation(new Milestone(o.Path, i.Path));
+                    result.AddRelation(new Milestone(o.GeneralPath, i.GeneralPath));
                 }
             }
 
@@ -86,7 +86,7 @@ namespace Reseda.Core
                     var x = new HashSet<string>();
                     x.Add(i.name);
                     if (o.expression.ContainsNames(x))
-                        result.AddRelation(new Response(i.Path, o.Path));
+                        result.AddRelation(new Response(i.GeneralPath, o.GeneralPath));
                 }
                 foreach (var o2 in output)
                 {
@@ -94,8 +94,8 @@ namespace Reseda.Core
                     x.Add(o2.name);
                     if (o.expression.ContainsNames(x))
                     {
-                        result.AddRelation(new Response(o2.Path, o.Path));
-                        result.AddRelation(new Milestone(o2.Path, o.Path));
+                        result.AddRelation(new Response(o2.GeneralPath, o.GeneralPath));
+                        result.AddRelation(new Milestone(o2.GeneralPath, o.GeneralPath));
                     }
                 }
             }
@@ -103,5 +103,49 @@ namespace Reseda.Core
             return (RootEvent)result;
         }
 
+        public List<PathExpression> GetAllEnabledEvents()
+        {
+            List<PathExpression> result = new List<PathExpression>();
+            foreach (var e in this.Descendants())
+            {
+                if (e.IsEnabled())
+                    result.Add(e.Path);
+            }
+
+            return result;
+        }
+
+        public List<Event> GetAllEnabledAndPendingComputationEvents()
+        {
+            List<Event> result = new List<Event>();
+            foreach (var e in this.Descendants())
+            {
+                if (e.IsEnabled() && e.GetType() == typeof(OutputEvent) && e.marking.pending)
+                    result.Add(e);
+            }
+
+            return result;
+        }
+
+
+        public String AutoComputeToString()
+        {
+            var result = "";
+            foreach (var p in AutoCompute())
+                result += p.ToString() + System.Environment.NewLine;
+            return result;
+        }
+
+
+        public List<PathExpression> AutoCompute()
+        {
+            if (GetAllEnabledAndPendingComputationEvents().Count == 0)
+                return new List<PathExpression>();
+            var e = GetAllEnabledAndPendingComputationEvents()[0];
+            e.Execute();
+            var result = AutoCompute();
+            result.Add(e.Path);
+            return result; 
+        }
     }
 }

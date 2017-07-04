@@ -33,6 +33,22 @@ namespace Reseda.Core
             }
         }
 
+
+        public PathExpression GeneralPath
+        {
+            get
+            {
+                if (parentProcess != null)
+                {
+                    var path = new Name(this.name);
+                    return parentProcess.parent.Path.Extend(path);
+                }
+                else
+                    return new Root();
+            }
+        }
+
+
         public Event()
         {
             this.marking = new Marking();

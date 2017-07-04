@@ -13,6 +13,7 @@ namespace Reseda.ConsoleApp
     {
         static RootEvent term;
         static ResedaParser parser;
+        static bool autoCompute = false;
 
         static void Main(string[] args)
         {
@@ -25,8 +26,8 @@ namespace Reseda.ConsoleApp
                 var commandParts = Console.ReadLine().Split(' ').ToList();
                 var commandName = commandParts[0];
                 var commandArgs = commandParts.Skip(1).ToList(); // the arguments is after the command                
-                //try
-                //{
+                try
+                {
                     switch (commandName)
                     {
                         // Create command based on CommandName (and maybe arguments)
@@ -41,23 +42,35 @@ namespace Reseda.ConsoleApp
                             Load(commandArgs[0]);
                             break;
                         case "term": Console.WriteLine(term.ToSource()); break;
+                        case "auto": autoCompute = !autoCompute;  Console.WriteLine(autoCompute); break;
                         case "tree": Console.WriteLine(term.PrintTree(true)); break;
                         case "live": Console.WriteLine(term.ProcessIsLive()); break;
                         case "inseq": term = term.MakeInSeq(); break;
                         case "glitchfree": term = term.MakeGlitchFree(); break;
+                        case "list":
+                            foreach (var pe in term.GetAllEnabledEvents())
+                                Console.WriteLine(pe.ToSource());
+                            break;
                         case "execute":
                             if (commandArgs.Count > 1)
                                 Execute(commandArgs[0], commandArgs[1]);
                             else
                                 Execute(commandArgs[0]);
                             break;
+                        default:
+                            if (commandArgs.Count > 0)
+                                Execute(commandName, commandArgs[0]);
+                            else
+                                Execute(commandName);
+
+                        break;
                     }
-                //}
-                //catch (Exception e)
-                //{
-                //    Console.WriteLine("Command " + commandName + "failed, because:");
-                //    Console.WriteLine(e.Message);
-                //}
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Command " + commandName + "failed, because:");
+                    Console.WriteLine(e.Message);
+                }
             }
         }
 
@@ -71,16 +84,21 @@ namespace Reseda.ConsoleApp
                 Console.WriteLine("Path selects more than one event, consider adding [0].");
             else
             {
-                //try
-                //{
+                try
+                {
                     es.ElementAt(0).Execute();
                     Console.WriteLine(term.ToSource());
                     Console.WriteLine(term.PrintTree(true));
-                //}
-                //catch (Exception e)
-                //{
-                //    Console.WriteLine("Execution of " + v + " failed because: " + e.Message);
-                //}
+                    if (autoCompute)
+                    {
+                        Console.WriteLine("Auto computing:");
+                        Console.WriteLine(term.AutoComputeToString());
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Execution of " + v + " failed because: " + e.Message);
+                }
             }
         }
 
@@ -106,6 +124,11 @@ namespace Reseda.ConsoleApp
                         e.Execute(int.Parse(value));
                     Console.WriteLine(term.ToSource());
                     Console.WriteLine(term.PrintTree(true));
+                    if (autoCompute)
+                    {
+                        Console.WriteLine("Auto computing:");
+                        Console.WriteLine(term.AutoComputeToString());
+                    }
                 }
                 catch (Exception e)
                 {
