@@ -96,7 +96,8 @@ class Path extends React.Component {
     axios.get(`/reseda/api/${this.props.term}/exec`, { 
       params: { 
         event: this.state.src,
-        value: this.input.value
+        value: this.input.value,
+        auto:  this.auto.checked
       }})
     .then((response) => { this.props.setTerm( response.data ); })
     .catch( (err) => { 
@@ -152,6 +153,14 @@ class Path extends React.Component {
                   onClick={this.submit}>
                   Execute
                 </button>
+              </p>
+            </div>
+            <div className="field">
+              <p className="control">
+                <label className="checkbox">
+                  <input ref={(ref) => this.auto = ref} type="checkbox"/>
+                  &nbsp; Auto-compute computation event
+                </label>
               </p>
             </div>
             <div className="column match-table">

@@ -13,9 +13,10 @@ DROPLET=reseda-droplet
 CONTAINER=reseda-container
 
 droplet-create:
-ifndef TOKEN
-  $(error Set TOKEN to Digitalocean API access token. (Check ~/.docker/machine/machines/reseda-droplet/config.json))
-endif
+	@if [ -z "$$TOKEN" ]; then  \
+		echo "Set TOKEN to Digitalocean API access token\n(See ~/.docker/machine/machines/reseda-droplet/config.json)" ; \
+		exit 255 ; \
+	fi
 	docker-machine create \
 	  --driver digitalocean \
 	  --digitalocean-access-token $(TOKEN) \
