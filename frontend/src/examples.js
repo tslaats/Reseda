@@ -20,7 +20,7 @@ amount[@price:value * @quantity:value],
 invoiceRow[@name:value + ';' + @price:value + ';' + 
            @quantity:value + ';' + @amount:value]
 `
-,'[Fig 3] Condition, response, milestone': `!name[?],
+,'[Fig 3] Relations': `!name[?],
 !price[?],
 !quantity[?],
 amount[@price:value * @quantity:value],
@@ -40,30 +40,30 @@ checkout *--> ship,
 ship -->% checkout
 `
 ,'[Fig 4] Data, path expressions': `itemInCart[]{
-        !name[?],
-        !price[?], 
-        !quantity[?],
-        amount[@price:value * @quantity:value],
-        invoiceRow[@name:value + ';' + @price:value + ';' + 
-                   @quantity:value + ';' + @amount:value]
-        ~
-        * --><> ../checkout      
+  !name[?],
+  !price[?], 
+  !quantity[?],
+  amount[@price:value * @quantity:value],
+  invoiceRow[@name:value + ';' + @price:value + ';' + 
+             @quantity:value + ';' + @amount:value]
+  ~
+  * --><> ../checkout      
 },
 checkout[?],
 ship[?],
-%printInvoice[@itemInCart/data/invoiceRow]
+printInvoice[@itemInCart/invoiceRow:value]
 ~
 checkout -->%  itemInCart,
 checkout -->* ship,
 checkout *--> ship,
 ship -->% checkout,
-ship -->+ printInvoice,
+ship -->* printInvoice,
 ship *--> printInvoice
 `
 ,'[Fig 5] Iteration, spawn': `addItem[?],
 checkout[?],
 ship[?],
-%printInvoice[@shipping/invoiceRow]
+printInvoice[@invoiceRow]
 ~
 addItem -->> {
   itemInCart[]{  
@@ -79,14 +79,12 @@ checkout -->%  itemInCart,
 checkout -->* ship,
 checkout *--> ship,
 ship -->% checkout,
-ship -->+ printInvoice,
+ship -->* printInvoice,
 ship *--> printInvoice,
-checkout -(p in itemInCart)->> {
-  shipping[]{ 
+checkout -(p in itemInCart)->> {  
     invoiceRow[@p/name:value + ';' + @p/price:value + ';' + 
                @p/quantity:value + ';' + @p/amount:value]
-    ~
-  }
+    ~  
 }
 `
 }

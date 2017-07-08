@@ -1,8 +1,12 @@
+deploy: docker container-reload
+
+
+
 docker: 
 	msbuild /p:Configuration=Release
 	cd frontend && yarn build
-	#zip docker.zip Makefile Dockerfile frontend/build Reseda.REST/bin/Release 
 	docker build -t debois/reseda .
+	docker push debois/reseda
 
 docker-run:
 	docker run -p 80:8080 
@@ -33,10 +37,14 @@ droplet-kill:
 	yes | docker-machine stop -f $(DROPLET) 
 	yes | docker-machine rm $(DROPLET)
 
+container-pull:
+	eval $$(docker-machine env $(DROPLET)) && \
+		docker pull debois/reseda:latest
+
 # Run for initial run
 container-run:
 	eval $$(docker-machine env $(DROPLET)) && \
-		docker run -d -p 80:8080 --name $(CONTAINER) debois/reseda
+		docker run -d -p 80:8080 --name $(CONTAINER) debois/reseda:latest
 
 # Start for subsequent runs
 container-start:
@@ -47,5 +55,11 @@ container-stop:
 	eval $$(docker-machine env $(DROPLET)) && \
 		docker stop -t0 $(CONTAINER)
 
-container-reload: droplet-start droplet-stop
+container-kill:
+	eval $$(docker-machine env $(DROPLET)) && \
+		docker rm $(CONTAINER)
+
+container-reload: container-stop container-kill container-pull container-run
+
+
 
