@@ -86,7 +86,10 @@ namespace Reseda.Core
                     var x = new HashSet<string>();
                     x.Add(i.name);
                     if (o.expression.ContainsNames(x))
+                    {
                         result.AddRelation(new Response(i.GeneralPath, o.GeneralPath));
+                        result.AddRelation(new Milestone(i.GeneralPath, o.GeneralPath));
+                    }
                 }
                 foreach (var o2 in output)
                 {
