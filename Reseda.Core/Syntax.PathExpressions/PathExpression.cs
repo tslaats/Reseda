@@ -53,6 +53,16 @@ namespace Reseda.Core
         }
 
 
+        public PathExpression ExtendFinal(PathExpression p)
+        {
+            if (this.child == null)
+                this.child = p;
+            else
+                this.child.ExtendFinal(p);
+            return this;
+        }
+
+
         PathExpression Child
         {
             get

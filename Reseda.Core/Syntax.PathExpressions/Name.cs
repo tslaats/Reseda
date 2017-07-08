@@ -69,7 +69,20 @@ namespace Reseda.Core
             if (this.name == iteratorName)
             {
                 //System.Diagnostics.Debug.WriteLine(e.Path.ToSource());
-                return e.Path;//.Extend(this.child);
+                if (this.child != null)
+                {
+                    
+                    //System.Diagnostics.Debug.WriteLine(e.Path.Extend(this.child.Clone()).ToSource());
+                    //var nc = this.child.Clone();
+                    //var p = e.Path.Clone();
+                    //System.Diagnostics.Debug.WriteLine(p);
+                    //System.Diagnostics.Debug.WriteLine(nc.ToSource());
+                    //p.child = nc;
+                    //System.Diagnostics.Debug.WriteLine(p);
+                    return e.Path.ExtendFinal(this.child);
+                }
+                else
+                    return e.Path;//.Extend(this.child);
             }
             else
             {
