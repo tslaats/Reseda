@@ -34,6 +34,11 @@ namespace Reseda.Core
             this.Execute(new BoolType(i));
         }
 
+        public void Execute(string i)
+        {
+            this.Execute(new StrType(i));
+        }
+
         public override string TypeToSource()
         {
             return "[?]";

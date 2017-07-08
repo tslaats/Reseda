@@ -83,6 +83,12 @@ namespace Reseda.Core
 
         public Event AddRelation(Relation r)
         {
+            foreach(var r2 in this.subProcess.relations)
+            {
+                if (r2.ToSource() == r.ToSource())
+                    return this;
+
+            }
             this.subProcess.relations.Add(r);
             return this;
         }
