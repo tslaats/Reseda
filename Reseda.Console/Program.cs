@@ -116,12 +116,17 @@ namespace Reseda.ConsoleApp
                 { 
                     InputEvent e = (InputEvent)es.ElementAt(0);
                     bool b;
+                    int i;
                     if (Boolean.TryParse(value, out b))
                     {
                         e.Execute(b);
                     }
+                    else if (int.TryParse(value, out i))
+                    {
+                        e.Execute(i);
+                    }
                     else
-                        e.Execute(int.Parse(value));
+                        e.Execute(value);
                     Console.WriteLine(term.ToSource());
                     Console.WriteLine(term.PrintTree(true));
                     if (autoCompute)
