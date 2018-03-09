@@ -341,5 +341,83 @@ B -(p in C)->> {D[!]}
             var term2 = p.Generate(term.subProcess.ToSource());
             Assert.AreEqual(term.ToSource(), term2.ToSource());
         }
+
+
+        [TestMethod]
+        public void FunctionTest()
+        {
+            string input = @"
+!name[?],
+!price[?],
+!quantity[freshid()],
+amount[afuntion(@price:value * @quantity:value)],
+invoiceRow[@name:value + ';' + @price:value + ';' + @quantity:value + ';' + @amount:value]";
+            var p = new ResedaParser();
+            p.dispTree(input);
+            var term = p.Generate(input);
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            var term2 = p.Generate(term.subProcess.ToSource());
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+        }
+
+
+        [TestMethod]
+        public void CountTest()
+        {
+            string input = @"
+!A[?],
+!A[?],
+!C[count(@A)];";
+            var p = new ResedaParser();
+            p.dispTree(input);
+            var term = p.Generate(input);
+            OutputEvent c = (OutputEvent)term.subProcess.structuredData[2];
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            var term2 = p.Generate(term.subProcess.ToSource());
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+            c.Execute();
+            System.Diagnostics.Debug.WriteLine(c.ToSource());
+            System.Diagnostics.Debug.WriteLine(c.marking.value);
+            Assert.AreEqual(c.marking.value.ToString(), "2");
+
+        }
+
+
+        [TestMethod]
+        public void FreshIdTest()
+        {
+            string input = @"
+!A[?],
+!B[?],
+!C[freshid()];";
+            var p = new ResedaParser();
+            p.dispTree(input);
+            var term = p.Generate(input);
+            InputEvent a = (InputEvent)term.subProcess.structuredData[0];
+            InputEvent b = (InputEvent)term.subProcess.structuredData[1];
+            OutputEvent c = (OutputEvent)term.subProcess.structuredData[2];
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            var term2 = p.Generate(term.subProcess.ToSource());
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+            c.Execute();
+            System.Diagnostics.Debug.WriteLine(c.ToSource());
+            System.Diagnostics.Debug.WriteLine(c.marking.value);
+            Assert.AreEqual(c.marking.value.ToString(), "0");
+            c.Execute();
+            Assert.AreEqual(c.marking.value.ToString(), "1");
+            a.Execute(3);
+            c.Execute();
+            Assert.AreEqual(c.marking.value.ToString(), "4");
+
+            b.Execute(1);
+            c.Execute();
+            Assert.AreEqual(c.marking.value.ToString(), "5");
+
+            b.Execute(10);
+            c.Execute();
+            Assert.AreEqual(c.marking.value.ToString(), "11");
+
+        }
+
     }
 }

@@ -202,6 +202,13 @@ namespace Reseda.Parser
                     return new Path(GeneratePath(node.ChildNodes[0]));
                 case "NegOp":
                     return new NegOp(GenerateExpression(node.ChildNodes[0]));
+                case "Function0Args":
+                    return new Function(node.ChildNodes[0].Token.Text);
+                case "Function1Args":
+                    var arg1 = GenerateExpression(node.ChildNodes[1]);
+                    var func = new Function(node.ChildNodes[0].Token.Text);
+                    func.AddArgument(arg1);
+                    return func;
                 default:
                     throw new NotImplementedException(node.ToString());
             }            

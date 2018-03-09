@@ -60,6 +60,7 @@
     <Compile Include="Syntax.DataExpressions\AndOp.cs" />
     <Compile Include="Syntax.DataExpressions\TimesOp.cs" />
     <Compile Include="Syntax.DataExpressions\DataTypes\Unit.cs" />
+    <Compile Include="Syntax.DataExpressions\Function.cs" />
     <Compile Include="Syntax.DataExpressions\ValueOf.cs" />
     <Compile Include="Syntax.PathExpressions\All.cs" />
     <Compile Include="Syntax.PathExpressions\Current.cs" />

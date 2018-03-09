@@ -97,6 +97,9 @@ namespace Reseda.Parser
             var Pending = new NonTerminal("Pending");
             var Excluded = new NonTerminal("Excluded");
             var PendingExcluded = new NonTerminal("PendingExcluded");
+            
+            var Function0Args = new NonTerminal("Function0Args");
+            var Function1Args = new NonTerminal("Function1Args");
 
             DDPath.Rule = DPathValue | DPath;
             DPathValue.Rule = DPath + (ToTerm(Symbols.ValueShort) | ToTerm(Symbols.Value));
@@ -112,13 +115,21 @@ namespace Reseda.Parser
             EqOp.Rule = BinExpr + ToTerm(Symbols.Eq) + BinExpr;
             GtOp.Rule = BinExpr + ToTerm(Symbols.Gt) + BinExpr;
 
-            Term.Rule = str | number | ParExpr | NegOp | identifier | Unit | DDPath;
+            Term.Rule = str | number | ParExpr | NegOp | identifier | Unit | DDPath | Function0Args | Function1Args;
             Unit.Rule = Empty;
             NegOp.Rule = ToTerm("!") + Expression;
             ParExpr.Rule = "(" + Expression + ")";
             BinExpr.Rule = PlusOp | MinOp | BinExpr2;
             PlusOp.Rule = BinExpr2 + ToTerm("+") + BinExpr2;
             MinOp.Rule = BinExpr2 + ToTerm("-") + BinExpr2;
+
+
+            Function0Args.Rule = identifier + ToTerm("()");
+            Function1Args.Rule = identifier + ToTerm("(") + Expression + ToTerm(")");
+
+            //Function0Args.Rule = ToTerm("abba") + identifier + ToTerm("()");
+            //Function0Args.Rule = ToTerm("abba") + identifier + ToTerm("(") + Expression + ToTerm(")");
+
 
             BinExpr2.Rule = TimesOp | DivOp | Expression;
             TimesOp.Rule = Expression + ToTerm("*") + Expression;
