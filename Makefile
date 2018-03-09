@@ -1,51 +1,32 @@
-docker: 
+IMAGE=reseda
+
+docker: build
+	docker build -t $(IMAGE) .
+
+# Try restore if build fails after checkout
+restore:
+	nuget restore
+	cd frontend && yarn install
+
+build: 
 	msbuild /p:Configuration=Release
 	cd frontend && yarn build
-	#zip docker.zip Makefile Dockerfile frontend/build Reseda.REST/bin/Release 
-	docker build -t debois/reseda .
 
 docker-run:
-	docker run -p 80:8080 
+	sudo docker run -p 8080:8080 $(IMAGE)
 
+docker-stop:
+	sudo docker kill $(IMAGE)
+	sudo docker rm $(IMAGE)
 
-# Digitalocean hosting
-DROPLET=reseda-droplet
-CONTAINER=reseda-container
+publish: docker
+	docker save $(IMAGE) | bzip2 --best | pv | ssh debois@dcr.itu.dk 'bunzip2 > $(IMAGE).docker'
+	@echo "** Recommended on remote host:"
+	@echo "sudo docker kill reseda"
+	@echo "sudo docker rm reseda"
+	@echo "sudo docker load -i $(IMAGE).docker"
+	@echo "sudo docker run --name reseda -p 8025:8080 --restart always --detach $(IMAGE)"
 
-droplet-create:
-	@if [ -z "$$TOKEN" ]; then  \
-		echo "Set TOKEN to Digitalocean API access token\n(See ~/.docker/machine/machines/reseda-droplet/config.json)" ; \
-		exit 255 ; \
-	fi
-	docker-machine create \
-	  --driver digitalocean \
-	  --digitalocean-access-token $(TOKEN) \
-	  --digitalocean-image "ubuntu-14-04-x64" \
-	  --digitalocean-region "ams3" \
-	  $(DROPLET)
-	
-# Region selects "Amsterdam 3"
+.phony : build restore docker
 
-droplet-ip:
-	docker-machine ip $(DROPLET)
-
-droplet-kill: 
-	yes | docker-machine stop -f $(DROPLET) 
-	yes | docker-machine rm $(DROPLET)
-
-# Run for initial run
-container-run:
-	eval $$(docker-machine env $(DROPLET)) && \
-		docker run -d -p 80:8080 --name $(CONTAINER) debois/reseda
-
-# Start for subsequent runs
-container-start:
-	eval $$(docker-machine env $(DROPLET)) && \
-		docker start $(CONTAINER) 
-
-container-stop:
-	eval $$(docker-machine env $(DROPLET)) && \
-		docker stop -t0 $(CONTAINER)
-
-container-reload: droplet-start droplet-stop
 
