@@ -419,5 +419,110 @@ invoiceRow[@name:value + ';' + @price:value + ';' + @quantity:value + ';' + @amo
 
         }
 
+
+
+        [TestMethod]
+        public void InitialValueTest()
+        {
+            string input = @"
+!A(3)[?],
+!B[?],
+!C(1)[freshid()];";
+            var p = new ResedaParser();
+            p.dispTree(input);
+            var term = p.Generate(input);
+            InputEvent a = (InputEvent)term.subProcess.structuredData[0];
+            InputEvent b = (InputEvent)term.subProcess.structuredData[1];
+            OutputEvent c = (OutputEvent)term.subProcess.structuredData[2];
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            var term2 = p.Generate(term.subProcess.ToSource());
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+
+            Assert.AreEqual(c.marking.value.ToString(), "1");
+            Assert.AreEqual(a.marking.value.ToString(), "3");
+            Assert.IsNull(b.marking.value);
+            c.Execute();
+            Assert.AreEqual(c.marking.value.ToString(), "4");
+            b.Execute(1);
+            Assert.AreEqual(c.marking.value.ToString(), "4");
+            a.Execute(5);
+            Assert.AreEqual(a.marking.value.ToString(), "5");
+            c.Execute();
+            Assert.AreEqual(c.marking.value.ToString(), "6");
+
+            /*
+            c.Execute();
+            System.Diagnostics.Debug.WriteLine(c.ToSource());
+            System.Diagnostics.Debug.WriteLine(c.marking.value);
+            Assert.AreEqual(c.marking.value.ToString(), "0");
+            c.Execute();
+            Assert.AreEqual(c.marking.value.ToString(), "1");
+            a.Execute(3);
+            c.Execute();
+            Assert.AreEqual(c.marking.value.ToString(), "4");
+
+            b.Execute(1);
+            c.Execute();
+            Assert.AreEqual(c.marking.value.ToString(), "5");
+
+            b.Execute(10);
+            c.Execute();
+            Assert.AreEqual(c.marking.value.ToString(), "11");
+            */
+        }
+
+        [TestMethod]
+        public void SpawnTrigger()
+        {
+            string input = @"A[?],
+B[?]
+;
+A -->> {C[@trigger:v];}";
+            var p = new ResedaParser();
+            p.dispTree(input);
+            var term = p.Generate(input);
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            var term2 = p.Generate(term.subProcess.ToSource());
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+            InputEvent a = (InputEvent)term.subProcess.structuredData[0];
+            InputEvent b = (InputEvent)term.subProcess.structuredData[1];
+            a.Execute(15);
+            OutputEvent c = (OutputEvent)term.subProcess.structuredData[2];
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+        }
+
+
+        [TestMethod]
+        public void SpawnTriggerInitialValue()
+        {
+            string input = @"A(3)[?],
+B[?]
+;
+A -->> {C(@trigger:v)[?];}, 
+B -->> {C(@trigger:v)[?];}";
+            var p = new ResedaParser();
+            p.dispTree(input);
+            var term = p.Generate(input);
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            var term2 = p.Generate(term.subProcess.ToSource());
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+            InputEvent a = (InputEvent)term.subProcess.structuredData[0];
+            InputEvent b = (InputEvent)term.subProcess.structuredData[1];            
+            Assert.AreEqual(a.marking.value.ToString(), "3");
+            Assert.IsNull(b.marking.value);
+            a.Execute(15);
+            InputEvent c = (InputEvent)term.subProcess.structuredData[2];
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            Assert.AreEqual(c.marking.value.ToString(), "15");
+            Assert.IsNull(b.marking.value);
+            b.Execute(45);
+            InputEvent c2 = (InputEvent)term.subProcess.structuredData[3];
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            Assert.AreEqual(c2.marking.value.ToString(), "45");
+            Assert.AreEqual(b.marking.value.ToString(), "45");
+            Assert.AreEqual(a.marking.value.ToString(), "15");
+            Assert.AreEqual(c.marking.value.ToString(), "15");
+        }
+
     }
 }

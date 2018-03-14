@@ -12,6 +12,7 @@ namespace Reseda.Core
         public Marking marking;
         public Process subProcess;
         public Process parentProcess;
+        public DataExpression InitialValue;
 
         public PathExpression Path {
             get
@@ -70,6 +71,7 @@ namespace Reseda.Core
             other.marking = this.marking.Clone();
             other.subProcess = this.subProcess.Clone(other);
             other.parentProcess = parent;
+            other.InitialValue = InitialValue;
             return other;
         }
 
@@ -161,6 +163,8 @@ namespace Reseda.Core
             if (!this.marking.included)
                 result += "%";
             result += this.name;
+            if (this.marking.value != null)
+                result += "(" + this.marking.value.ToString() + ")";
             result += TypeToSource();
             if (this.subProcess.structuredData.Count > 0 || this.subProcess.relations.Count > 0)
                 result += "{" + subProcess.ToSource() + "}";
@@ -184,6 +188,8 @@ namespace Reseda.Core
 
         internal virtual void PathReplace(string iteratorName, Event e)
         {
+            if (InitialValue != null)
+                InitialValue.PathReplace(iteratorName, e);
             this.subProcess.PathReplace(iteratorName, e);
         }
 
@@ -228,7 +234,7 @@ namespace Reseda.Core
             {
                 foreach (var e in s.process.structuredData)
                 {
-                    s.context.AddChildEvent(e);
+                    s.context.AddChildEvent(e.InitiateValue(s.context));
                 }
                 foreach (var r in s.process.relations)
                 {
@@ -237,6 +243,16 @@ namespace Reseda.Core
                 }
             }
 
+        }
+
+        private Event InitiateValue(Event context)
+        {
+            if (InitialValue != null)
+            {
+                this.marking.value = InitialValue.Eval(context);
+                InitialValue = null;
+            }
+            return this;
         }
 
         public Boolean Bounded()

@@ -94,12 +94,12 @@ namespace Reseda.Core
                             var over = s.iterateOver.Eval(this.parent);
                             foreach (Event x in over)
                             {                                
-                                result.spawn.Add(new SpawnEffect(s.target.Clone(null).PathReplace(s.iteratorName, x), this.parent));
+                                result.spawn.Add(new SpawnEffect(s.target.Clone(null).PathReplace(s.iteratorName, x).PathReplace("trigger", e), this.parent));
                                 //result.spawn.Add(new SpawnEffect(s.target.Clone(null), this.parent));
                             }
                         }
                         else
-                            result.spawn.Add(new SpawnEffect(s.target, this.parent));
+                            result.spawn.Add(new SpawnEffect(s.target.Clone(null).PathReplace("trigger", e), this.parent));
                     }
                 }
             }

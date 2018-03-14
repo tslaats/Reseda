@@ -109,12 +109,20 @@ namespace Reseda.Parser
             return result;
         }
 
+        public void AddInitialValue(ref Event e, ParseTreeNode exp)
+        {
+            if (exp.Term.Name == "Const")
+                e.marking.value = GenerateConst(exp.ChildNodes[0]);
+            else
+                e.InitialValue = GenerateExpression(exp);
+        }
 
         public HashSet<Event> GenerateEvents(ParseTreeNode node)
         {
             HashSet<Event> result = new HashSet<Event>();
             foreach (ParseTreeNode child in node.ChildNodes)
             {
+                Event e = null;
                 if ((child.ChildNodes[0].Term.Name == "Pending") 
                     || (child.ChildNodes[0].Term.Name == "Excluded") 
                     || (child.ChildNodes[0].Term.Name == "PendingExcluded")
@@ -122,8 +130,7 @@ namespace Reseda.Parser
                     || (child.ChildNodes[0].Term.Name == "ExecutedPending")
                     || (child.ChildNodes[0].Term.Name == "ExecutedExcluded")
                     || (child.ChildNodes[0].Term.Name == "ExecutedPendingExcluded"))
-                {
-                    Event e = null;
+                {                    
                     if (child.Term.Name == "OutputEvent")
                         e = GenerateOutputEvent(child, 1);
                     else if (child.Term.Name == "InputEvent")
@@ -139,22 +146,32 @@ namespace Reseda.Parser
                         (child.ChildNodes[0].Term.Name == "ExecutedExcluded") || (child.ChildNodes[0].Term.Name == "ExecutedPendingExcluded"))
                         e.marking.happened = true;
 
-                    result.Add(e);
+                    // TODO: check if const (set initial), or data expression, if data expression then store in a new field.
+                    if (child.ChildNodes[2].ChildNodes.Count > 0 && child.ChildNodes[2].ChildNodes[0] != null)
+                        AddInitialValue(ref e, child.ChildNodes[2].ChildNodes[0].ChildNodes[0]);
+
+
                 }
                 else
                 {
                     if (child.Term.Name == "OutputEvent")
-                        result.Add(GenerateOutputEvent(child, 0));
+                        e = (GenerateOutputEvent(child, 0));
                     else if (child.Term.Name == "InputEvent")
-                        result.Add(GenerateInputEvent(child, 0));
+                        e = (GenerateInputEvent(child, 0));
+
+                    // TODO: check if const (set initial), or data expression, if data expression then store in a new field.
+                    if (child.ChildNodes[1].ChildNodes.Count > 0 && child.ChildNodes[1].ChildNodes[0] != null)
+                        AddInitialValue(ref e, child.ChildNodes[1].ChildNodes[0].ChildNodes[0]);
                 }
+                result.Add(e);
             }  
             return result;
         }
 
         private Event GenerateInputEvent(ParseTreeNode child, int i)
-        {            
-            var result = new InputEvent(child.ChildNodes[i].Token.Text);
+        {
+            i++;
+            var result = new InputEvent(child.ChildNodes[i - 1].Token.Text);
             if (child.ChildNodes.Count > i + 1 && child.ChildNodes[i + 1] != null && child.ChildNodes[i + 1].Term.Name == "Process")
                 AddProcess(result, child.ChildNodes[i+ 1]);
             return result;
@@ -162,10 +179,26 @@ namespace Reseda.Parser
 
         private Event GenerateOutputEvent(ParseTreeNode child, int i)
         {
-            var result = new OutputEvent(child.ChildNodes[i + 0].Token.Text, GenerateExpression(child.ChildNodes[i + 1]));
+            i++;
+            var result = new OutputEvent(child.ChildNodes[i - 1].Token.Text, GenerateExpression(child.ChildNodes[i + 1]));
             if (child.ChildNodes.Count > i + 2 && child.ChildNodes[i + 2].Term.Name == "Process")
                 AddProcess(result, child.ChildNodes[i + 2]);
             return result;
+        }
+
+        private DataType GenerateConst(ParseTreeNode node)
+        {
+            switch (node.Term.Name)
+            {
+                case "number":
+                    return new IntType((int)node.Token.Value);
+                case "string":
+                    return new StrType((string)node.Token.Value);
+                case "Unit":
+                    return new Unit();
+                default:
+                    throw new NotImplementedException(node.ToString());
+            }
         }
 
         private DataExpression GenerateExpression(ParseTreeNode node)
@@ -188,13 +221,9 @@ namespace Reseda.Parser
                     return new TimesOp(GenerateExpression(node.ChildNodes[0]), GenerateExpression(node.ChildNodes[1]));
                 case "DivOp":
                     return new DivOp(GenerateExpression(node.ChildNodes[0]), GenerateExpression(node.ChildNodes[1]));
-                case "number":
-                    return new IntType((int)node.Token.Value);
-                case "string":
-                    return new StrType((string)node.Token.Value);
+                case "Const":
+                    return GenerateConst(node.ChildNodes[0]);
                 case "identifier":
-                    return new Unit();
-                case "Unit":
                     return new Unit();
                 case "DPathValue":
                     return new ValueOf(GenerateExpression(node.ChildNodes[0]));                    
