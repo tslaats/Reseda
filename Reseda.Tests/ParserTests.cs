@@ -524,5 +524,31 @@ B -->> {C(@trigger:v)[?];}";
             Assert.AreEqual(c.marking.value.ToString(), "15");
         }
 
+
+        [TestMethod]
+        public void GuardedCondition()
+        {
+            string input = @"A[],
+B[],
+D[],
+C[];
+A[(count(@/C)==0)] -->* B,
+D -->* C
+";
+            var p = new ResedaParser();
+            p.dispTree(input);
+            var term = p.Generate(input);
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            var term2 = p.Generate(term.subProcess.ToSource());
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+            OutputEvent a = (OutputEvent)term.subProcess.structuredData[0];
+            OutputEvent b = (OutputEvent)term.subProcess.structuredData[1];
+            OutputEvent d = (OutputEvent)term.subProcess.structuredData[2];
+            OutputEvent c = (OutputEvent)term.subProcess.structuredData[3];
+            Assert.IsTrue(b.IsEnabled());
+            b.Execute();
+        }
+
+
     }
 }
