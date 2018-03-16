@@ -1,4 +1,7 @@
 IMAGE=reseda
+USER=debois
+HOST=dcr.itu.dk
+REMOTE=$(USER)@$(HOST)
 
 docker: build
 	docker build -t $(IMAGE) .
@@ -19,14 +22,17 @@ docker-stop:
 	sudo docker kill $(IMAGE)
 	sudo docker rm $(IMAGE)
 
-publish: docker
+upload: docker
 	docker save $(IMAGE) | bzip2 --best | pv | ssh debois@dcr.itu.dk 'bunzip2 > $(IMAGE).docker'
-	@echo "** Recommended on remote host:"
-	@echo "sudo docker kill reseda"
-	@echo "sudo docker rm reseda"
-	@echo "sudo docker load -i $(IMAGE).docker"
-	@echo "sudo docker run --name reseda -p 8025:8080 --restart always --detach $(IMAGE)"
 
-.phony : build restore docker
+deploy: 
+	ssh $(REMOTE) "sudo docker kill reseda"
+	ssh $(REMOTE) "sudo docker rm reseda"
+	ssh $(REMOTE) "sudo docker load -i $(IMAGE).docker"
+	ssh $(REMOTE) "sudo docker run --name reseda -p 8025:8080 --restart always --detach $(IMAGE)"
+
+publish: upload deploy
+
+.phony : build restore docker publish
 
 
