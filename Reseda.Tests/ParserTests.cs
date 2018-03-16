@@ -547,7 +547,49 @@ D -->* C
             OutputEvent c = (OutputEvent)term.subProcess.structuredData[3];
             Assert.IsTrue(b.IsEnabled());
             b.Execute();
+
+            Assert.IsFalse(c.IsEnabled());
+            Assert.ThrowsException<Exception>(() =>
+            {
+                c.Execute();
+            });                
         }
+
+
+        [TestMethod]
+        public void CloneFilterTest()
+        {
+            string input = @"A[],
+B[],
+D[],
+C[];
+A[(count(@/C)==0)] -->* B,
+D -->* C
+";
+            var p = new ResedaParser();
+            p.dispTree(input);
+            var term = p.Generate(input);
+            var term3 = term.Clone(null);
+            Assert.AreEqual(term.ToSource(), term3.ToSource());
+            term = term3;
+
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            var term2 = p.Generate(term.subProcess.ToSource());
+            Assert.AreEqual(term.ToSource(), term2.ToSource());
+            OutputEvent a = (OutputEvent)term.subProcess.structuredData[0];
+            OutputEvent b = (OutputEvent)term.subProcess.structuredData[1];
+            OutputEvent d = (OutputEvent)term.subProcess.structuredData[2];
+            OutputEvent c = (OutputEvent)term.subProcess.structuredData[3];
+            Assert.IsTrue(b.IsEnabled());
+            b.Execute();
+
+            Assert.IsFalse(c.IsEnabled());
+            Assert.ThrowsException<Exception>(() =>
+            {
+                c.Execute();
+            });
+        }
+
 
 
     }

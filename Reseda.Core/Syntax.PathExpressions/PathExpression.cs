@@ -26,6 +26,14 @@ namespace Reseda.Core
 
         internal abstract PathExpression Clone();
 
+        internal PathExpression ExtendClone(PathExpression newPE)
+        {
+            if (this.filter != null)
+                newPE.filter = this.filter.Clone();
+            return newPE;
+        }
+
+
         public virtual String ToSource()
         {
             return this.ToString();
