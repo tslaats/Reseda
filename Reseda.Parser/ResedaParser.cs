@@ -135,6 +135,8 @@ namespace Reseda.Parser
                         e = GenerateOutputEvent(child, 1);
                     else if (child.Term.Name == "InputEvent")
                         e = GenerateInputEvent(child, 1);
+                    else if (child.Term.Name == "TypedInputEvent")
+                        e = (GenerateTypedInputEvent(child, 1));
 
                     if ((child.ChildNodes[0].Term.Name == "Pending") || (child.ChildNodes[0].Term.Name == "PendingExcluded") || 
                         (child.ChildNodes[0].Term.Name == "ExecutedPending") || (child.ChildNodes[0].Term.Name == "ExecutedPendingExcluded"))
@@ -158,6 +160,9 @@ namespace Reseda.Parser
                         e = (GenerateOutputEvent(child, 0));
                     else if (child.Term.Name == "InputEvent")
                         e = (GenerateInputEvent(child, 0));
+                    else if (child.Term.Name == "TypedInputEvent")
+                        e = (GenerateTypedInputEvent(child, 0));
+                    
 
                     // TODO: check if const (set initial), or data expression, if data expression then store in a new field.
                     if (child.ChildNodes[1].ChildNodes.Count > 0 && child.ChildNodes[1].ChildNodes[0] != null)
@@ -174,6 +179,15 @@ namespace Reseda.Parser
             var result = new InputEvent(child.ChildNodes[i - 1].Token.Text);
             if (child.ChildNodes.Count > i + 1 && child.ChildNodes[i + 1] != null && child.ChildNodes[i + 1].Term.Name == "Process")
                 AddProcess(result, child.ChildNodes[i+ 1]);
+            return result;
+        }
+
+        private Event GenerateTypedInputEvent(ParseTreeNode child, int i)
+        {
+            i++;
+            var result = new InputEvent(child.ChildNodes[i - 1].Token.Text);
+            if (child.ChildNodes.Count > i + 2 && child.ChildNodes[i + 2] != null && child.ChildNodes[i + 2].Term.Name == "Process")
+                AddProcess(result, child.ChildNodes[i + 2]);
             return result;
         }
 
@@ -226,7 +240,9 @@ namespace Reseda.Parser
                 case "identifier":
                     return new Unit();
                 case "DPathValue":
-                    return new ValueOf(GenerateExpression(node.ChildNodes[0]));                    
+                    return new ValueOf(GenerateExpression(node.ChildNodes[0]));
+                case "DPathIncluded":
+                    return new IsIncluded(GenerateExpression(node.ChildNodes[0]));
                 case "DPath":
                     return new Path(GeneratePath(node.ChildNodes[0]));
                 case "NegOp":

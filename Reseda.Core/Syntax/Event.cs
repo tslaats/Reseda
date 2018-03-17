@@ -163,7 +163,9 @@ namespace Reseda.Core
             if (!this.marking.included)
                 result += "%";
             result += this.name;
-            if (this.marking.value != null)
+            if (this.InitialValue != null)
+                result += "(" + this.InitialValue.ToSource() + ")";
+            if (this.marking.value != null && this.InitialValue == null)
                 result += "(" + this.marking.value.ToString() + ")";
             result += TypeToSource();
             if (this.subProcess.structuredData.Count > 0 || this.subProcess.relations.Count > 0)
