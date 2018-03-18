@@ -24,6 +24,8 @@ namespace Reseda.Core
 
             if (s.value.Count > 1) throw new Exception("Value of multiple events.");
 
+            if (s.value.Count < 1) throw new Exception("Value of non-existent event.");
+
             if (s.value.ElementAt(0).marking.value == null)
                 return new Unit();
             else

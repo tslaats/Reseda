@@ -165,6 +165,61 @@ customer[]{
             Assert.AreEqual(term.ToSource(), term2.ToSource());
         }
 
+
+        [TestMethod]
+        public void BPMTestThomas()
+        {
+            string input = @"orders[]{
+ create_order[?:@/customers/customer/customer_id:value]
+ ;
+ create_order -->>{
+ order[]{
+ !order_id[freshid()],
+ !customer_id[@trigger:value]
+ }
+}
+},
+customers[]{
+ create_customer[?],
+ customer[] {
+ customer_id(0)[],
+ customer_name('John')[] 
+ },
+ customer[]{
+ customer_id(1)[],
+ customer_name('Mary')[]
+ }
+ ;
+ create_customer -->> {
+ customer[]{
+ !customer_id[freshid()],
+ !customer_name[?:string]
+ }
+ }
+}";
+            var p = new ResedaParser();
+            p.dispTree(input);
+            var term = p.Generate(input);
+            System.Diagnostics.Debug.WriteLine(term.subProcess.ToSource());
+            var term2 = p.Generate(term.subProcess.ToSource());
+
+            //Assert.AreEqual(term.ToSource(), term2.ToSource());
+            InputEvent create_order = (InputEvent)term.subProcess.structuredData[0].subProcess.structuredData[0];
+
+            create_order.Execute(1);
+
+            System.Diagnostics.Debug.WriteLine(term.ToSource());
+
+            OutputEvent o1 = (OutputEvent)term.subProcess.structuredData[0].subProcess.structuredData[1].subProcess.structuredData[0];
+            OutputEvent o2 = (OutputEvent)term.subProcess.structuredData[0].subProcess.structuredData[1].subProcess.structuredData[1];
+
+            o1.Execute();
+            o2.Execute();
+            System.Diagnostics.Debug.WriteLine(term.ToSource());
+
+        }
+
+
     }
 }
 

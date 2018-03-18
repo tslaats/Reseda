@@ -20,14 +20,16 @@ namespace Reseda.Core
                 if (parentProcess != null)
                 {
                     var path = new Name(this.name);
-                    var results = parentProcess.parent.Path.Extend(path).Eval(this.Root(), this.Root());
+                    
+                    var results = parentProcess.parent.Path.ExtendFinal(path).Eval(this.Root(), this.Root());
                     //if (results.Count > 1)
                     //{
                         for (int i = 0; i < results.Count; i++)
                             if (results.ElementAt(i) == this)
                                 path.AddFilter(new IntType(i));
-                    //}
-                    return parentProcess.parent.Path.Extend(path);                    
+                    //}                    
+                    var x = parentProcess.parent.Path.ExtendFinal(path);
+                    return x;
                 }
                 else
                     return new Root();
