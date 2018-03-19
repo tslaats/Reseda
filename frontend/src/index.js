@@ -223,7 +223,7 @@ class Parser extends React.Component {
 
   render() { 
     const selection = 
-      Object.keys(examples).map((key) =>
+      Object.keys(examples).sort().map((key) =>
         <option key={key}>{key}</option>)
     return (
       <div className="tile is-ancestor">
@@ -270,6 +270,74 @@ class Parser extends React.Component {
 } 
 
 
+function linebreak(indent) {
+  const tabsize = 2;
+  return '\n' + (indent > 0 ? ' '.repeat(tabsize * indent) : ''); 
+}
+
+
+function indent(str) { 
+  let rs = "";
+  let indent = 0;
+  let cr = false;
+  let at_start = true;
+  const NORMAL = 0;
+  const SKIP = 1;
+  let state = NORMAL;
+  
+  for (let i = 0; i < str.length; ++i) {
+    const ch = str[i];
+
+    if (state === SKIP) {
+      rs += ch;
+      switch (ch) {
+        case ']': state = NORMAL;
+      }
+      continue;
+    }
+
+    if (ch === '}') {
+      indent -= 1;
+    }
+
+    if (cr && ch !== '}') {
+      rs += linebreak(indent);
+      cr = false;
+    }
+
+    switch (ch) {
+      case ';':
+        rs += linebreak(indent);
+        rs += ';';
+        cr = true;
+        break;
+
+      case ',': 
+        rs += ',';
+        cr = true;
+        break;
+
+      case '{':
+        rs += '{';
+        indent += 1;
+        cr = true;
+        break;
+
+      case '}':
+        rs += linebreak(indent);
+        rs += '}';
+        break;
+
+      default: 
+        rs += str[i];
+        break;
+    }
+  }
+
+  return rs;
+}
+
+
 class Term extends React.Component { 
   constructor(props) { 
     super(props);
@@ -309,8 +377,10 @@ class Term extends React.Component {
     return (
       <div className="tile is-ancestor">
         <div className="tile is-parent">
-          <Tile title="Term" classes="is-info">
-            { this.state.term }
+          <Tile title="Term" classes="is-info term">
+            <pre>
+              { indent(this.state.term) }
+            </pre>
           </Tile>
         </div>
         <div className="tile is-parent">
