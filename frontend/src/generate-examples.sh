@@ -12,7 +12,7 @@ echo 'export const examples = '
 
 echo "{ 'Choose an example process': '' "
 
-find examples ../../../wintertypes4dcr/losangeles/examples -type  f -print0 | while read -d $'\0' i
+find examples ../../../wintertypes4dcr/sydney/examples -type f -name \\[\* -print0 | while read -d $'\0' i
 do
     /bin/echo -n ","
     TITLE=$(basename "$i" | cut -d. -f1)

@@ -135,7 +135,7 @@ let exec id (Q : Reseda.Core.RootEvent) (req : HttpRequest) =
     let P = Q.Clone(null) :?> Reseda.Core.RootEvent
     // Figure out which event we're executing
     let path = (req.queryParamOpt "event" |> Option.bind snd).Value
-    let auto = req.queryParamOpt "auto" |> Option.isSome
+    let auto = (req.queryParamOpt "auto" |> Option.bind snd).Value
     let matches = parser.GeneratePath(path).Eval(P)
     if matches.Count <> 1 then
       failwithf "Path identifies %d event, I can execute only one." <| matches.Count
@@ -152,7 +152,7 @@ let exec id (Q : Reseda.Core.RootEvent) (req : HttpRequest) =
           match bool.TryParse x with 
           | true, b -> ievt.Execute(b)
           | false, _ -> ievt.Execute(int x)
-          if auto then 
+          if auto = "true" then 
              P.AutoCompute() |> ignore
     | _ -> 
       failwithf "The root event can never be executed"

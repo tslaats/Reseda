@@ -13,6 +13,7 @@ restore:
 
 build: 
 	msbuild /p:Configuration=Release
+	cd frontend/src && ./generate-examples.sh
 	cd frontend && yarn build
 
 docker-run:
