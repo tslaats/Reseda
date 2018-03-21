@@ -511,10 +511,10 @@ const App = (props) => {
         <div>
           <Term {...cxt}/>
           <Path {...cxt}/>
-          <Analysis {...cxt}/>
           <Parser {...cxt}/>
         </div>
     );
+          //<Analysis {...cxt}/>
   };
 
 ReactDOM.render(
