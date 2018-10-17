@@ -24,7 +24,8 @@ export const examples =
       }
     }
   }
-}`
+}
+`
 ,'[Example 1] Modelling structured data using constant values': `customer[] {
   customer_id(0)[],
   customer_name('John')[]  
@@ -66,6 +67,7 @@ customer[]{
     }
   }
 }
+
 `
 ,'[Example 2c] Computation sequence': `customers[]{
     create_customer[?],
