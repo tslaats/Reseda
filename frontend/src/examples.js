@@ -1,27 +1,20 @@
 export const examples = 
 { 'Choose an example process': '' 
 ,'[Example 4] Orders collection definition': `orders[]{
-  create_order[
-    ?:@/customers/customer/customer_id:value
-  ]
+  create_order[?:@/customers/customer/customer_id:value]
   ;
   create_order -->>{
     order[]{
       !order_id[freshid()],
       !customer_id[@trigger:value],
-      !pick_item[
-         ?:@/products/product/product_id:value
-      ]
+      !pick_item[?:@/products/product/product_id:value]
       ;             
       pick_item -->>{
         order_line[]{
           !order_line_id[freshid()],
           !item[@trigger:value],
-          !wrap_item[
-            ?:@/deliveries/
-                 delivery[
-                    not(deliver_items:executed)
-                 ]/delivery_id:value
+          !wrap_item[?:@/deliveries/
+                 delivery[!@deliver_items:included]/delivery_id:value
           ]
           ;
           wrap_item -->* order_line_id,
@@ -31,8 +24,7 @@ export const examples =
       }
     }
   }
-}
-`
+}`
 ,'[Example 1] Modelling structured data using constant values': `customer[] {
   customer_id(0)[],
   customer_name('John')[]  
@@ -53,8 +45,8 @@ customer[]{
     }
 }`
 ,'[Example 5] Deliveries collection definition': `deliveries[]{
-  create_delivery[
-    ?:@/customers/customer/customer_id:value
+  create_delivery[?:
+    @/customers/customer/customer_id:value
   ]
   ;   
   create_delivery -->> { 
@@ -68,9 +60,7 @@ customer[]{
      ]/order_line[
         @wrap_item:value==@rule/delivery_id:value
      ]/order_line_id
-         -->> {
-             !item_id[@trigger:value]
-             },
+         -->> { !item_id[@trigger:value] },
      item_id -->+ deliver_items,
      deliver_items -->% deliver_items
     }
