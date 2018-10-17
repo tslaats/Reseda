@@ -148,10 +148,11 @@ let exec id (Q : Reseda.Core.RootEvent) (req : HttpRequest) =
     | :? Reseda.Core.InputEvent as ievt -> 
       match req.queryParamOpt "value" |> Option.bind snd with
       | None -> failwithf "Event '%s' requires an input value to execute" path
-      | Some x -> 
-          match bool.TryParse x with 
-          | true, b -> ievt.Execute(b)
-          | false, _ -> ievt.Execute(int x)
+      | Some z -> 
+          match bool.TryParse z, System.Int32.TryParse z with 
+          | (true, b), _ -> ievt.Execute(b)
+          | _, (true, k) -> ievt.Execute(k)
+          | _, _ ->         ievt.Execute(z)
           if auto = "true" then 
              P.AutoCompute() |> ignore
     | _ -> 
