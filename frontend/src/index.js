@@ -280,7 +280,6 @@ function indent(str) {
   let rs = "";
   let indent = 0;
   let cr = false;
-  let at_start = true;
   const NORMAL = 0;
   const SKIP = 1;
   let state = NORMAL;
@@ -291,7 +290,11 @@ function indent(str) {
     if (state === SKIP) {
       rs += ch;
       switch (ch) {
-        case ']': state = NORMAL;
+        case ']': 
+          state = NORMAL;
+          break;
+        default:
+          break;
       }
       continue;
     }
@@ -459,7 +462,7 @@ class Analysis extends React.Component {
       <div className="tile is-parent">
         <Tile title="Input serialisation" classes="is-primary">
           <p> Click the button below to add relations to ensure strict
-            serialisation of input- and output events (cf. Definition ?.?). 
+            serialisation of input- and output events.
           </p>
           <br/>
           <div className="field">
@@ -478,7 +481,7 @@ class Analysis extends React.Component {
       <div className="tile is-parent">
         <Tile title="Glitch freedom" classes="is-primary">
           <p> Click the button below to automatically add
-            relations to ensure glitch-freedom (cf. Definition ?.?). 
+            relations to ensure glitch-freedom.
           </p>
           <br/>
           <div className="field">
@@ -511,10 +514,10 @@ const App = (props) => {
         <div>
           <Term {...cxt}/>
           <Path {...cxt}/>
+          <Analysis {...cxt}/>
           <Parser {...cxt}/>
         </div>
     );
-          //<Analysis {...cxt}/>
   };
 
 ReactDOM.render(
