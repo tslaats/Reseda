@@ -193,7 +193,7 @@ customers[]{
  create_customer -->> {
  customer[]{
  !customer_id[freshid()],
- !customer_name[?:string]
+ !customer_name[?]
  }
  }
 }";

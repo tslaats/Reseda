@@ -185,7 +185,7 @@ namespace Reseda.Parser
         private Event GenerateTypedInputEvent(ParseTreeNode child, int i)
         {
             i++;
-            var result = new InputEvent(child.ChildNodes[i - 1].Token.Text);
+            var result = new InputEvent(child.ChildNodes[i - 1].Token.Text, GenerateExpression(child.ChildNodes[i + 1]));
             if (child.ChildNodes.Count > i + 2 && child.ChildNodes[i + 2] != null && child.ChildNodes[i + 2].Term.Name == "Process")
                 AddProcess(result, child.ChildNodes[i + 2]);
             return result;
@@ -243,6 +243,10 @@ namespace Reseda.Parser
                     return new ValueOf(GenerateExpression(node.ChildNodes[0]));
                 case "DPathIncluded":
                     return new IsIncluded(GenerateExpression(node.ChildNodes[0]));
+                case "DPathExecuted":
+                    return new IsExecuted(GenerateExpression(node.ChildNodes[0]));
+                case "DPathPending":
+                    return new IsPending(GenerateExpression(node.ChildNodes[0]));
                 case "DPath":
                     return new Path(GeneratePath(node.ChildNodes[0]));
                 case "NegOp":

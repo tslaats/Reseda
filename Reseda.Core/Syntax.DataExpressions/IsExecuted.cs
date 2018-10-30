@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Reseda.Core
 {
-    public class IsIncluded : DataExpression
+    public class IsExecuted : DataExpression
     {
         private DataExpression child;
 
-        public IsIncluded(DataExpression dataExpression)
+        public IsExecuted(DataExpression dataExpression)
         {
             this.child = dataExpression;
         }
@@ -19,20 +19,20 @@ namespace Reseda.Core
         {
             var c = child.Eval(context);
             if (!(c.GetType() == typeof(EventSet)))
-                throw new Exception("IsIncluded of not an event set.");
+                throw new Exception("IsExecuted of not an event set.");
             EventSet s = (EventSet)c;
 
-            if (s.value.Count > 1) throw new Exception("IsIncluded of multiple events.");
+            if (s.value.Count > 1) throw new Exception("IsExecuted of multiple events.");
 
             if (s.value.ElementAt(0).marking == null)
                 return new Unit();
             else
-                return new BoolType(s.value.ElementAt(0).marking.included);
+                return new BoolType(s.value.ElementAt(0).marking.happened);
         }
 
         public override string ToSource()
         {
-            return child.ToSource() + ":i";
+            return child.ToSource() + ":e";
         }
 
 
@@ -48,7 +48,7 @@ namespace Reseda.Core
 
         internal override DataExpression Clone()
         {
-            return new IsIncluded(this.child.Clone());
+            return new IsExecuted(this.child.Clone());
         }
     }
 }

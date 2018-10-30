@@ -84,6 +84,8 @@ namespace Reseda.Parser
 
             var DPathValue = new NonTerminal("DPathValue");
             var DPathIncluded = new NonTerminal("DPathIncluded");
+            var DPathExecuted = new NonTerminal("DPathExecuted");
+            var DPathPending = new NonTerminal("DPathPending");            
             var DDPath = new NonTerminal("DDPath");
 
 
@@ -110,9 +112,11 @@ namespace Reseda.Parser
             var Function0Args = new NonTerminal("Function0Args");
             var Function1Args = new NonTerminal("Function1Args");
 
-            DDPath.Rule = DPathValue | DPathIncluded | DPath;
+            DDPath.Rule = DPathValue | DPathIncluded | DPathExecuted | DPathPending | DPath;
             DPathValue.Rule = DPath + (ToTerm(Symbols.ValueShort) | ToTerm(Symbols.Value));
             DPathIncluded.Rule = DPath + (ToTerm(Symbols.IncludedShort) | ToTerm(Symbols.Included));
+            DPathExecuted.Rule = DPath + (ToTerm(Symbols.ExecutedShort) | ToTerm(Symbols.Executed));
+            DPathPending.Rule = DPath + (ToTerm(Symbols.PendingShort) | ToTerm(Symbols.Pending));
 
             DPath.Rule = ToTerm("@") + Path;
             Expression.Rule = Term | BoolExpr;

@@ -21,15 +21,28 @@ namespace Reseda.Core
             if (!(c.GetType() == typeof(EventSet)))
                 throw new Exception("Value of not an event set.");
             EventSet s = (EventSet)c;
-
-            if (s.value.Count > 1) throw new Exception("Value of multiple events.");
-
+            
             if (s.value.Count < 1) throw new Exception("Value of non-existent event.");
 
-            if (s.value.ElementAt(0).marking.value == null)
-                return new Unit();
+            if (s.value.Count > 1)
+            {
+                var result = new HashSet<DataType>();
+                foreach (Event e in s.value)
+                {
+                    if (e.marking.value == null)
+                        result.Add(new Unit());
+                    else
+                        result.Add(e.marking.value);
+                }
+                return new DataSet(result);
+            }
             else
-                return s.value.ElementAt(0).marking.value;
+            {
+                if (s.value.ElementAt(0).marking.value == null)
+                    return new Unit();
+                else
+                    return s.value.ElementAt(0).marking.value;
+            }
         }
 
         public override string ToSource()

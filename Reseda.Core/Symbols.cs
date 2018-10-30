@@ -18,5 +18,9 @@ namespace Reseda.Core
         public static String ValueShort = ":v";
         public static String Included = ":included";
         public static String IncludedShort = ":i";
+        public static String Executed = ":executed";
+        public static String ExecutedShort = ":e";
+        public static String Pending = ":pending";
+        public static String PendingShort = ":p";
     }
 }

@@ -14,6 +14,25 @@ namespace Reseda.Core
             value = v;
         }
 
+
+        public override bool Equals(Object obj)
+        {
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                StrType i = (StrType)obj;
+                return (i.value == this.value);
+            }
+        }
+        
+        public override int GetHashCode()
+        {
+            return value.GetHashCode();
+        }
+
         public override string ToString()
         {
             return this.value.ToString();

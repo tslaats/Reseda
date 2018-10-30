@@ -8,6 +8,21 @@ namespace Reseda.Core
 {
     public class InputEvent : Event
     {
+        DataExpression type;
+
+
+        public InputEvent(String name, DataExpression type)
+        {
+            this.name = name;
+            this.type = type;
+        }
+
+        public InputEvent(String name, DataExpression type, Marking m): base(m)
+        {
+            this.name = name;
+            this.type = type;
+        }
+
         public InputEvent(String name)
         {
             this.name = name;
@@ -16,6 +31,14 @@ namespace Reseda.Core
         public InputEvent(String name, Marking m): base(m)
         {
             this.name = name;
+        }
+        
+        public DataSet ValidInputs()
+        {
+            if (type == null)
+                return null;
+            else
+                return (DataSet)type.Eval(this);            
         }
 
         public override void Execute()
@@ -41,7 +64,10 @@ namespace Reseda.Core
 
         public override string TypeToSource()
         {
-            return "[?]";
+            if (type == null)
+                return "[?]";
+            else
+                return "[?:" + type.ToSource() + "]";
         }
 
         private void Execute(DataType d)
@@ -50,13 +76,17 @@ namespace Reseda.Core
             {
                 throw new Exception("Trying to execute disabled event!");
             }
+            if (this.ValidInputs() != null && !this.ValidInputs().Contains(d))
+            {
+                throw new Exception("Invalid input on typed event!");
+            }
             this.marking.value = d;
             base.Execute();
         }
 
         public override Event Clone(Process parent)
         {
-            return (Event)this.CloneInto(new InputEvent(this.name), parent);
+            return (Event)this.CloneInto(new InputEvent(this.name, this.type), parent);
         }
     }
 }

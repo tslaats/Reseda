@@ -42,7 +42,10 @@
   <ItemGroup>
     <Compile Include="Auxiliary\SideEffects.cs" />
     <Compile Include="Auxiliary\SpawnEffect.cs" />
+    <Compile Include="Syntax.DataExpressions\DataTypes\DataSet.cs" />
     <Compile Include="Syntax.DataExpressions\DataTypes\StrType.cs" />
+    <Compile Include="Syntax.DataExpressions\IsPending.cs" />
+    <Compile Include="Syntax.DataExpressions\IsExecuted.cs" />
     <Compile Include="Syntax.DataExpressions\NegOp.cs" />
     <Compile Include="Syntax.DataExpressions\GtOp.cs" />
     <Compile Include="Syntax.DataExpressions\EqOp.cs" />

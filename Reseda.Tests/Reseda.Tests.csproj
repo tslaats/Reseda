@@ -51,6 +51,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EDOCPaperTests.cs" />
     <Compile Include="CoreTests.cs" />
     <Compile Include="BPMPaperTests.cs" />
     <Compile Include="PathParserTests.cs" />
